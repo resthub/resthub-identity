@@ -5,7 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.resthub.core.exception.AlreadyExistingEntityException;
+import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
@@ -22,7 +22,7 @@ import org.springframework.util.Assert;
  * It's a bean whose name is "groupService"
  * */
 @Named("groupService")
-public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group, GroupRepository> implements GroupService {
+public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRepository> implements GroupService {
 
 	/**
 	 * The userRepository<br/>
@@ -262,8 +262,8 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group, GroupR
 		}
 	}
 
-	@Override
-	public Long getIdFromEntity(Group group) {
-		return group.getId();
-	}
+//	@Override
+//	public Long getIdFromEntity(Group group) {
+//		return group.getId();
+//	}
 }

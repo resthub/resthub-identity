@@ -1,10 +1,6 @@
 package org.resthub.identity.service;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -15,32 +11,50 @@ import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
-import org.resthub.core.test.service.AbstractServiceTest;
+import org.fest.assertions.Assertions;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.UserService.UserServiceChange;
+import org.resthub.test.common.AbstractTransactionalTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
-public class UserServiceTest extends AbstractServiceTest<User, Long, UserService> {
+public class UserServiceTest extends AbstractTransactionalTest {
 
-    @Inject
+	/*
+     * The UserService is needed because we have specific method for password
+     * management
+     */
+	@Inject
     @Named("userService")
-    @Override
-    public void setService(UserService service) {
-        super.setService(service);
-    }
+    private UserService userService;
 
     @Inject
     @Named("groupService")
     private GroupService groupService;
+    
     @Inject
     @Named("roleService")
     private RoleService roleService;
 
-    @Override
+    // Cleanup after each test
+    @BeforeMethod
+    public void cleanBefore() {
+    	groupService.deleteAll();
+    	roleService.deleteAll();
+    	userService.deleteAll();
+    }
+    
+	// Cleanup after each test
+    @AfterMethod
+    public void cleanAfter() {
+    	groupService.deleteAll();
+    	roleService.deleteAll();
+    	userService.deleteAll();
+    }
+    
     public User createTestEntity() {
         String userLogin = "UserTestUserName" + Math.round(Math.random() * 100000);
         String userPassword = "UserTestUserPassword";
@@ -56,18 +70,6 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         return g;
     }
 
-    /*
-     * The UserService is needed because we have specific method for password
-     * management
-     */
-    UserService userService;
-
-    @Inject
-    @Named("userService")
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
     @Test
     public void testMultiDeletion() throws Exception {
 
@@ -77,18 +79,16 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         User u2 = new User();
         u2.setLogin("u2");
 
-        u1 = service.create(u1);
-        u2 = service.create(u2);
+        u1 = userService.create(u1);
+        u2 = userService.create(u2);
 
-        service.delete(u1);
-        service.delete(u2);
+        userService.delete(u1);
+        userService.delete(u2);
 
-        Assert.assertNull(service.findById(u1.getId()));
-        Assert.assertNull(service.findById(u2.getId()));
-
+        Assertions.assertThat(userService.findById(u1.getId())).isNull();
+        Assertions.assertThat(userService.findById(u2.getId())).isNull();
     }
 
-    @Override
     @Test
     public void testUpdate() {
         /* Given a new user */
@@ -103,7 +103,7 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u.setLastName(lastName);
         u.setPassword(password);
         u.setLogin(login);
-        u = this.service.create(u);
+        u = userService.create(u);
 
         // when we try to change some info (firstName) about the user and that
         // we give the good password
@@ -112,12 +112,12 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u.setId(uid);
         u.setFirstName(firstNameAbr);
         u.setPassword(password);
-        u = service.update(u);
+        u = userService.update(u);
 
         // Then The modification is updated
-        assertEquals(u.getFirstName(), firstNameAbr);
+        Assertions.assertThat(u.getFirstName()).isEqualTo(firstNameAbr);
 
-        this.service.delete(u);
+        userService.delete(u);
     }
 
     @Test
@@ -129,18 +129,18 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
-        service.create(u);
+        userService.create(u);
         // userService.create(u);
 
         /* When we search him with good login and password */
         // u = userService.authenticateUser(login, password);
 
-        u = service.authenticateUser(login, password);
+        u = userService.authenticateUser(login, password);
 
         /* Then we retrieve the good user */
-        assertNotNull(u);
-        assertEquals(u.getLogin(), login);
-        service.delete(u);
+        Assertions.assertThat(u).isNotNull();
+        Assertions.assertThat(u.getLogin()).isEqualTo(login);
+        userService.delete(u);
         // userService.delete(u);
     }
 
@@ -155,20 +155,20 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         User u = new User();
         u.setLogin(login);
         u.setPassword(password1);
-        service.create(u);
+        userService.create(u);
 
         /* After that the password is updates */
         u.setPassword(password2);
-        u = service.updatePassword(u);
+        u = userService.updatePassword(u);
 
         /* When we search him with good login and password */
-        u = service.authenticateUser(login, password2);
+        u = userService.authenticateUser(login, password2);
 
         /* Then we retrieve the good user */
-        assertNotNull(u);
-        assertEquals(u.getLogin(), login);
+        Assertions.assertThat(u).isNotNull();
+        Assertions.assertThat(u.getLogin()).isEqualTo(login);
 
-        service.delete(u);
+        userService.delete(u);
         // userService.delete(u);
     }
 
@@ -182,15 +182,15 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
-        service.create(u);
+        userService.create(u);
         // userService.create(u);
         /* When we search him providing a bad password */
-        User retrievedUser = service.authenticateUser(login, badPassword);
+        User retrievedUser = userService.authenticateUser(login, badPassword);
 
         /* Then the user is not retrieved */
-        assertNull(retrievedUser);
+        Assertions.assertThat(retrievedUser).isNull();
 
-        service.delete(u);
+        userService.delete(u);
     }
 
     @Test
@@ -203,15 +203,15 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
-        service.create(u);
+        userService.create(u);
 
         /* When we search him providing a bad login */
-        User retrievedUser = service.authenticateUser(badLogin, password);
+        User retrievedUser = userService.authenticateUser(badLogin, password);
         /* Then the user is not retrieved */
 
-        assertNull(retrievedUser);
+        Assertions.assertThat(retrievedUser).isNull();
 
-        this.service.delete(u);
+        this.userService.delete(u);
     }
 
     @Test
@@ -229,17 +229,17 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u.setLogin(login);
         u.setPassword(password);
         u.getPermissions().addAll(permissions);
-        service.create(u);
+        userService.create(u);
 
         /* When we retrieved him after a search */
-        u = service.findByLogin(login);
+        u = userService.findByLogin(login);
 
         /* We can get the direct permissions */
-        assertEquals("Permissions not found", 2, u.getPermissions().size());
-        assertTrue("Permissions not found", u.getPermissions().contains("ADMIN"));
-        assertTrue("Permissions not found", u.getPermissions().contains("USER"));
+        Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
+        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
 
-        service.delete(u);
+        userService.delete(u);
 
     }
 
@@ -275,26 +275,26 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u.setPassword(password);
         u.getPermissions().addAll(permissions);
         u.getGroups().add(group);
-        service.create(u);
+        userService.create(u);
 
         /* When we retrieved him after a search */
-        u = service.findByLogin(login);
+        u = userService.findByLogin(login);
 
         /* We can get the direct permissions */
-        assertEquals("Permissions not found", 2, u.getPermissions().size());
-        assertTrue("Permissions not found", u.getPermissions().contains("ADMIN"));
-        assertTrue("Permissions not found", u.getPermissions().contains("USER"));
+        Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
+        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
 
         /* now with the permissions from groups */
-        List<String> allPermissions = service.getUserPermissions(login);
-        assertEquals("Permissions not found", 4, allPermissions.size());
-        assertTrue("Permissions not found", allPermissions.contains("ADMIN"));
-        assertTrue("Permissions not found", allPermissions.contains("USER"));
-        assertTrue("Permissions not found", allPermissions.contains("TESTGROUPPERMISSION"));
-        assertTrue("Permissions not found", allPermissions.contains("TESTSUBGROUPPERMISSION"));
+        List<String> allPermissions = userService.getUserPermissions(login);
+        Assertions.assertThat(allPermissions.size()).as("Permissions not found").isEqualTo(4);
+        Assertions.assertThat(allPermissions.contains("ADMIN")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains("USER")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains("TESTGROUPPERMISSION")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains("TESTSUBGROUPPERMISSION")).as("Permissions not found").isTrue();
 
         // TODO : remove this when we will use DBunit
-        service.delete(u);
+        userService.delete(u);
         groupService.delete(group);
         groupService.delete(subGroup);
     }
@@ -335,27 +335,30 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u.setPassword(password);
         u.getPermissions().addAll(permissions);
         u.getGroups().add(group);
-        service.create(u);
+        userService.create(u);
 
         /* When we retrieved him after a search */
-        u = service.findByLogin(login);
+        u = userService.findByLogin(login);
 
         /* We can get the direct permissions */
+        Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
+        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
         assertEquals("Permissions not found", 2, u.getPermissions().size());
         assertTrue("Permissions not found", u.getPermissions().contains("ADMIN"));
         assertTrue("Permissions not found", u.getPermissions().contains("USER"));
 
         /* now with the permissions from groups */
-        List<String> allPermissions = service.getUserPermissions(login);
-        assertEquals("Permissions not found", 4, allPermissions.size());
-        assertTrue("Permissions not found", allPermissions.contains("ADMIN"));
+        List<String> allPermissions = userService.getUserPermissions(login);
+        Assertions.assertThat(allPermissions.size()).as("Permissions not found").isEqualTo(4);
+        Assertions.assertThat(allPermissions.contains("ADMIN")).as("Permissions not found").isTrue();
         // the USER permission should exists only once in the list
-        assertTrue("Permissions not found", allPermissions.contains("USER"));
-        assertTrue("Permissions not found", allPermissions.contains("TESTGROUPPERMISSION"));
-        assertTrue("Permissions not found", allPermissions.contains("TESTSUBGROUPPERMISSION"));
+        Assertions.assertThat(allPermissions.contains("USER")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains("TESTGROUPPERMISSION")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains("TESTSUBGROUPPERMISSION")).as("Permissions not found").isTrue();
 
         // TODO : remove this when we will use DBunit
-        service.delete(u);
+        userService.delete(u);
         groupService.delete(group);
         groupService.delete(subGroup);
     }
@@ -389,17 +392,17 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
 
         /* Given a link between this user and the group */
         u.getGroups().add(g);
-        u = this.service.create(u);
+        u = userService.create(u);
 
         /* When I get the users of the group */
-        List<User> usersFromGroup = this.service.getUsersFromGroup(groupName);
+        List<User> usersFromGroup = this.userService.getUsersFromGroup(groupName);
 
         /* Then the list of users contains our user */
-        assertTrue("The list of users should contain our just added user", usersFromGroup.contains(u));
-
+        Assertions.assertThat(usersFromGroup.contains(u)).as("The list of users should contain our just added user").isTrue();
+        
         /* Cleanup */
-        this.service.delete(u);
-        this.groupService.delete(g);
+        userService.delete(u);
+        groupService.delete(g);
     }
 
     @Test
@@ -424,43 +427,44 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u4.getRoles().add(r1);
         u4.getRoles().add(r2);
 
-        u1 = this.service.create(u1);
-        u2 = this.service.create(u2);
-        u3 = this.service.create(u3);
-        u4 = this.service.create(u4);
+        u1 = userService.create(u1);
+        u2 = userService.create(u2);
+        u3 = userService.create(u3);
+        u4 = userService.create(u4);
 
         // When I look for users with roles
-        List<User> notExistingRoleUsers = this.service.findAllUsersWithRoles(Arrays.asList("role"));
-        List<User> role1Users = this.service.findAllUsersWithRoles(Arrays.asList("role1"));
-        List<User> role2Users = this.service.findAllUsersWithRoles(Arrays.asList("role2"));
-        List<User> role1AndRole2Users = this.service.findAllUsersWithRoles(Arrays.asList("role1", "role2"));
+        List<User> notExistingRoleUsers = userService.findAllUsersWithRoles(Arrays.asList("role"));
+        List<User> role1Users = userService.findAllUsersWithRoles(Arrays.asList("role1"));
+        List<User> role2Users = userService.findAllUsersWithRoles(Arrays.asList("role2"));
+        List<User> role1AndRole2Users = userService.findAllUsersWithRoles(Arrays.asList("role1", "role2"));
 
         // Then the lists should only contain what I asked for
-        assertTrue("A search with an unknown role shouldn't bring anything", notExistingRoleUsers.isEmpty());
+        Assertions.assertThat(notExistingRoleUsers.isEmpty()).as("A search with an unknown role shouldn't bring anything").isTrue();
 
-        assertEquals("The list of users with role1 should contain 2 elements", 2, role1Users.size());
-        assertTrue("The list of users with role1 should contain user1", role1Users.contains(u1));
-        assertTrue("The list of users with role1 should contain user4", role1Users.contains(u4));
+        Assertions.assertThat(role1Users.size()).as("The list of users with role1 should contain 2 elements").isEqualTo(2);
+        Assertions.assertThat(role1Users.contains(u1)).as("The list of users with role1 should contain user1").isTrue();
+        Assertions.assertThat(role1Users.contains(u4)).as("The list of users with role1 should contain user4").isTrue();
 
-        assertEquals("The list of users with role2 should contain 2 elements", 2, role2Users.size());
-        assertTrue("The list of users with role2 should contain user3", role2Users.contains(u3));
-        assertTrue("The list of users with role2 should contain user4", role2Users.contains(u4));
+        Assertions.assertThat(role2Users.size()).as("The list of users with role2 should contain 2 elements").isEqualTo(2);
+        Assertions.assertThat(role2Users.contains(u3)).as("The list of users with role2 should contain user3").isTrue();
+        Assertions.assertThat(role2Users.contains(u4)).as("The list of users with role2 should contain user4").isTrue();
 
-        assertEquals("The list of users with role1 and role2 should contain 3 elements", 3, role1AndRole2Users.size());
-        assertTrue("The list of users with role2 should contain user1", role1AndRole2Users.contains(u1));
-        assertTrue("The list of users with role2 should contain user3", role1AndRole2Users.contains(u3));
-        assertTrue("The list of users with role2 should contain user4", role1AndRole2Users.contains(u4));
+        Assertions.assertThat(role1AndRole2Users.size()).as("The list of users with role2 should contain 3 elements").isEqualTo(3);
+        Assertions.assertThat(role1AndRole2Users.contains(u1)).as("The list of users with role1 and role2 should contain user1").isTrue();
+        Assertions.assertThat(role1AndRole2Users.contains(u3)).as("The list of users with role1 and role2 should contain user3").isTrue();
+        Assertions.assertThat(role1AndRole2Users.contains(u4)).as("The list of users with role1 and role2 should contain user4").isTrue();
 
         // TODO : remove this when we will use DBunit
         u1.getRoles().clear();
-        this.service.update(u1);
+        userService.update(u1);
         u2.getRoles().clear();
-        this.service.update(u2);
+        userService.update(u2);
         u3.getRoles().clear();
-        this.service.update(u3);
+        userService.update(u3);
         u4.getRoles().clear();
-        this.service.update(u4);
+        userService.update(u4);
         this.roleService.deleteAll();
+        userService.deleteAll();
     }
 
     /**
@@ -519,61 +523,61 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u4.getRoles().add(r4);
         u4.getGroups().add(g3);
 
-        u1 = this.service.create(u1);
-        u2 = this.service.create(u2);
-        u3 = this.service.create(u3);
-        u4 = this.service.create(u4);
+        u1 = userService.create(u1);
+        u2 = userService.create(u2);
+        u3 = userService.create(u3);
+        u4 = userService.create(u4);
 
         // When I look for users with roles
-        List<User> notExistingRoleUsers = this.service.findAllUsersWithRoles(Arrays.asList("role"));
-        List<User> role1Users = this.service.findAllUsersWithRoles(Arrays.asList("role1"));
-        List<User> role2Users = this.service.findAllUsersWithRoles(Arrays.asList("role2"));
-        List<User> role3Users = this.service.findAllUsersWithRoles(Arrays.asList("role3"));
-        List<User> role4Users = this.service.findAllUsersWithRoles(Arrays.asList("role4"));
-        List<User> role2AndRole3Users = this.service.findAllUsersWithRoles(Arrays.asList("role2", "role3"));
+        List<User> notExistingRoleUsers = userService.findAllUsersWithRoles(Arrays.asList("role"));
+        List<User> role1Users = userService.findAllUsersWithRoles(Arrays.asList("role1"));
+        List<User> role2Users = userService.findAllUsersWithRoles(Arrays.asList("role2"));
+        List<User> role3Users = userService.findAllUsersWithRoles(Arrays.asList("role3"));
+        List<User> role4Users = userService.findAllUsersWithRoles(Arrays.asList("role4"));
+        List<User> role2AndRole3Users = userService.findAllUsersWithRoles(Arrays.asList("role2", "role3"));
 
         // Then the lists should only contain what I asked for
-        assertTrue("A search with an unknown role shouldn't bring anything", notExistingRoleUsers.isEmpty());
+        Assertions.assertThat(notExistingRoleUsers.isEmpty()).as("A search with an unknown role shouldn't bring anything").isTrue();
 
-        assertEquals("The list of users with role1 should contain 4 elements", 4, role1Users.size());
-        assertTrue("The list of users with role1 should contain user1", role1Users.contains(u1));
-        assertTrue("The list of users with role1 should contain user2", role1Users.contains(u2));
-        assertTrue("The list of users with role1 should contain user3", role1Users.contains(u3));
-        assertTrue("The list of users with role1 should contain user4", role1Users.contains(u4));
+        Assertions.assertThat(role1Users.size()).as("The list of users with role1 should contain 4 elements").isEqualTo(4);
+        Assertions.assertThat(role1Users.contains(u1)).as("The list of users with role1 should contain user1").isTrue();
+        Assertions.assertThat(role1Users.contains(u2)).as("The list of users with role1 should contain user2").isTrue();
+        Assertions.assertThat(role1Users.contains(u3)).as("The list of users with role1 should contain user3").isTrue();
+        Assertions.assertThat(role1Users.contains(u4)).as("The list of users with role1 should contain user4").isTrue();
 
-        assertEquals("The list of users with role2 should contain 2 elements", 2, role2Users.size());
-        assertTrue("The list of users with role2 should contain user1", role2Users.contains(u1));
-        assertTrue("The list of users with role2 should contain user3", role2Users.contains(u3));
+        Assertions.assertThat(role2Users.size()).as("The list of users with role2 should contain 2 elements").isEqualTo(2);
+        Assertions.assertThat(role2Users.contains(u1)).as("The list of users with role2 should contain user1").isTrue();
+        Assertions.assertThat(role2Users.contains(u3)).as("The list of users with role2 should contain user3").isTrue();
 
-        assertEquals("The list of users with role3 should contain 3 elements", 3, role3Users.size());
-        assertTrue("The list of users with role3 should contain user2", role3Users.contains(u2));
-        assertTrue("The list of users with role3 should contain user3", role3Users.contains(u3));
-        assertTrue("The list of users with role3 should contain user4", role3Users.contains(u4));
+        Assertions.assertThat(role3Users.size()).as("The list of users with role3 should contain 3 elements").isEqualTo(3);
+        Assertions.assertThat(role3Users.contains(u2)).as("The list of users with role3 should contain user2").isTrue();
+        Assertions.assertThat(role3Users.contains(u3)).as("The list of users with role3 should contain user3").isTrue();
+        Assertions.assertThat(role3Users.contains(u4)).as("The list of users with role3 should contain user4").isTrue();
 
-        assertEquals("The list of users with role4 should contain 3 elements", 3, role4Users.size());
-        assertTrue("The list of users with role4 should contain user1", role4Users.contains(u1));
-        assertTrue("The list of users with role4 should contain user3", role4Users.contains(u3));
-        assertTrue("The list of users with role4 should contain user4", role4Users.contains(u4));
+        Assertions.assertThat(role4Users.size()).as("The list of users with role4 should contain 3 elements").isEqualTo(3);
+        Assertions.assertThat(role4Users.contains(u1)).as("The list of users with role4 should contain user1").isTrue();
+        Assertions.assertThat(role4Users.contains(u3)).as("The list of users with role4 should contain user3").isTrue();
+        Assertions.assertThat(role4Users.contains(u4)).as("The list of users with role4 should contain user4").isTrue();
 
-        assertEquals("The list of users with role2 and role3 should contain 4 elements", 4, role2AndRole3Users.size());
-        assertTrue("The list of users with role2 and role3 should contain user1", role2AndRole3Users.contains(u1));
-        assertTrue("The list of users with role2 and role3 should contain user2", role2AndRole3Users.contains(u2));
-        assertTrue("The list of users with role2 and role3 should contain user3", role2AndRole3Users.contains(u3));
-        assertTrue("The list of users with role2 and role3 should contain user4", role2AndRole3Users.contains(u4));
+        Assertions.assertThat(role2AndRole3Users.size()).as("The list of users with role2 and role3 should contain 4 elements").isEqualTo(4);
+        Assertions.assertThat(role2AndRole3Users.contains(u1)).as("The list of users with role2 and role3 should contain user1").isTrue();
+        Assertions.assertThat(role2AndRole3Users.contains(u2)).as("The list of users with role2 and role3 should contain user2").isTrue();
+        Assertions.assertThat(role2AndRole3Users.contains(u3)).as("The list of users with role2 and role3 should contain user3").isTrue();
+        Assertions.assertThat(role2AndRole3Users.contains(u4)).as("The list of users with role2 and role3 should contain user4").isTrue();
 
         // TODO : remove this when we will use DBunit
         u1.getRoles().clear();
         u1.getGroups().clear();
-        this.service.update(u1);
+        userService.update(u1);
         u2.getRoles().clear();
         u2.getGroups().clear();
-        this.service.update(u2);
+        userService.update(u2);
         u3.getRoles().clear();
         u3.getGroups().clear();
-        this.service.update(u3);
+        userService.update(u3);
         u4.getRoles().clear();
         u4.getGroups().clear();
-        this.service.update(u4);
+        userService.update(u4);
 
         g1.getRoles().clear();
         this.groupService.update(g1);
@@ -585,6 +589,8 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         this.groupService.update(g4);
 
         this.roleService.deleteAll();
+        userService.deleteAll();
+        groupService.deleteAll();
     }
 
     /**
@@ -643,43 +649,40 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u4.getRoles().add(r4);
         u4.getGroups().add(g3);
 
-        u1 = this.service.create(u1);
-        u2 = this.service.create(u2);
-        u3 = this.service.create(u3);
-        u4 = this.service.create(u4);
+        u1 = userService.create(u1);
+        u2 = userService.create(u2);
+        u3 = userService.create(u3);
+        u4 = userService.create(u4);
 
         // When I ask for user roles
-        List<Role> u1Roles = this.service.getAllUserRoles(u1.getLogin());
-        List<Role> u2Roles = this.service.getAllUserRoles(u2.getLogin());
-        List<Role> u3Roles = this.service.getAllUserRoles(u3.getLogin());
-        List<Role> u4Roles = this.service.getAllUserRoles(u4.getLogin());
+        List<Role> u1Roles = userService.getAllUserRoles(u1.getLogin());
+        List<Role> u2Roles = userService.getAllUserRoles(u2.getLogin());
+        List<Role> u3Roles = userService.getAllUserRoles(u3.getLogin());
+        List<Role> u4Roles = userService.getAllUserRoles(u4.getLogin());
 
         // Then users should have the correct roles
-        assertEquals("User1 should have 3 roles", 3, u1Roles.size());
-        assertTrue("User1 should have role1, role2 and role4",
-                u1Roles.contains(r1) && u1Roles.contains(r2) && u1Roles.contains(r4));
-        assertEquals("User2 should have 2 roles", 2, u2Roles.size());
-        assertTrue("User2 should have role1, role2 and role4", u2Roles.contains(r1) && u2Roles.contains(r3));
-        assertEquals("User3 should have 4 roles", 4, u3Roles.size());
-        assertTrue("User3 should have role1, role2 and role4",
-                u3Roles.contains(r1) && u3Roles.contains(r2) && u3Roles.contains(r3) && u3Roles.contains(r4));
-        assertEquals("User4 should have 3 roles", 3, u4Roles.size());
-        assertTrue("User4 should have role1, role2 and role4",
-                u4Roles.contains(r1) && u4Roles.contains(r3) && u4Roles.contains(r4));
+        Assertions.assertThat(u1Roles.size()).as("User1 should have 3 roles").isEqualTo(3);
+        Assertions.assertThat(u1Roles.contains(r1) && u1Roles.contains(r2) && u1Roles.contains(r4)).as("User1 should have role1, role2 and role4").isTrue();
+        Assertions.assertThat(u2Roles.size()).as("User2 should have 2 roles").isEqualTo(2);
+        Assertions.assertThat(u2Roles.contains(r1) && u2Roles.contains(r3)).as("User1 should have role1 and role3").isTrue();
+        Assertions.assertThat(u3Roles.size()).as("User3 should have 4 roles").isEqualTo(4);
+        Assertions.assertThat(u3Roles.contains(r1) && u3Roles.contains(r2) && u3Roles.contains(r3) && u1Roles.contains(r4)).as("User3 should have role1, role2, role3 and role4").isTrue();
+        Assertions.assertThat(u4Roles.size()).as("User4 should have 3 roles").isEqualTo(3);
+        Assertions.assertThat(u4Roles.contains(r1) && u4Roles.contains(r3) && u4Roles.contains(r4)).as("User4 should have role1, role3 and role4").isTrue();
 
         // TODO : remove this when we will use DBunit
         u1.getRoles().clear();
         u1.getGroups().clear();
-        this.service.update(u1);
+        userService.update(u1);
         u2.getRoles().clear();
         u2.getGroups().clear();
-        this.service.update(u2);
+        userService.update(u2);
         u3.getRoles().clear();
         u3.getGroups().clear();
-        this.service.update(u3);
+        userService.update(u3);
         u4.getRoles().clear();
         u4.getGroups().clear();
-        this.service.update(u4);
+        userService.update(u4);
 
         g1.getRoles().clear();
         this.groupService.update(g1);
@@ -691,6 +694,8 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         this.groupService.update(g4);
 
         this.roleService.deleteAll();
+        userService.deleteAll();
+        groupService.deleteAll();
     }
 
     @Test
@@ -701,17 +706,19 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
 
         // Given a new user
         User u = this.createTestEntity();
-        u = this.service.create(u);
+        u = userService.create(u);
 
         // When I associate the user and the role
-        this.service.addRoleToUser(u.getLogin(), r.getName());
+        userService.addRoleToUser(u.getLogin(), r.getName());
 
         // Then I get the user with this role
-        User userWithRole = this.service.findById(u.getId());
-        assertTrue("The user should contain the role", userWithRole.getRoles().contains(r));
+        User userWithRole = userService.findById(u.getId());
+        Assertions.assertThat(userWithRole.getRoles().contains(r)).as("The user should contain the role").isTrue();
 
         // TODO : remove this when we will use DBunit
-        this.service.removeRoleFromUser(u.getLogin(), r.getName());
+        userService.removeRoleFromUser(u.getLogin(), r.getName());
+        
+        this.roleService.deleteAll();
     }
 
     @Test
@@ -722,15 +729,15 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
 
         // Given a new user associated to the previous role
         User u = this.createTestEntity();
-        u = this.service.create(u);
-        this.service.addRoleToUser(u.getLogin(), r.getName());
+        u = userService.create(u);
+        userService.addRoleToUser(u.getLogin(), r.getName());
 
         // When I remove the role from the user
-        this.service.removeRoleFromUser(u.getLogin(), r.getName());
+        userService.removeRoleFromUser(u.getLogin(), r.getName());
 
         // Then I get the user without this role
-        User userWithRole = this.service.findById(u.getId());
-        assertFalse("The user shouldn't contain the role", userWithRole.getRoles().contains(r));
+        User userWithRole = userService.findById(u.getId());
+        Assertions.assertThat(userWithRole.getRoles().contains(r)).as("The user shouldn't contain the role").isFalse();
 
         this.roleService.deleteAll();
     }
@@ -749,8 +756,10 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         u = userService.create(u);
 
         // Then a creation notification has been received
-        assertEquals(UserServiceChange.USER_CREATION.name(), listener.lastType);
-        assertArrayEquals(new Object[] { u }, listener.lastArguments);
+        Assertions.assertThat(listener.lastType).isEqualTo(UserServiceChange.USER_CREATION.name());
+        Assertions.assertThat(listener.lastArguments).isEqualTo(new Object[] { u });
+        
+        userService.delete(u);
     } // shouldCreationBeNotified().
 
     @Test
@@ -768,8 +777,9 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         userService.delete(u.getId());
 
         // Then a deletion notification has been received
-        assertEquals(UserServiceChange.USER_DELETION.name(), listener.lastType);
-        assertArrayEquals(new Object[] { u }, listener.lastArguments);
+        Assertions.assertThat(listener.lastType).isEqualTo(UserServiceChange.USER_DELETION.name());
+        Assertions.assertThat(listener.lastArguments).isEqualTo(new Object[] { u });
+        
     } // shouldDeletionBeNotifiedById().
 
     @Test
@@ -787,8 +797,9 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         userService.delete(u);
 
         // Then a deletion notification has been received
-        assertEquals(UserServiceChange.USER_DELETION.name(), listener.lastType);
-        assertArrayEquals(new Object[] { u }, listener.lastArguments);
+        Assertions.assertThat(listener.lastType).isEqualTo(UserServiceChange.USER_DELETION.name());
+        Assertions.assertThat(listener.lastArguments).isEqualTo(new Object[] { u });
+        
     } // shouldDeletionBeNotifiedByUser().
 
     @Test
@@ -811,11 +822,12 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         userService.addGroupToUser(u.getLogin(), g.getName());
 
         // Then a deletion notification has been received
-        assertEquals(UserServiceChange.USER_ADDED_TO_GROUP.name(), listener.lastType);
-        assertArrayEquals(new Object[] { u, g }, listener.lastArguments);
+        Assertions.assertThat(listener.lastType).isEqualTo(UserServiceChange.USER_ADDED_TO_GROUP.name());
+        Assertions.assertThat(listener.lastArguments).isEqualTo(new Object[] { u, g });
 
         userService.removeGroupFromUser(u.getLogin(), g.getName());
-
+        userService.delete(u);
+        groupService.delete(g);
     } // shouldUserAdditionToGroupBeNotified().
 
     @Test
@@ -839,7 +851,10 @@ public class UserServiceTest extends AbstractServiceTest<User, Long, UserService
         userService.removeGroupFromUser(u.getLogin(), g.getName());
 
         // Then a deletion notification has been received
-        assertEquals(UserServiceChange.USER_REMOVED_FROM_GROUP.name(), listener.lastType);
-        assertArrayEquals(new Object[] { u, g }, listener.lastArguments);
+        Assertions.assertThat(listener.lastType).isEqualTo(UserServiceChange.USER_REMOVED_FROM_GROUP.name());
+        Assertions.assertThat(listener.lastArguments).isEqualTo(new Object[] { u, g });
+        
+        userService.delete(u);
+        groupService.delete(g);
     } // shouldUserRemovalFromGroupBeNotified().
 }

@@ -1,31 +1,29 @@
 package org.resthub.identity.service;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Random;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.junit.Test;
-import org.resthub.core.test.AbstractTransactionAwareTest;
+import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
+import org.resthub.test.common.AbstractTransactionalTest;
+import org.testng.annotations.Test;
 
 /**
  * SearchService test
  */
-public class SearchServiceTest extends AbstractTransactionAwareTest {
+public class SearchServiceTest extends AbstractTransactionalTest {
 
     /**
      * Injection of the tested service.
      */
     @Inject
-    protected SearchService tested;
+    @Named("searchService")
+    protected SearchService searchService;
 
     /**
      * Injection of the User service.
@@ -57,8 +55,11 @@ public class SearchServiceTest extends AbstractTransactionAwareTest {
         // TODO Given an existing role
 
         // When reindexing
-        tested.resetIndexes();
+        searchService.resetIndexes();
 
+        // Delete
+        groupService.deleteAll();
+        
         // Then everything's fine
     } // shouldExistingResourcesBeReIndexed().
 
@@ -102,22 +103,26 @@ public class SearchServiceTest extends AbstractTransactionAwareTest {
         u5 = userService.create(u5);
 
         // When requesting j on users
-        List<AbstractPermissionsOwner> results = tested.search("j", true, false);
+        List<AbstractPermissionsOwner> results = searchService.search("j", true, false);
 
         // Then the first user is retrieved
-        assertTrue("login 'jdujardin' did not match", results.contains(u1));
+        Assertions.assertThat(results.contains(u1)).as("login 'jdujardin' did not match").isTrue();
 
         // Then the second user is retrieved
-        assertTrue("email 'jdujardin@test.com' did not match", results.contains(u2));
+        Assertions.assertThat(results.contains(u2)).as("email 'jdujardin@test.com' did not match").isTrue();
 
         // Then the third user is retrieved
-        assertTrue("first name 'jean' did not match", results.contains(u3));
+        Assertions.assertThat(results.contains(u3)).as("first name 'jean' did not match").isTrue();
 
         // Then the fourth user is not retrived
-        assertFalse("last name 'dujardin' did match", results.contains(u4));
+        Assertions.assertThat(results.contains(u4)).as("last name 'dujardin' did match").isFalse();
 
         // Then the fifth user is not retrived
-        assertFalse("login 'adurand' did match", results.contains(u5));
+        Assertions.assertThat(results.contains(u5)).as("login 'adurand' did match").isFalse();
+        
+        // Delete
+        userService.deleteAll();
+        
     } // shouldUsersBeRetrieved().
 
     @Test
@@ -138,16 +143,20 @@ public class SearchServiceTest extends AbstractTransactionAwareTest {
         g3 = groupService.create(g3);
 
         // When requesting j on users
-        List<AbstractPermissionsOwner> results = tested.search("j", false, true);
+        List<AbstractPermissionsOwner> results = searchService.search("j", false, true);
 
         // Then the first group is retrieved
-        assertTrue("login 'jeans' did not match", results.contains(g1));
+        Assertions.assertThat(results.contains(g1)).as("name 'jdujardin' did not match").isTrue();
 
         // Then the second group is not retrived
-        assertFalse("name 'dujeu' did match", results.contains(g2));
+		Assertions.assertThat(results.contains(g2)).as("name 'dujeu' did match").isFalse();
 
         // Then the third group is not retrived
-        assertFalse("name 'other' did match", results.contains(g3));
+		Assertions.assertThat(results.contains(g3)).as("name 'other' did match").isFalse();
+		
+		// Delete
+        groupService.deleteAll();
+        
     } // shouldGroupsBeRetrieved().
 
     @Test
@@ -177,19 +186,24 @@ public class SearchServiceTest extends AbstractTransactionAwareTest {
         g2 = groupService.create(g2);
 
         // When requesting j on users and groups
-        List<AbstractPermissionsOwner> results = tested.search("j", true, true);
+        List<AbstractPermissionsOwner> results = searchService.search("j", true, true);
 
         // Then the first user is retrieved
-        assertTrue("login 'jdujardin' did not match", results.contains(u1));
+        Assertions.assertThat(results.contains(u1)).as("login 'jdujardin' did not match").isTrue();
 
         // Then the second user is not retrieved
-        assertFalse("login 'other' did match", results.contains(u2));
+        Assertions.assertThat(results.contains(u2)).as("login 'other' did match").isFalse();
 
         // Then the first group is retrieved
-        assertTrue("login 'jeans' did not match", results.contains(g1));
+        Assertions.assertThat(results.contains(g1)).as("login 'jeans' did not match").isTrue();
 
         // Then the second group is not retrived
-        assertFalse("name 'other-group' did match", results.contains(g2));
+        Assertions.assertThat(results.contains(g2)).as("name 'other-group' did match").isFalse();
+        
+        // Delete
+        userService.deleteAll();
+        groupService.deleteAll();
+        
     } // shouldUserAndGroupsBeRetrieved()
 
     @Test
@@ -221,31 +235,36 @@ public class SearchServiceTest extends AbstractTransactionAwareTest {
         g2 = groupService.create(g2);
 
         // When requesting j on users and groups
-        List<AbstractPermissionsOwner> results = tested
+        List<AbstractPermissionsOwner> results = searchService
                 .search("lastName:g* OR firstName:j* OR name:admin*", true, true);
 
         // Then the first user is retrieved
-        assertTrue("last name 'jean' did not match", results.contains(u1));
+        Assertions.assertThat(results.contains(u1)).as("last name 'jean' did not match").isTrue();
 
         // Then the second user is retrieved
-        assertTrue("first name 'george' did not match", results.contains(u2));
+		Assertions.assertThat(results.contains(u2)).as("first name 'george' did not match").isTrue();
 
         // Then the first group is retrieved
-        assertTrue("name 'admin' did not match", results.contains(g1));
+		Assertions.assertThat(results.contains(g1)).as("name 'admin' did not match").isTrue();
 
         // Then the second group is not retrived
-        assertFalse("name 'users' did match", results.contains(g2));
+		Assertions.assertThat(results.contains(g2)).as("name 'users' did match").isFalse();
+		
+		// Delete
+        userService.deleteAll();
+        groupService.deleteAll();
+        
     } // shouldComplexQueriesBeExecuted()
 
     @Test
     public void shouldFailedOnNullQuery() {
         try {
             // When performing a search with a null query
-            tested.search(null, false, false);
-            fail("An IllegalArgumentException may have been raised");
+        	searchService.search(null, false, false);
+            Assertions.fail("An IllegalArgumentException may have been raised");
         } catch (IllegalArgumentException exc) {
             // Then an exception is raised
-            assertTrue(exc.getMessage().contains("must not be null"));
+        	Assertions.assertThat(exc.getMessage().contains("must not be null")).isTrue();
         }
     } // shouldFailedOnNullQuery()
 
@@ -253,11 +272,11 @@ public class SearchServiceTest extends AbstractTransactionAwareTest {
     public void shouldFailedOnInvalidQuery() {
         try {
             // When performing a search with a invalide query
-            tested.search("name:*", false, false);
-            fail("An IllegalArgumentException may have been raised");
+        	searchService.search("name:*", false, false);
+            Assertions.fail("An IllegalArgumentException may have been raised");
         } catch (IllegalArgumentException exc) {
             // Then an exception is raised
-            assertTrue(exc.getMessage().toLowerCase().contains("misformatted"));
+        	Assertions.assertThat(exc.getMessage().toLowerCase().contains("misformatted")).isTrue();
         }
     } // shouldFailedOnInvalidQuery()
 
