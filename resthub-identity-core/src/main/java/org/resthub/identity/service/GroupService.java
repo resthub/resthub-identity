@@ -2,8 +2,8 @@ package org.resthub.identity.service;
 
 import java.util.List;
 
-import org.resthub.core.exception.AlreadyExistingEntityException;
-import org.resthub.core.service.GenericService;
+import org.resthub.common.service.CrudService;
+import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.service.tracability.TracableService;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * @author Guillaume Zurbach
  */
-public interface GroupService extends GenericService<Group, Long>, TracableService {
+public interface GroupService extends CrudService<Group, Long>, TracableService {
 
 	/**
 	 * Kind of changes notified by this service
