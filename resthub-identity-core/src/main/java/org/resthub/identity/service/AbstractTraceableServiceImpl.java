@@ -3,7 +3,7 @@ package org.resthub.identity.service;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.resthub.core.service.GenericServiceImpl;
+import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.service.tracability.ServiceListener;
 import org.resthub.identity.service.tracability.TracableService;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
 public abstract class AbstractTraceableServiceImpl<TEntity, TRepository extends PagingAndSortingRepository<TEntity, Long>>
-		extends GenericServiceImpl<TEntity, Long, TRepository> implements TracableService {
+		extends CrudServiceImpl<TEntity, Long, TRepository> implements TracableService {
 
 	/**
 	 * Set of registered listeners

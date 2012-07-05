@@ -6,7 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.resthub.core.exception.AlreadyExistingEntityException;
+import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
@@ -141,7 +141,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 		Assert.notNull(login, "User login can't be null");
 		List<User> result = this.repository.findByLogin(login);
 		int size = result.size();
-		return (size > 0) ? result.get(0) : null;
+		return (size > 0 && size < 2) ? result.get(0) : null;
 	}
 
 	/**
@@ -215,6 +215,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			Group g = groupService.findByName(groupName);
 			if (u != null && g != null) {
 				u.getGroups().add(g);
+				this.repository.save(u);
 			}
 			// Publish notification
 			publishChange(UserServiceChange.USER_ADDED_TO_GROUP.name(), u, g);
@@ -232,6 +233,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			Group g = groupService.findByName(groupName);
 			if (u != null && g != null) {
 				u.getGroups().remove(g);
+				this.repository.save(u);
 			}
 			// Publish notification
 			publishChange(UserServiceChange.USER_REMOVED_FROM_GROUP.name(), u, g);
@@ -242,6 +244,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<User> getUsersFromGroup(String groupName) {
 		List<User> usersFromGroup = this.repository.getUsersFromGroup(groupName);
 		return usersFromGroup;
@@ -251,6 +254,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<User> findAllUsersWithRoles(List<String> roles) {
 		List<User> usersWithRole = new ArrayList<User>(); // this list will hold
 															// all the users for
@@ -339,11 +343,43 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			}
 		}
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public List<Group> getAllUserGroups(String userLogin) {
+		List<Group> roles = new ArrayList<Group>();
+		User u = this.findByLogin(userLogin);
+		if (u != null) {
+			this.getGroupsFromRootElement(roles, u);
+		}
+
+		return roles;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void getGroupsFromRootElement(List<Group> groups, AbstractPermissionsOwner owner) {
+		// Stop the processing if one of the parameters is null
+		if (groups != null && owner != null) {
+			// Add the roles we find on our path if needed.
+			for (Group g : owner.getGroups()) {
+				if (!groups.contains(g)) {
+					groups.add(g);
+				}
+			}
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Role> getAllUserRoles(String userLogin) {
 		List<Role> roles = new ArrayList<Role>();
 		User u = this.findByLogin(userLogin);
@@ -399,8 +435,8 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 		return null;
 	}
 
-	@Override
-	public Long getIdFromEntity(User user) {
-		return user.getId();
-	}
+//	@Override
+//	public Long getIdFromEntity(User user) {
+//		return user.getId();
+//	}
 }

@@ -1,13 +1,12 @@
 package org.resthub.identity.tools;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.fest.assertions.Assertions;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
+import org.testng.annotations.Test;
 
 public class PermissionsOwnerToolsTest {
 
@@ -23,7 +22,7 @@ public class PermissionsOwnerToolsTest {
         lp = PermissionsOwnerTools.getInheritedPermission(u);
 
         // There is no permissions
-        assertTrue(lp.size() == 0);
+        Assertions.assertThat(lp.size()== 0).isTrue();
     }
 
     @Test
@@ -44,9 +43,9 @@ public class PermissionsOwnerToolsTest {
         lp = PermissionsOwnerTools.getInheritedPermission(u);
 
         // There is the 2 permissions
-        assertTrue(lp.size() == 2);
-        assertTrue(lp.contains(p1));
-        assertTrue(lp.contains(p2));
+        Assertions.assertThat(lp.size() == 2).isTrue();
+        Assertions.assertThat(lp.contains(p1)).isTrue();
+        Assertions.assertThat(lp.contains(p2)).isTrue();
 
     }
 
@@ -69,9 +68,9 @@ public class PermissionsOwnerToolsTest {
         lp = PermissionsOwnerTools.getInheritedPermission(u);
 
         // There is no permissions
-        assertTrue(lp.size() == 2);
-        assertTrue(lp.contains(p1));
-        assertTrue(lp.contains(p2));
+        Assertions.assertThat(lp.size() == 2).isTrue();
+        Assertions.assertThat(lp.contains(p1)).isTrue();
+        Assertions.assertThat(lp.contains(p2)).isTrue();
     }
 
     @Test
@@ -100,10 +99,10 @@ public class PermissionsOwnerToolsTest {
         lp = PermissionsOwnerTools.getInheritedPermission(u);
 
         // There is no permissions
-        assertTrue(lp.size() == 3);
-        assertTrue(lp.contains(p1));
-        assertTrue(lp.contains(p2));
-        assertTrue(lp.contains(p3));
+        Assertions.assertThat(lp.size() == 3).isTrue();
+        Assertions.assertThat(lp.contains(p1)).isTrue();
+        Assertions.assertThat(lp.contains(p2)).isTrue();
+        Assertions.assertThat(lp.contains(p3)).isTrue();
     }
 
 }
