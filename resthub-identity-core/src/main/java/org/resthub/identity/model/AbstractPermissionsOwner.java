@@ -17,6 +17,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+
 /**
  * <p>
  * Describe a generic class for users and groups. It contains/manage mainly
@@ -108,6 +111,7 @@ public abstract class AbstractPermissionsOwner {
      */
     @ManyToMany
     @JoinTable(name = "permissions_owner_roles")
+    @JsonIgnore
     public List<Role> getRoles() {
         return this.roles;
     }
@@ -129,6 +133,7 @@ public abstract class AbstractPermissionsOwner {
      */
     @ManyToMany
     @JoinTable(name = "permissions_owner_groups", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "permissions_owner", referencedColumnName = "id"))
+    @JsonIgnore
     public List<Group> getGroups() {
         return groups;
     }
