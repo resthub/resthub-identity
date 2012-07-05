@@ -1,26 +1,23 @@
 package org.resthub.identity.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.junit.Test;
-import org.resthub.core.test.service.AbstractServiceTest;
+import org.fest.assertions.Assertions;
 import org.resthub.identity.model.Role;
+import org.resthub.test.common.AbstractTransactionalTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Test class for <tt>RoleService</tt>.
  * 
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public class RoleServiceTest extends AbstractServiceTest<Role, Long, RoleService> {
+public class RoleServiceTest extends AbstractTransactionalTest {
 
     /**
      * Generate a random role name based on a string and a randomized number.
@@ -33,70 +30,79 @@ public class RoleServiceTest extends AbstractServiceTest<Role, Long, RoleService
 
     @Inject
     @Named("roleService")
-    @Override
-    public void setService(RoleService service) {
-        super.setService(service);
-    }
+    private RoleService roleService;
 
-    @Override
+    // Cleanup after each test
+    @BeforeMethod
+    public void cleanBefore() {
+    	roleService.deleteAll();
+    }
+    
+	// Cleanup after each test
+    @AfterMethod
+    public void cleanAfter() {
+    	roleService.deleteAll();
+    }
+    
     public Role createTestEntity() {
         Role testRole = new Role(generateRandomRoleName());
         return testRole;
     }
-
-    @Override
+    
+    @Test
     public void testUpdate() {
         // Given a new role
         Role testRole = this.createTestEntity();
-        testRole = this.service.create(testRole);
+        testRole = roleService.create(testRole);
 
         // When I update this role
         final String newRoleName = this.generateRandomRoleName();
         testRole.setName(newRoleName);
-        testRole = this.service.update(testRole);
+        testRole = roleService.update(testRole);
 
         // Then the modification is done.
-        assertEquals("Role not updated!", testRole.getName(), newRoleName);
+        Assertions.assertThat(testRole.getName()).as("Role not updated!").isEqualTo(newRoleName);
     }
 
     @Test
     public void shouldFindByName() {
         // Given a new role
         Role r = this.createTestEntity();
-        r = this.service.create(r);
+        r = roleService.create(r);
 
         // When I find it by name
-        Role roleFromName = this.service.findByName(r.getName());
+        Role roleFromName = roleService.findByName(r.getName());
 
         // Then I can find it
-        assertNotNull("The role should be found", roleFromName);
-        assertEquals("The role found should be the same as the one created", r, roleFromName);
+        Assertions.assertThat(roleFromName).as("The role should be found").isNotNull();
+        Assertions.assertThat(roleFromName).as("The role found should be the same as the one created").isEqualTo(r);
     }
 
     @Test
     public void shouldNotFindRoleWithWeirdName() {
         // Given a new role
         Role r = this.createTestEntity();
-        r = this.service.create(r);
+        r = roleService.create(r);
 
         // When I find it with a weird name
-        Role roleFromName = this.service.findByName("InventedNameThatShouldntBringAnyResult");
+        Role roleFromName = roleService.findByName("InventedNameThatShouldntBringAnyResult");
 
         // Then I can find it
-        assertNull("No role should be found", roleFromName);
+        Assertions.assertThat(roleFromName).as("No role should be found").isNull();
     }
 
     @Test
     public void shouldFindNameWithWildcard() {
         // Given a new role
         Role r = this.createTestEntity();
-        r = this.service.create(r);
+        r = roleService.create(r);
 
         // When I search for a part of its name
-        List<Role> roles = this.service.findByNameLike(r.getName().substring(0, 9) + "%");
+        List<Role> roles = roleService.findByNameLike(r.getName().substring(0, 9) + "%");
 
         // Then the list is not empty and contains our role
-        assertFalse("The list of roles shouldn't be empty", roles.isEmpty());
-        assertTrue("The list of roles should contain our role", roles.contains(r));
+        Assertions.assertThat(roles.isEmpty()).as("The list of roles shouldn't be empty").isFalse();
+        Assertions.assertThat(roles.contains(r)).as("The list of roles should contain our role").isTrue();
     }
+    
 }

@@ -1,9 +1,5 @@
 package org.resthub.identity.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,16 +7,21 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.junit.Test;
-import org.resthub.core.test.repository.AbstractRepositoryTest;
+import org.fest.assertions.Assertions;
+import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.test.common.AbstractTransactionalTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * 
  * @author Guillaume Zurbach
  */
-public class UserRepositoryTest extends AbstractRepositoryTest<User, Long, UserRepository> {
+public class UserRepositoryTest extends AbstractTransactionalTest {
 
 	private static final String GROUP_NAME = "TestGroup";
 
@@ -35,23 +36,107 @@ public class UserRepositoryTest extends AbstractRepositoryTest<User, Long, UserR
 	@Inject
 	@Named("groupRepository")
 	protected GroupRepository groupRepository;
+	
+	@Inject
+	@Named("roleRepository")
+	protected RoleRepository roleRepository;
+	
+	@Inject
+	@Named("abstractPermissionsOwnerRepository")
+	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
 
 	@Inject
 	@Named("userRepository")
-	@Override
-	public void setRepository(UserRepository resourceRepository) {
-		super.setRepository(resourceRepository);
+	private UserRepository userRepository;
+	
+	// Cleanup after each test
+    @BeforeMethod
+    public void cleanBefore() {
+        roleRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+    
+	// Cleanup after each test
+    @AfterMethod
+    public void cleanAfter() {
+    	roleRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+    
+	/*
+	 * Tests
+	 */
+	
+	@Test
+	public void testUpdate() {
+		User user = userRepository.save(createTestUser());
+		
+		User user1 = userRepository.findOne(user.getId());
+		user1.setEmail("test@plop.fr");
+		userRepository.save(user1);
+
+		User user2 = userRepository.findOne(user.getId());
+		Assertions.assertThat(user2.getEmail()).as("User not updated!").isEqualTo("test@plop.fr");
 	}
 
-	@Override
-	protected User createTestEntity() {
-		return createTestUser();
+	@Test
+	public void testGetAndPermissions() {
+		User user = createTestUser();
+		user = userRepository.save(user);
+
+		// when we search him by his login and password
+		List<User> users = userRepository.findByLogin(user.getLogin());
+		Assertions.assertThat(users).as("Users list is null!").isNotNull();
+		Assertions.assertThat(users.get(0)).as("First element is null!").isNotNull();
+		Assertions.assertThat(users.get(0).getLogin()).as("Login is not good!").isEqualTo(user.getLogin());
+		Assertions.assertThat(users.get(0).getPermissions()).isNotNull();
+		Assertions.assertThat(users.get(0).getPermissions().isEmpty()).isFalse();
+		Assertions.assertThat(users.get(0).getPermissions().get(0)).as("First permission should be equals to "+user.getPermissions().get(0)+"!").isEqualTo(user.getPermissions().get(0));
+		Assertions.assertThat(users.get(0).getPermissions().get(1)).as("Second permission should be equals to "+user.getPermissions().get(1)+"!").isEqualTo(user.getPermissions().get(1));
 	}
 
+	@Test
+	public void testGetUsersFromGroup() {
+		Group group = createTestGroup();
+		group = groupRepository.save(group);
+
+		User user = createTestUser();
+		user.getGroups().add(group);
+		userRepository.save(user);
+
+		List<User> users = userRepository.getUsersFromGroup(group.getName());
+		Assertions.assertThat(users).as("Users should not be null").isNotNull();
+		Assertions.assertThat(users.isEmpty()).as("Users should not empty").isFalse();
+	}
+	
+	@Test
+	public void testGetWithRoles() {
+		Role role = createTestRole();
+		role = roleRepository.save(role);
+
+		User user = createTestUser();
+		user.getRoles().add(role);
+		userRepository.save(user);
+
+		List<AbstractPermissionsOwner> users = abstractPermissionsOwnerRepository.getWithRoles(Arrays.asList(role.getName()));
+		Assertions.assertThat(users).as("Users should not be null").isNotNull();
+		Assertions.assertThat(users.isEmpty()).as("Users should not empty").isFalse();
+	}
+	
+	
+	/*
+	 * Méthodes génériques
+	 */
+	
 	private Group createTestGroup() {
 		Group group = new Group();
 		group.setName(GROUP_NAME + Math.round(Math.random() * 100));
 		return group;
+	}
+	
+	private Role createTestRole() {
+		Role role = new Role(GROUP_NAME + Math.round(Math.random() * 100));
+		return role;
 	}
 
 	private User createTestUser() {
@@ -64,51 +149,6 @@ public class UserRepositoryTest extends AbstractRepositoryTest<User, Long, UserR
 
 		user.getPermissions().addAll(new ArrayList<String>(Arrays.asList(USER_PERMISSION_1, USER_PERMISSION_2)));
 		return user;
-	}
-
-	@Override
-	public void testUpdate() {
-		User user1 = repository.findOne(this.id);
-		user1.setEmail("test@plop.fr");
-		repository.save(user1);
-
-		User user2 = repository.findOne(this.id);
-		assertEquals("User not updated!", user2.getEmail(), "test@plop.fr");
-	}
-
-	@Test
-	public void testGetAndPermissions() {
-		User user = createTestUser();
-		user = repository.save(user);
-
-		// when we search him by his login and password
-		List<User> users = repository.findByLogin(user.getLogin());
-		assertNotNull(users);
-		assertNotNull(users.get(0));
-		assertEquals(user.getLogin(), users.get(0).getLogin());
-		assertNotNull(users.get(0).getPermissions());
-		assertFalse(users.get(0).getPermissions().isEmpty());
-		assertEquals(user.getPermissions().get(0), users.get(0).getPermissions().get(0));
-		assertEquals(user.getPermissions().get(1), users.get(0).getPermissions().get(1));
-	}
-
-	@Test
-	public void testGetUsersFromGroup() {
-		Group group = createTestGroup();
-		group = groupRepository.save(group);
-
-		User user = createTestUser();
-		user.getGroups().add(group);
-		repository.save(user);
-
-		List<User> users = this.repository.getUsersFromGroup(group.getName());
-		assertNotNull("Users should not be null", users);
-		assertFalse("Users should not empty", users.isEmpty());
-	}
-	
-	@Override
-	public Long getIdFromEntity(User user) {
-		return user.getId();
 	}
 	
 }

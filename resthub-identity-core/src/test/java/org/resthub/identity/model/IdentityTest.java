@@ -1,10 +1,7 @@
 package org.resthub.identity.model;
 
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
+import org.fest.assertions.api.Assertions;
+import org.testng.annotations.Test;
 
 /**
  * Test class to test behavior of the identity model behavior This is
@@ -20,7 +17,7 @@ public class IdentityTest {
         // Given a new Identity
         AbstractPermissionsOwner i = new PermissionsOwner();
         // the object should exist and the permissions list being null
-        assertNotNull("The new Identity is null", i);
+        Assertions.assertThat(i).isNotNull().as("The new Identity is null");
     }
 
     @Test
@@ -33,30 +30,29 @@ public class IdentityTest {
         i.getPermissions().add(p1);
 
         // The permission list defined should be the one given
-        assertEquals("the permissions list is not properly setted", p1, i.getPermissions().get(0));
+        Assertions.assertThat(i.getPermissions().get(0)).isEqualTo(p1).as("the permissions list is not properly setted");
     }
 
     @Test
     public void testRoleSettlement() {
         AbstractPermissionsOwner owner = new PermissionsOwner();
 
-        assertNotNull("Role list shouldn't be null", owner.getRoles());
-        assertEquals("Role list should be empty", 0, owner.getRoles().size());
-
+        Assertions.assertThat(owner.getRoles()).isNotNull().as("Role list shouldn't be null");
+        Assertions.assertThat(owner.getRoles().size()).isEqualTo(0).as("Role list should be empty");
+        
         final String testRoleName = "testRole";
         Role testRole = new Role(testRoleName);
-
-        assertEquals("Name of the role should be the one set in constructor", testRoleName, testRole.getName());
-        assertNotNull("Permissions of the role shouldn't be null", testRole.getPermissions());
-        assertEquals("Newly created role shouldn't have permissions", 0, testRole.getPermissions().size());
+        Assertions.assertThat(testRole.getName()).isEqualTo(testRoleName).as("Name of the role should be the one set in constructor");
+        Assertions.assertThat(testRole.getPermissions()).isNotNull().as("Permissions of the role shouldn't be null");
+        Assertions.assertThat(testRole.getPermissions().size()).isEqualTo(0).as("Newly created role shouldn't have permissions");
 
         final String testPermissionName = "testPerm";
         testRole.getPermissions().add(testPermissionName);
 
-        assertTrue("Permissions of the role should contain the newly added permission", testRole.getPermissions()
-                .contains(testPermissionName));
+        Assertions.assertThat(testRole.getPermissions().contains(testPermissionName)).isTrue().as("Permissions of the role should contain the newly added permission");
 
         owner.getRoles().add(testRole);
-        assertTrue("Permission owner should contain the newly created role", owner.getRoles().contains(testRole));
+        Assertions.assertThat(owner.getRoles().contains(testRole)).isTrue().as("Permission owner should contain the newly created role");
+
     }
 }

@@ -1,52 +1,62 @@
 package org.resthub.identity.repository;
 
-import static org.junit.Assert.assertEquals;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.resthub.core.test.repository.AbstractRepositoryTest;
+import org.fest.assertions.Assertions;
 import org.resthub.identity.model.Group;
+import org.resthub.test.common.AbstractTransactionalTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * 
  * @author Guillaume Zurbach
  */
-public class GroupRepositoryTest extends AbstractRepositoryTest<Group, Long, GroupRepository> {
+public class GroupRepositoryTest extends AbstractTransactionalTest {
 
 	private static final String GROUP_NAME = "TestGroup";
 	private static final String NEW_GROUP_NAME = "NewGroup";
 
 	@Inject
 	@Named("groupRepository")
-	@Override
-	public void setRepository(GroupRepository groupRepository) {
-		super.setRepository(groupRepository);
-	}
+	private GroupRepository groupRepository;
 
-	@Override
-	protected Group createTestEntity() {
-		return createTestGroup();
-	}
-
-	private Group createTestGroup() {
+	// Cleanup after each test
+    @BeforeMethod
+    public void cleanBefore() {
+    	groupRepository.deleteAll();
+    }
+    
+	// Cleanup after each test
+    @AfterMethod
+    public void cleanAfter() {
+    	groupRepository.deleteAll();
+    }
+    
+	@Test
+	public void testCreate() {
 		Group group = new Group();
 		group.setName(GROUP_NAME + Math.round(Math.random() * 100));
-		return group;
+		group = groupRepository.save(group);
+		Assertions.assertThat(group).as("Group not created !").isNotNull();
 	}
 
-	@Override
+	@Test
 	public void testUpdate() {
-		Group group1 = repository.findOne(this.id);
+		// Créer un groupe
+		Group group = new Group();
+		group.setName(GROUP_NAME + Math.round(Math.random() * 100));
+		group = groupRepository.save(group);
+		Assertions.assertThat(group).as("Group not created !").isNotNull();
+		// Récupérer le groupe créé et le modifier
+		Group group1 = groupRepository.findOne(group.getId());
 		group1.setName(NEW_GROUP_NAME);
-		repository.save(group1);
-
-		Group group2 = repository.findOne(this.id);
-		assertEquals("Group not updated!", group2.getName(), NEW_GROUP_NAME);
+		groupRepository.save(group1);
+		// Récupérer le groupe pour vérifier s'il a bien été modifié
+		Group group2 = groupRepository.findOne(group.getId());
+		Assertions.assertThat(group2.getName()).as("Group not updated!").isEqualTo(NEW_GROUP_NAME);
 	}
 
-	@Override
-	public Long getIdFromEntity(Group group) {
-		return group.getId();
-	}
 }

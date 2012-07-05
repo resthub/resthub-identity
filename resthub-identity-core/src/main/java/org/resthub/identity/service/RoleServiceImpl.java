@@ -121,8 +121,8 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 		return createdRole;
 	}
 
-	@Override
-	public Long getIdFromEntity(Role role) {
-		return role.getId();
-	}
+//	@Override
+//	public Long getIdFromEntity(Role role) {
+//		return role.getId();
+//	}
 }
