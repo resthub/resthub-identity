@@ -148,6 +148,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<String> getUserPermissions(String login) {
 		List<String> p = null;
 		User u = this.findByLogin(login);
@@ -199,6 +200,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			if (u != null) {
 				while (u.getPermissions().contains(permission)) {
 					u.getPermissions().remove(permission);
+					this.update(u);
 				}
 			}
 		}
@@ -318,7 +320,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			if (r != null) {
 				if (!u.getRoles().contains(r)) {
 					u.getRoles().add(r);
-					this.repository.save(u);
+					this.update(u);
 					this.publishChange(RoleChange.ROLE_ADDED_TO_USER.name(), r, u);
 				}
 			}
@@ -337,7 +339,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			if (r != null) {
 				if (u.getRoles().contains(r)) {
 					u.getRoles().remove(r);
-					this.repository.save(u);
+					this.update(u);
 					this.publishChange(RoleChange.ROLE_REMOVED_FROM_USER.name(), r, u);
 				}
 			}
