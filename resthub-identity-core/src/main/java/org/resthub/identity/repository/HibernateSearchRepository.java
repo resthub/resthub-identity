@@ -3,9 +3,9 @@ package org.resthub.identity.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -38,8 +38,16 @@ public class HibernateSearchRepository implements SearchRepository {
 	/**
 	 * JPA persistence context, injected by Spring.
 	 */
-	@PersistenceContext
-	protected EntityManager entityManager;
+	@Inject
+	protected EntityManagerFactory entityManagerFactory;
+	
+	public void setEntityManagerFactory(EntityManagerFactory emf) {
+		this.entityManagerFactory = emf;
+	}
+
+	public EntityManagerFactory getEntityManagerFactory() {
+		return this.entityManagerFactory;
+	}
 
 	/**
 	 * Inihibition flag. No query should be realized while re-indexing resources.
@@ -58,7 +66,7 @@ public class HibernateSearchRepository implements SearchRepository {
 		// No query should be realized while re-indexing resources.
 		if (!inhibitSearch) {
 			// Gets the Hibernate search object to performs queries.
-			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManagerFactory.createEntityManager());
 
 			// Parse the the queryString.
 			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[] { "name",
@@ -116,7 +124,7 @@ public class HibernateSearchRepository implements SearchRepository {
 		logger.info("[resetIndexes] Re-indexing all users, groups and roles...");
 		this.inhibitSearch = true;
 		try {
-			FullTextEntityManager searchFactory = Search.getFullTextEntityManager(entityManager);
+			FullTextEntityManager searchFactory = Search.getFullTextEntityManager(entityManagerFactory.createEntityManager());
 			searchFactory.createIndexer(User.class, Group.class, Role.class).startAndWait();
 		} catch (InterruptedException e) {
 			logger.error("[resetIndexes] Fatal error while re-indexing users, groups and roles " + e.getMessage(), e);

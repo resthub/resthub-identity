@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 /**
  * SearchService test
  */
+//TODO : these tests don't work
 public class SearchServiceTest extends AbstractTransactionalTest {
 
     /**
