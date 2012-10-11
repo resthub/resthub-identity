@@ -72,6 +72,7 @@ public class GroupControllerWebTest extends AbstractWebTest {
         return resource.getId();
     }
 
+    // TODO : this test doesn't work
     @Test
     public void testShouldGetUsersFromGroup() throws IllegalArgumentException, InterruptedException, ExecutionException, IOException {
     	
@@ -95,7 +96,6 @@ public class GroupControllerWebTest extends AbstractWebTest {
         u.setLogin(login);
         response = client.url(rootUrl()+"user").jsonPost(u).get();
         u = JsonHelper.deserialize(response.getBody(), User.class);
-        System.out.println("Id user : "+u.getId());
         
         /* Given a link between this user and the group */
         client.url(rootUrl()+"user/name/" + u.getLogin() + "/groups/" + g.getName()).put("");

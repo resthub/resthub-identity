@@ -66,7 +66,16 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 		return g;
 
 	}
-
+	
+	/**
+	 *  {@inheritDoc}
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public List<Group> getGroupsFromGroup(String groupName){
+        return this.repository.findGroupsFromGroup(groupName);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -80,6 +89,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 				boolean contain = group.getGroups().contains(subGroup);
 				if (!contain) {
 					group.getGroups().add(subGroup);
+					this.repository.save(group);
 					// Publish notification
 					publishChange(GroupServiceChange.GROUP_ADDED_TO_GROUP.name(), subGroup, group);
 				}
@@ -99,6 +109,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 				boolean contains = g.getPermissions().contains(permission);
 				if (!contains) {
 					g.getPermissions().add(permission);
+					this.repository.save(g);
 				}
 			}
 		}
@@ -124,6 +135,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional
 	public void removeGroupFromGroup(String groupName, String subGroupName) {
 		if (groupName != null && subGroupName != null) {
 			Group group = this.findByName(groupName);
@@ -132,6 +144,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 				boolean contain = group.getGroups().contains(subGroup);
 				if (contain) {
 					group.getGroups().remove(subGroup);
+					this.repository.save(group);
 					// Publish notification
 					publishChange(GroupServiceChange.GROUP_REMOVED_FROM_GROUP.name(), subGroup, group);
 				}
@@ -151,6 +164,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 			while (permissions.contains(permission)) {
 				permissions.remove(permission);
 			}
+			this.repository.save(g);
 		}
 	}
 
@@ -228,6 +242,15 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(readOnly = true)
+	public List<Role> getRolesFromGroup(String groupName) {
+		return this.repository.findRolesFromGroup(groupName);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	@Transactional
 	public void addRoleToGroup(String groupName, String roleName) {
 		Group g = this.findByName(groupName);
@@ -262,8 +285,4 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 		}
 	}
 
-//	@Override
-//	public Long getIdFromEntity(Group group) {
-//		return group.getId();
-//	}
 }
