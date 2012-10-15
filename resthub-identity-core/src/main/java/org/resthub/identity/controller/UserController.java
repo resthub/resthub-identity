@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.resthub.common.exception.NotFoundException;
 
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.exception.ExpectationFailedException;
@@ -13,7 +14,6 @@ import org.resthub.identity.model.User;
 import org.resthub.identity.service.UserService;
 import org.resthub.identity.tools.PermissionsOwnerTools;
 import org.resthub.web.controller.ServiceBasedRestController;
-import org.resthub.web.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -70,14 +70,14 @@ public class UserController extends ServiceBasedRestController<User, Long, UserS
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_USER_ADMIN", "IM_USER_READ" }) @Override
-    public List<User> findAll() {
+    public Iterable<User> findAll() {
         return super.findAll();
     }
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_USER_ADMIN", "IM_USER_READ" }) @RequestMapping(value = "/findAllPerPage", method = RequestMethod.GET) @Override
-    public Page<User> findAll(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size) {
-        return super.findAll(page, size);
+    public Page<User> findPaginated(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size) {
+        return super.findPaginated(page, size);
     }
     
     /** Override this methods in order to secure it **/

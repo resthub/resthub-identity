@@ -8,8 +8,8 @@ import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.test.common.AbstractWebTest;
 import org.resthub.web.Client;
-import org.resthub.web.Client.Response;
 import org.resthub.web.JsonHelper;
+import org.resthub.web.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -24,32 +24,28 @@ public class RoleControllerWebTest extends AbstractWebTest {
 
 	Client client = new Client();
 	
-	protected String rootUrl() {
+    public RoleControllerWebTest() {
+        this.activeProfiles = "resthub-web-server,resthub-jpa";
+    }
+        
+        protected String rootUrl() {
         return "http://localhost:9797/api/";
     }
 	
 	// Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-        try {
-        	client.url(rootUrl()+"user").delete().get();
-        	client.url(rootUrl()+"group").delete().get();
-            client.url(rootUrl()+"role").delete().get();
-        } catch (InterruptedException | ExecutionException e) {
-            Assertions.fail("Exception during delete all request", e);
-        }
+       	client.url(rootUrl()+"user").delete();
+       	client.url(rootUrl()+"group").delete();
+        client.url(rootUrl()+"role").delete();
     }
     
 	// Cleanup after each test
     @AfterMethod
     public void cleanAfter() {
-        try {
-        	client.url(rootUrl()+"user").delete().get();
-        	client.url(rootUrl()+"group").delete().get();
-            client.url(rootUrl()+"role").delete().get();
-        } catch (InterruptedException | ExecutionException e) {
-            Assertions.fail("Exception during delete all request", e);
-        }
+   	client.url(rootUrl()+"user").delete();
+     	client.url(rootUrl()+"group").delete();
+        client.url(rootUrl()+"role").delete();
     }
 
     /**
@@ -86,10 +82,10 @@ public class RoleControllerWebTest extends AbstractWebTest {
         Role r1 = new Role("role1");
         Role r2 = new Role("role2");
         
-        Response response = client.url(rootUrl()+"role").jsonPost(r1).get();
+        Response response = client.url(rootUrl()+"role").jsonPost(r1);
         r1 = JsonHelper.deserialize(response.getBody(), Role.class); 
         
-        response = client.url(rootUrl()+"role").jsonPost(r2).get();
+        response = client.url(rootUrl()+"role").jsonPost(r2);
         r2 = JsonHelper.deserialize(response.getBody(), Role.class);
         
         // Given some new users
@@ -98,13 +94,13 @@ public class RoleControllerWebTest extends AbstractWebTest {
         User u3 = this.createTestUser(3);
         User u4 = this.createTestUser(4);
         
-        response = client.url(rootUrl()+"user").jsonPost(u1).get();
+        response = client.url(rootUrl()+"user").jsonPost(u1);
         u1 = JsonHelper.deserialize(response.getBody(), User.class);
-        response = client.url(rootUrl()+"user").jsonPost(u2).get();
+        response = client.url(rootUrl()+"user").jsonPost(u2);
         u2 = JsonHelper.deserialize(response.getBody(), User.class);
-        response = client.url(rootUrl()+"user").jsonPost(u3).get();
+        response = client.url(rootUrl()+"user").jsonPost(u3);
         u3 = JsonHelper.deserialize(response.getBody(), User.class);
-        response = client.url(rootUrl()+"user").jsonPost(u4).get();
+        response = client.url(rootUrl()+"user").jsonPost(u4);
         u4 = JsonHelper.deserialize(response.getBody(), User.class);
         
         // Given the association of the users with the roles
@@ -117,9 +113,9 @@ public class RoleControllerWebTest extends AbstractWebTest {
         client.url(rootUrl()+"user/name/" + u4.getLogin() + "/roles/" + r2.getName()).put(JsonHelper.serialize(u4));
 
         // When I look for users with roles
-        String notExistingRoleUsers = client.url(rootUrl()+"role/inventedRole/users").get().get().getBody();
-        String role1Users = client.url(rootUrl()+"role/role1/users").get().get().getBody();
-        String role2Users = client.url(rootUrl()+"role/role2/users").get().get().getBody();
+        String notExistingRoleUsers = client.url(rootUrl()+"role/inventedRole/users").get().getBody();
+        String role1Users = client.url(rootUrl()+"role/role1/users").get().getBody();
+        String role2Users = client.url(rootUrl()+"role/role2/users").get().getBody();
         
         // Then the lists should only contain what I asked for
         Assertions.assertThat(notExistingRoleUsers).as("A search with an unknown role shouldn't bring anything").isEqualTo("[]");

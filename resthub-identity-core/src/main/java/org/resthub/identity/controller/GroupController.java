@@ -3,6 +3,7 @@ package org.resthub.identity.controller;
 import java.util.List;
 
 import javax.inject.Inject;
+import org.resthub.common.exception.NotFoundException;
 
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.exception.ExpectationFailedException;
@@ -11,7 +12,6 @@ import org.resthub.identity.model.User;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.UserService;
 import org.resthub.web.controller.ServiceBasedRestController;
-import org.resthub.web.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -89,14 +89,14 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_GROUP_ADMIN", "IM_GROUP_READ" }) @Override
-    public List<Group> findAll() {
+    public Iterable<Group> findAll() {
         return super.findAll();
     }
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_GROUP_ADMIN", "IM_GROUP_READ" }) @RequestMapping(value = "/findAllPerPage", method = RequestMethod.GET) @Override
-    public Page<Group> findAll(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false)  Integer size) {
-        return super.findAll(page, size);
+    public Page<Group> findPaginated(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false)  Integer size) {
+        return super.findPaginated(page, size);
     }
     
     /** Override this methods in order to secure it **/

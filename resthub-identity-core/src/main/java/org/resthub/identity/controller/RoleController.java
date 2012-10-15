@@ -5,13 +5,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.resthub.common.exception.NotFoundException;
 
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.RoleService;
 import org.resthub.identity.service.UserService;
 import org.resthub.web.controller.ServiceBasedRestController;
-import org.resthub.web.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -52,14 +52,14 @@ public class RoleController extends ServiceBasedRestController<Role, Long, RoleS
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_ROLE_ADMIN", "IM_ROLE_READ" }) @Override
-    public List<Role> findAll() {
+    public Iterable<Role> findAll() {
         return super.findAll();
     }
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_ROLE_ADMIN", "IM_ROLE_READ" }) @RequestMapping(value = "/findAllPerPage", method = RequestMethod.GET) @Override
-    public Page<Role> findAll(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size) {
-        return super.findAll(page, size);
+    public Page<Role> findPaginated(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size) {
+        return super.findPaginated(page, size);
     }
     
     /** Override this methods in order to secure it **/

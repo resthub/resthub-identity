@@ -8,9 +8,9 @@ import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.User;
 import org.resthub.test.common.AbstractWebTest;
 import org.resthub.web.Client;
-import org.resthub.web.Client.Response;
 import org.resthub.web.Http;
 import org.resthub.web.JsonHelper;
+import org.resthub.web.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,38 +21,34 @@ import org.testng.annotations.Test;
 public class SearchControllerWebTest extends AbstractWebTest {
 	
 	Client client = new Client();
+        
+    public SearchControllerWebTest() {
+        this.activeProfiles = "resthub-web-server,resthub-jpa";
+    }
 	
-	protected String rootUrl() {
+    protected String rootUrl() {
         return "http://localhost:9797/api/";
     }
 
 	// Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-        try {
-        	client.url(rootUrl()+"user").delete().get();
-        	client.url(rootUrl()+"group").delete().get();
-            client.url(rootUrl()+"role").delete().get();
-        } catch (InterruptedException | ExecutionException e) {
-            Assertions.fail("Exception during delete all request", e);
-        }
+       	client.url(rootUrl()+"user").delete();
+        client.url(rootUrl()+"group").delete();
+        client.url(rootUrl()+"role").delete();
     }
     
 	// Cleanup after each test
     @AfterMethod
     public void tearDown() {
-        try {
-        	client.url(rootUrl()+"user").delete().get();
-        	client.url(rootUrl()+"group").delete().get();
-            client.url(rootUrl()+"role").delete().get();
-        } catch (InterruptedException | ExecutionException e) {
-            Assertions.fail("Exception during delete all request", e);
-        }
+       	client.url(rootUrl()+"user").delete();
+        client.url(rootUrl()+"group").delete();
+        client.url(rootUrl()+"role").delete();
     }
     
     @Test
     public void shouldIndexesBeReseted() throws InterruptedException, ExecutionException, IOException {
-    	Response response = client.url(rootUrl()+"search").put("").get();
+    	Response response = client.url(rootUrl()+"search").put("");
         // Then the operation is processed
     	Assertions.assertThat(response.getStatus()).isEqualTo(Http.NO_CONTENT);
     }
@@ -60,7 +56,7 @@ public class SearchControllerWebTest extends AbstractWebTest {
     @Test
     public void shouldNullQueryFailed() throws InterruptedException, ExecutionException, IOException {
         // When searching without parameter
-    	Response response = client.url(rootUrl()+"search").get().get();
+    	Response response = client.url(rootUrl()+"search").get();
         // Then the result is an error.
     	Assertions.assertThat(response.getStatus()).isEqualTo(Http.BAD_REQUEST);
     }
@@ -68,7 +64,7 @@ public class SearchControllerWebTest extends AbstractWebTest {
     @Test
     public void shouldEmptyQueryFailed() throws InterruptedException, ExecutionException, IOException {
         // When searching with empty query
-    	Response response = client.url(rootUrl()+"search").setQueryParameter("query", "").get().get();
+    	Response response = client.url(rootUrl()+"search").setQueryParameter("query", "").get();
         // Then the result is empty.
     	Assertions.assertThat(response.getStatus()).isEqualTo(Http.INTERNAL_SERVER_ERROR);
     	Assertions.assertThat(response.getBody().contains("Misformatted queryString")).isTrue();
@@ -77,7 +73,7 @@ public class SearchControllerWebTest extends AbstractWebTest {
     @Test
     public void shouldUnmatchingQueryReturnsEmptyResults() throws InterruptedException, ExecutionException, IOException {
         // When searching with an unmatching query
-    	Response response = client.url(rootUrl()+"search").setQueryParameter("query", "toto").get().get();
+    	Response response = client.url(rootUrl()+"search").setQueryParameter("query", "toto").get();
     	AbstractPermissionsOwner[] results = JsonHelper.deserialize(response.getBody(), AbstractPermissionsOwner[].class); 
 
     	// Then the result is empty.
@@ -92,7 +88,7 @@ public class SearchControllerWebTest extends AbstractWebTest {
         user.setLogin("jdujardin");
         user.setPassword("pwd");
         
-        Response response = client.url(rootUrl()+"user").jsonPost(user).get();
+        Response response = client.url(rootUrl()+"user").jsonPost(user);
         user = JsonHelper.deserialize(response.getBody(), User.class); 
 
         // Given a user with jean as name
@@ -100,11 +96,11 @@ public class SearchControllerWebTest extends AbstractWebTest {
         user2.setLogin("user2");
         user2.setLastName("jean");
         user2.setPassword("pwd");
-        response = client.url(rootUrl()+"user").jsonPost(user2).get();
+        response = client.url(rootUrl()+"user").jsonPost(user2);
         user2 = JsonHelper.deserialize(response.getBody(), User.class);
 
         // When searching the created user
-        response = client.url(rootUrl()+"search").setQueryParameter("query", "j").get().get();
+        response = client.url(rootUrl()+"search").setQueryParameter("query", "j").get();
         User[] results = JsonHelper.deserialize(response.getBody(), User[].class);
         // Then the result contains the user.
         Assertions.assertThat(results).isNotNull();
@@ -123,7 +119,7 @@ public class SearchControllerWebTest extends AbstractWebTest {
         User user = new User();
         user.setLogin("jdujardin");
         user.setPassword("pwd");
-        Response response = client.url(rootUrl()+"user").jsonPost(user).get();
+        Response response = client.url(rootUrl()+"user").jsonPost(user);
         user = JsonHelper.deserialize(response.getBody(), User.class); 
 
         // Given a user with jean as name
@@ -131,10 +127,10 @@ public class SearchControllerWebTest extends AbstractWebTest {
         user2.setLogin("user2");
         user2.setLastName("jean");
         user2.setPassword("pwd");
-        response = client.url(rootUrl()+"user").jsonPost(user2).get();
+        response = client.url(rootUrl()+"user").jsonPost(user2);
         user2 = JsonHelper.deserialize(response.getBody(), User.class);
 
-        response = client.url(rootUrl()+"search").setQueryParameter("query", "j").get().get();
+        response = client.url(rootUrl()+"search").setQueryParameter("query", "j").get();
         User[] results = JsonHelper.deserialize(response.getBody(), User[].class);
 
         // Then the result contains the user.
@@ -155,11 +151,11 @@ public class SearchControllerWebTest extends AbstractWebTest {
         User user = new User();
         user.setLogin("jdujardin");
         user.setPassword("pwd");
-        Response response = client.url(rootUrl()+"user").jsonPost(user).get();
+        Response response = client.url(rootUrl()+"user").jsonPost(user);
         user = JsonHelper.deserialize(response.getBody(), User.class);
 
         // When searching the created user without users
-        response = client.url(rootUrl()+"search").setQueryParameter("query", "j").setQueryParameter("users", "false").get().get();
+        response = client.url(rootUrl()+"search").setQueryParameter("query", "j").setQueryParameter("users", "false").get();
         User[] results = JsonHelper.deserialize(response.getBody(), User[].class);
         // Then the result does not contains the user.
         Assertions.assertThat(results).isNotNull();
