@@ -5,6 +5,7 @@ import java.util.List;
 import org.resthub.common.service.CrudService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Role;
 import org.resthub.identity.service.tracability.TracableService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,6 +108,17 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 	void removePermissionFromGroup(String groupName, String permission);
 
 	/**
+	 * 
+	 * Get groups from a group
+	 * 
+	 * @param groupName
+	 * 				the name of the group
+	 * @return
+	 */
+	@Transactional
+	List<Group> getGroupsFromGroup(String groupName);
+	
+	/**
 	 * Add a group from one group's groups
 	 * 
 	 * @param groupName
@@ -116,7 +128,15 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 	 */
 	@Transactional
 	void addGroupToGroup(String groupName, String subGroupName);
-
+	
+	/**
+	 * Get roles from a group.
+	 * 
+	 * @param groupName
+	 *            Group name.
+	 */
+	List<Role> getRolesFromGroup(String groupName);
+	
 	/**
 	 * Add a role to a group.
 	 * 

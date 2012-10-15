@@ -8,8 +8,10 @@ import org.resthub.common.exception.NotFoundException;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.exception.ExpectationFailedException;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.GroupService;
+import org.resthub.identity.service.RoleService;
 import org.resthub.identity.service.UserService;
 import org.resthub.web.controller.ServiceBasedRestController;
 import org.springframework.data.domain.Page;
@@ -40,6 +42,9 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      * */
 	@Inject
     UserService userService;
+	
+	@Inject
+    RoleService roleService;
 
     @Inject @Override      
     public void setService(GroupService service) {
@@ -145,11 +150,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      */
     @RequestMapping(method = RequestMethod.GET, value = "name/{name}/groups") @ResponseBody
     public List<Group> getGroupsFromGroups(@PathVariable("name") String name) {
-        Group g = this.service.findByName(name);
-        if (g == null) {
-            throw new NotFoundException();
-        }
-        return g.getGroups();
+        return this.service.getGroupsFromGroup(name);
     }
 
     /**
@@ -161,7 +162,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      *            the name of the group the be added
      */
     @RequestMapping(method = RequestMethod.PUT, value = "name/{name}/groups/{group}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addGroupToUser(@PathVariable("name") String name, @PathVariable("group") String group) {
+    public void addGroupToGroup(@PathVariable("name") String name, @PathVariable("group") String group) {
         this.service.addGroupToGroup(name, group);
     }
 
@@ -174,7 +175,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      *            the name of the gorup the be removed
      */    
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/groups/{groups}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeGroupsForUser(@PathVariable("name") String name, @PathVariable("groups") String groupName) {
+    public void removeGroupsForGroup(@PathVariable("name") String name, @PathVariable("groups") String groupName) {
         this.service.removeGroupFromGroup(name, groupName);
     }
 
@@ -228,15 +229,23 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
         if (usersFromGroup == null) {
             throw new NotFoundException();
         }
-        System.out.println("Taille de la liste : "+usersFromGroup.size());
         return usersFromGroup;
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "name/{name}/roles") @ResponseBody
+    public List<Role> getRolesFromGroup(@PathVariable("name") String name) {
+        List<Role> roles = this.service.getRolesFromGroup(name);
+        if (roles == null) {
+            throw new NotFoundException();
+        }
+        return roles;
     }
     
     @Secured({ "IM_GROUP_ADMIN" }) @RequestMapping(method = RequestMethod.PUT, value = "name/{name}/roles/{role}") @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addRoleToGroup(@PathVariable("name") String name, @PathVariable("role") String role) {
         this.service.addRoleToGroup(name, role);
     }
-
+    
     @Secured({ "IM_GROUP_ADMIN" }) @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles/{role}") @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeRoleFromGroup(@PathVariable("name") String name, @PathVariable("role") String role) {
         this.service.removeRoleFromGroup(name, role);
