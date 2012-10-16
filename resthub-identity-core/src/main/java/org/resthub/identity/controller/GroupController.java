@@ -50,11 +50,6 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
     public void setService(GroupService service) {
         this.service = service;
     }
-    
-    @Override
-	public Long getIdFromResource(Group resource) {
-		return resource.getId();
-	}
 
     /**
      * Automatically called to inject the userService beans<br/>

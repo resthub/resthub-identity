@@ -7,16 +7,13 @@ import javax.inject.Named;
 
 import org.fest.assertions.Assertions;
 import org.resthub.identity.model.Role;
-import org.resthub.test.common.AbstractTransactionalTest;
+import org.resthub.test.AbstractTransactionalTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/**
- * Test class for <tt>RoleService</tt>.
- * 
- * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
- */
+@ActiveProfiles("resthub-jpa")
 public class RoleServiceTest extends AbstractTransactionalTest {
 
     /**

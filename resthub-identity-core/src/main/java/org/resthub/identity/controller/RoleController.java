@@ -32,12 +32,7 @@ public class RoleController extends ServiceBasedRestController<Role, Long, RoleS
     public void setService(RoleService service) {
         this.service = service;
     }
-    
-    @Override
-	public Long getIdFromResource(Role resource) {
-		return resource.getId();
-	}
-    
+
     /** Override this methods in order to secure it **/
     @Secured({ "IM_ROLE_ADMIN" }) @Override 
     public Role create(@RequestBody Role role) {

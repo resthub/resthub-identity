@@ -9,13 +9,14 @@ import org.fest.assertions.Assertions;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.GroupService.GroupServiceChange;
-import org.resthub.test.common.AbstractTransactionalTest;
+import org.resthub.test.AbstractTransactionalTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+@ActiveProfiles("resthub-jpa")
 public class GroupServiceTest extends AbstractTransactionalTest {
-
 
     @Inject
     @Named("userService")

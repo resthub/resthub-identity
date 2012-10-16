@@ -10,13 +10,11 @@ import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
-import org.resthub.test.common.AbstractTransactionalTest;
+import org.resthub.test.AbstractTransactionalTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.Test;
 
-/**
- * SearchService test
- */
-//TODO : these tests don't work
+@ActiveProfiles("resthub-jpa")
 public class SearchServiceTest extends AbstractTransactionalTest {
 
     /**

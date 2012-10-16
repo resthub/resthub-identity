@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -38,11 +39,15 @@ public class HibernateSearchRepository implements SearchRepository {
 	/**
 	 * JPA persistence context, injected by Spring.
 	 */
-	@Inject
-	protected EntityManagerFactory entityManagerFactory;
 	
-	public void setEntityManagerFactory(EntityManagerFactory emf) {
+	protected EntityManagerFactory entityManagerFactory;
+        
+        protected EntityManager entityManager;
+	
+	@Inject
+        public void setEntityManagerFactory(EntityManagerFactory emf) {
 		this.entityManagerFactory = emf;
+                this.entityManager = emf.createEntityManager();
 	}
 
 	public EntityManagerFactory getEntityManagerFactory() {
@@ -66,7 +71,7 @@ public class HibernateSearchRepository implements SearchRepository {
 		// No query should be realized while re-indexing resources.
 		if (!inhibitSearch) {
 			// Gets the Hibernate search object to performs queries.
-			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManagerFactory);
+			FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(this.entityManager);
 
 			// Parse the the queryString.
 			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[] { "name",
@@ -124,7 +129,7 @@ public class HibernateSearchRepository implements SearchRepository {
 		logger.info("[resetIndexes] Re-indexing all users, groups and roles...");
 		this.inhibitSearch = true;
 		try {
-			FullTextEntityManager searchFactory = Search.getFullTextEntityManager(entityManagerFactory);
+			FullTextEntityManager searchFactory = Search.getFullTextEntityManager(this.entityManager);
 			searchFactory.createIndexer(User.class, Group.class, Role.class).startAndWait();
 		} catch (InterruptedException e) {
 			logger.error("[resetIndexes] Fatal error while re-indexing users, groups and roles " + e.getMessage(), e);

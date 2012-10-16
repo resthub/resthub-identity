@@ -12,15 +12,14 @@ import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
-import org.resthub.test.common.AbstractTransactionalTest;
+import org.resthub.test.AbstractTransactionalTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Guillaume Zurbach
- */
+@ActiveProfiles("resthub-jpa")
 public class UserRepositoryTest extends AbstractTransactionalTest {
 
 	private static final String GROUP_NAME = "TestGroup";

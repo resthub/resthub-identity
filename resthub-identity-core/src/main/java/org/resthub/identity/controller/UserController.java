@@ -42,11 +42,6 @@ public class UserController extends ServiceBasedRestController<User, Long, UserS
     public void setService(UserService service) {
         this.service = service;
     }
-    
-    @Override
-	public Long getIdFromResource(User resource) {
-		return resource.getId();
-	}
 
     /** Override this methods in order to secure it **/
     @Secured({ "IM_USER_ADMIN" }) @Override

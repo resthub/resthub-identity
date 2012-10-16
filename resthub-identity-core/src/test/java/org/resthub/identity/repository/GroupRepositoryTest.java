@@ -5,15 +5,13 @@ import javax.inject.Named;
 
 import org.fest.assertions.Assertions;
 import org.resthub.identity.model.Group;
-import org.resthub.test.common.AbstractTransactionalTest;
+import org.resthub.test.AbstractTransactionalTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-/**
- * 
- * @author Guillaume Zurbach
- */
+@ActiveProfiles("resthub-jpa")
 public class GroupRepositoryTest extends AbstractTransactionalTest {
 
 	private static final String GROUP_NAME = "TestGroup";
