@@ -21,6 +21,7 @@ public class GroupControllerWebTest extends AbstractWebTest {
 	
     public GroupControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
+        this.useOpenEntityManagerInViewFilter = true;
     }
 	
 	// Cleanup after each test
