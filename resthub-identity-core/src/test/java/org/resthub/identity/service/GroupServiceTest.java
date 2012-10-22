@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.fest.assertions.Assertions;
+import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.GroupService.GroupServiceChange;

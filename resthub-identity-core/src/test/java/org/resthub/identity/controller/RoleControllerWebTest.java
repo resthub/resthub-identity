@@ -1,6 +1,8 @@
 package org.resthub.identity.controller;
 
 
+import java.util.List;
+
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
@@ -21,6 +23,7 @@ public class RoleControllerWebTest extends AbstractWebTest {
 
     public RoleControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
+        this.useOpenEntityManagerInViewFilter = true;
     }
 	
 	// Cleanup after each test
@@ -109,7 +112,7 @@ public class RoleControllerWebTest extends AbstractWebTest {
         String role2Users = this.request("api/role/role2/users").get().getBody();
         
         // Then the lists should only contain what I asked for
-        Assertions.assertThat(notExistingRoleUsers).as("A search with an unknown role shouldn't bring anything").isEqualTo("[]");
+        Assertions.assertThat(notExistingRoleUsers).as("A search with an unknown role shouldn't bring anything").isEqualTo("[ ]");
 
         Assertions.assertThat(role1Users.contains(u1.getLogin())).as("The list of users with role1 should contain user1").isTrue();
         Assertions.assertThat(role1Users.contains(u2.getLogin())).as("The list of users with role1 shouldn't contain user2").isFalse();

@@ -8,6 +8,7 @@ import org.resthub.test.AbstractWebTest;
 import org.resthub.web.Http;
 import org.resthub.web.JsonHelper;
 import org.resthub.web.Response;
+import org.resthub.web.exception.BadRequestClientException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -41,21 +42,16 @@ public class SearchControllerWebTest extends AbstractWebTest {
     	Assertions.assertThat(response.getStatus()).isEqualTo(Http.NO_CONTENT);
     }
 
-    @Test
+    @Test(expectedExceptions=BadRequestClientException.class)
     public void shouldNullQueryFailed() {
         // When searching without parameter
-    	Response response = this.request("api/search").get();
-        // Then the result is an error.
-    	Assertions.assertThat(response.getStatus()).isEqualTo(Http.BAD_REQUEST);
+    	this.request("api/search").get();
     }
 
-    @Test
+    @Test(expectedExceptions=BadRequestClientException.class)
     public void shouldEmptyQueryFailed() {
         // When searching with empty query
-    	Response response = this.request("api/search").setQueryParameter("query", "").get();
-        // Then the result is empty.
-    	Assertions.assertThat(response.getStatus()).isEqualTo(Http.INTERNAL_SERVER_ERROR);
-    	Assertions.assertThat(response.getBody().contains("Misformatted queryString")).isTrue();
+    	this.request("api/search").setQueryParameter("query", "").get();
     }
 
     @Test

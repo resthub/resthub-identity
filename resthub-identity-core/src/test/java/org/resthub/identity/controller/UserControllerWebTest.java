@@ -19,6 +19,8 @@ public class UserControllerWebTest extends AbstractWebTest {
 
     public UserControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
+        this.useOpenEntityManagerInViewFilter = true;
+        
     }
     
     // Cleanup after each test
@@ -136,7 +138,7 @@ public class UserControllerWebTest extends AbstractWebTest {
 
         // Then the lists should only contain what I asked for
         Assertions.assertThat(user1Roles.contains(r1.getName())).as("The list of roles for user1 should contain role1").isTrue();
-        Assertions.assertThat(user2Roles).as("The list of roles for user2 should be empty").isEqualTo("[]");
+        Assertions.assertThat(user2Roles).as("The list of roles for user2 should be empty").isEqualTo("[ ]");
         Assertions.assertThat(user3Roles.contains(r2.getName())).as("The list of roles for user3 should contain role2").isTrue();
         Assertions.assertThat(user4Roles.contains(r1.getName()) && user4Roles.contains(r2.getName())).as("The list of roles for user4 should contain role1 and role2").isTrue();
     }

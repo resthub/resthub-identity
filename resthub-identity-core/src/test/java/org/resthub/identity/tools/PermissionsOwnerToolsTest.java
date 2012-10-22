@@ -3,7 +3,7 @@ package org.resthub.identity.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fest.assertions.Assertions;
+import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
 import org.testng.annotations.Test;

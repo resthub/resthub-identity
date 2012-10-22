@@ -1,8 +1,5 @@
 package org.resthub.identity.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +8,7 @@ import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.fest.assertions.Assertions;
+import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
@@ -346,9 +343,9 @@ public class UserServiceTest extends AbstractTransactionalTest {
         Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
         Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
         Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
-        assertEquals("Permissions not found", 2, u.getPermissions().size());
-        assertTrue("Permissions not found", u.getPermissions().contains("ADMIN"));
-        assertTrue("Permissions not found", u.getPermissions().contains("USER"));
+        Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
+        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
 
         /* now with the permissions from groups */
         List<String> allPermissions = userService.getUserPermissions(login);
