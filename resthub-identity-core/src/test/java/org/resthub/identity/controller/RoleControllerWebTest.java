@@ -1,8 +1,6 @@
 package org.resthub.identity.controller;
 
 
-import java.util.List;
-
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
