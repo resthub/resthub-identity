@@ -5,6 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.elasticsearch.client.Client;
+import org.resthub.identity.elasticsearch.Indexer;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
@@ -12,6 +14,8 @@ import org.resthub.identity.model.User;
 import org.resthub.identity.repository.GroupRepository;
 import org.resthub.identity.repository.UserRepository;
 import org.resthub.identity.service.RoleService.RoleChange;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -31,7 +35,12 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	protected UserRepository userRepository;
     
 	protected RoleService roleService;
+	
+	private @Value("#{esProp['index.name']}") String indexName;
+    private @Value("#{esProp['index.group.type']}") String indexType;
 
+    @Autowired Client client;
+    
 	@Inject
 	@Named("groupRepository")
 	@Override
@@ -179,6 +188,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 
 		// Let the other delete method do the job
 		this.delete(group);
+		Indexer.delete(client, indexName, indexType, group.getId().toString());
 	}
 
 	/**
@@ -191,6 +201,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 		if (existingGroup == null) {
 			// Overriden method call.
 			group = super.create(group);
+			Indexer.add(client, group, indexName, indexType, group.getId().toString());
 			// Publish notification
 			publishChange(GroupServiceChange.GROUP_CREATION.name(), group);
 			return group;
@@ -210,6 +221,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 		Group existingGroup = this.findByName(group.getName());
 		if (existingGroup == null || existingGroup.getId() == group.getId()) {
 			group = super.update(group);
+			Indexer.edit(client, group, indexName, indexType, group.getId().toString());
 		} else {
 			throw new AlreadyExistingEntityException("Group " + group.getName() + " already exists.");
 		}
@@ -233,7 +245,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 
 		// Proceed with the actual delete
 		super.delete(group);
-
+		Indexer.delete(client, indexName, indexType, group.getId().toString());
 		// Publish notification
 		publishChange(GroupServiceChange.GROUP_DELETION.name(), group);
 	} // delete().

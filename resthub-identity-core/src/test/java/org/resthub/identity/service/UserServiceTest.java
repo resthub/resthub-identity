@@ -347,6 +347,7 @@ public class UserServiceTest extends AbstractTransactionalTest {
         Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
         Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
 
+
         /* now with the permissions from groups */
         List<String> allPermissions = userService.getUserPermissions(login);
         Assertions.assertThat(allPermissions.size()).as("Permissions not found").isEqualTo(4);

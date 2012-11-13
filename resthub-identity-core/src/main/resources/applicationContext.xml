@@ -1,11 +1,8 @@
-<beans  
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:util="http://www.springframework.org/schema/util"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:elasticsearch="http://www.pilato.fr/schema/elasticsearch"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                             http://www.springframework.org/schema/context
@@ -16,22 +13,45 @@
                             http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
                             http://www.springframework.org/schema/util
                             http://www.springframework.org/schema/util/spring-util.xsd">
-    
-    <context:annotation-config />
-    <context:component-scan base-package="org.resthub.identity" />
-    
-    <context:property-placeholder location="classpath*:identity.properties" properties-ref="identityProperties"
-        ignore-resource-not-found="true" ignore-unresolvable="true" />
 
-    <util:properties id="identityProperties">
-        <prop key="entityManagerFactoryRef">entityManagerFactory</prop>
-        <prop key="transactionManagerRef">transactionManager</prop>
-    </util:properties>
-    
-    <jpa:repositories base-package="org.resthub.identity.repository" 
-    	entity-manager-factory-ref="${entityManagerFactoryRef}"
-		transaction-manager-ref="${transactionManagerRef}" />	
-    
-    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
-    
+	<context:annotation-config />
+	<context:component-scan base-package="org.resthub.identity" />
+
+	<context:property-placeholder location="classpath*:identity.properties"
+		properties-ref="identityProperties" ignore-resource-not-found="true"
+		ignore-unresolvable="true" />
+
+	<util:properties id="esProp"
+		location="classpath:elasticSearchProperties.properties" />
+
+	<util:properties id="identityProperties">
+		<prop key="entityManagerFactoryRef">entityManagerFactory</prop>
+		<prop key="transactionManagerRef">transactionManager</prop>
+	</util:properties>
+
+	<jpa:repositories base-package="org.resthub.identity.repository"
+		entity-manager-factory-ref="${entityManagerFactoryRef}"
+		transaction-manager-ref="${transactionManagerRef}" />
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+
+	<bean id="esNode"
+		class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean">
+	</bean>
+	<!-- Embedded ES -->
+    <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/> 
+	
+
+	<!-- Non Embedded ES -->
+
+	<!--<bean id="esClient"
+		class="fr.pilato.spring.elasticsearch.ElasticsearchTransportClientFactoryBean">
+		<property name="esNodes">
+			<list>
+				<value>localhost:9300</value>
+			</list>
+		</property>
+	</bean> -->
+
 </beans>

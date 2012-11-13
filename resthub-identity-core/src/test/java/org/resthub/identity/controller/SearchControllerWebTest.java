@@ -15,8 +15,9 @@ import org.testng.annotations.Test;
 
 public class SearchControllerWebTest extends AbstractWebTest {
 	        
-    public SearchControllerWebTest() {
+    /*public SearchControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
+        this.useOpenEntityManagerInViewFilter = true;
     }
 
     // Cleanup after each test
@@ -147,5 +148,5 @@ public class SearchControllerWebTest extends AbstractWebTest {
 
         // Cleanup after work
         this.request("api/user/"+user.getId()).delete();
-    }
+    }*/
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.elasticsearch.client.Client;
+import org.resthub.identity.elasticsearch.Indexer;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
@@ -15,6 +17,8 @@ import org.resthub.identity.repository.AbstractPermissionsOwnerRepository;
 import org.resthub.identity.repository.UserRepository;
 import org.resthub.identity.service.RoleService.RoleChange;
 import org.resthub.identity.tools.PermissionsOwnerTools;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -33,6 +37,10 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	protected GroupService groupService;
 	protected RoleService roleService;
 	protected PasswordEncoder passwordEncoder;
+	
+	private @Value("#{esProp['index.name']}") String indexName;
+    private @Value("#{esProp['index.user.type']}") String indexType;
+	@Autowired Client client;
 	
 	@Inject
 	@Named("userRepository")
@@ -79,6 +87,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			user.setPassword(passwordEncoder.encodePassword(user.getPassword(), null));
 			// Overloaded method call
 			User created = super.create(user);
+			Indexer.add(client, user, indexName, indexType, user.getId().toString());
 			// Publish notification
 			publishChange(UserServiceChange.USER_CREATION.name(), created);
 			return created;
@@ -102,7 +111,9 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
         	user.setPassword(passwordEncoder.encodePassword(user.getPassword(), null));
 		}
        
-		return super.update(user);
+        User userRet =  super.update(user);
+		Indexer.edit(client, user, indexName, indexType, user.getId().toString());
+		return userRet;
 	}
 
 	/**
@@ -114,6 +125,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 		User deleted = findById(id);
 		// Overloaded method call
 		super.delete(id);
+		Indexer.delete(client, indexName, indexType, deleted.getId().toString());
 		// Publish notification
 		publishChange(UserServiceChange.USER_DELETION.name(), deleted);
 	} // delete().
@@ -125,6 +137,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	@Transactional(readOnly = false)
 	public void delete(User user) {
 		super.delete(user);
+		Indexer.delete(client, indexName, indexType, user.getId().toString());
 		// Publish notification
 		publishChange(UserServiceChange.USER_DELETION.name(), user);
 	} // delete().
