@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
+
 /**
  * <p>
  * Describe a generic class for users and groups. It contains/manage mainly
