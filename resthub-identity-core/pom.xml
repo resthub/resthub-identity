@@ -26,21 +26,7 @@
 			<version>${elasticsearch.version}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.resthub</groupId>
-			<artifactId>resthub-web-server</artifactId>
-			<version>${resthub.spring.stack.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-context</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-expression</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+		
 		
 		<dependency>
 			<groupId>fr.pilato.spring</groupId>

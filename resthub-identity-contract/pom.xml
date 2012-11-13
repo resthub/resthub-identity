@@ -15,6 +15,21 @@
 	<description>Provide identity management model</description>
 
 	<dependencies>
+	<dependency>
+			<groupId>org.resthub</groupId>
+			<artifactId>resthub-web-server</artifactId>
+			<version>${resthub.spring.stack.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-expression</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>org.resthub</groupId>
 			<artifactId>resthub-jpa</artifactId>
