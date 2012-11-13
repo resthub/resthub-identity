@@ -40,18 +40,18 @@
 		class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean">
 	</bean>
 	<!-- Client for Embedded ES -->
-   <!-- <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/> -->
+    <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/> 
 	
 
 	<!-- Client for Non Embedded ES -->
 
-	<bean id="esClient"
+	<!--<bean id="esClient"
 		class="fr.pilato.spring.elasticsearch.ElasticsearchTransportClientFactoryBean">
 		<property name="esNodes">
 			<list>
 				<value>localhost:9300</value>
 			</list>
 		</property>
-	</bean> 
+	</bean>  -->
 
 </beans>
