@@ -14,12 +14,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-
 @Entity
 @Table(name = "idm_roles")
-@Indexed
 public class Role {
 
     protected Long id;
@@ -55,7 +51,6 @@ public class Role {
      * 
      * @return the name of the role.
      */
-    @Field
     @Column(nullable = false, unique = true)
     public String getName() {
         return this.name;

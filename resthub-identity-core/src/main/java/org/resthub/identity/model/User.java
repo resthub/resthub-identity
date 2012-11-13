@@ -7,10 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Describe a user account.<br/>
@@ -20,7 +18,6 @@ import org.hibernate.search.annotations.Indexed;
  */
 @Entity
 @Table(name = "idm_users")
-@Indexed
 public class User extends AbstractPermissionsOwner {
 
 	/**
@@ -60,7 +57,6 @@ public class User extends AbstractPermissionsOwner {
      * 
      * @return the user login
      * */
-    @Field
     @Column(unique = true, nullable = false)
     public String getLogin() {
         return login;
@@ -104,7 +100,6 @@ public class User extends AbstractPermissionsOwner {
      * 
      * @return user's FirstName
      * */
-    @Field
     @Column
     public String getFirstName() {
         return firstName;
@@ -125,7 +120,6 @@ public class User extends AbstractPermissionsOwner {
      * 
      * @return user's lastName
      * */
-    @Field
     @Column
     public String getLastName() {
         return lastName;
@@ -146,7 +140,6 @@ public class User extends AbstractPermissionsOwner {
      * 
      * @return user's email;
      * */
-    @Field
     @Column(/* nullable = false */)
     public String getEmail() {
         return email;

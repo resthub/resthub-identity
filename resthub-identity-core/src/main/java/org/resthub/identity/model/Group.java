@@ -4,9 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-
 /**
  * Describes a group.<br/>
  * A group has few attributes, a name, a list of {@link User} belonging to this
@@ -15,7 +12,6 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 /* "Group" conflicts with SQL keyword */
 @Table(name = "idm_groups")
-@Indexed
 public class Group extends AbstractPermissionsOwner {
 
     /**
@@ -35,7 +31,6 @@ public class Group extends AbstractPermissionsOwner {
      * 
      * @return name of the group
      * */
-    @Field
     @Column(unique = true, nullable = false)
     public String getName() {
         return name;
