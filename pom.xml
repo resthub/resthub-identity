@@ -14,10 +14,14 @@
 	<properties>
 		<resthub.spring.stack.version>2.0-SNAPSHOT</resthub.spring.stack.version>
 		<spring.security.version>3.1.3.RELEASE</spring.security.version>
+		<elasticsearch.spring.integration.version>0.0.2</elasticsearch.spring.integration.version>
+		<elasticsearch.version>0.20.0.RC1</elasticsearch.version>
 	</properties>
 
 	<modules>
+		<module>resthub-identity-contract</module>
 		<module>resthub-identity-core</module>
+		<module>resthub-identity-webapp</module>
 	</modules>
 
 	<build>
