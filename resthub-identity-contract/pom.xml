@@ -15,7 +15,13 @@
 	<description>Provide identity management model</description>
 
 	<dependencies>
-	<dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${log4joverself4.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.resthub</groupId>
 			<artifactId>resthub-web-server</artifactId>
 			<version>${resthub.spring.stack.version}</version>
@@ -29,6 +35,11 @@
 					<artifactId>spring-expression</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.resthub</groupId>
+			<artifactId>resthub-web-common</artifactId>
+			<version>${resthub.spring.stack.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.resthub</groupId>

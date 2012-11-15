@@ -2,6 +2,8 @@ package org.resthub.identity.elasticsearch;
 
 import java.io.IOException;
 
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,44 +11,45 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Named("jsonConverter")
 public class JsonObjectConverter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JsonObjectConverter.class);
+	private Logger logger = LoggerFactory.getLogger(JsonObjectConverter.class);
 
-	private static ObjectMapper mapper = new ObjectMapper();
+	private ObjectMapper mapper = new ObjectMapper();
 
-	public static <T> T getObjectFromJson(String sourceJson, Class<T> classExpected){
+	public <T> T getObjectFromJson(String sourceJson, Class<T> classExpected){
 
-		LOGGER.debug("Getting Object from Json.");
+		logger.debug("Getting Object from Json.");
 
 		T objectResult = null;
 
 		try {
 			objectResult = mapper.readValue(sourceJson, classExpected);
 		} catch (JsonParseException | JsonMappingException e) {
-			LOGGER.error("Exception : Json Exception", e);
+			logger.error("Exception : Json Exception", e);
 		} catch (IOException e) {
-			LOGGER.error("Exception : IOException", e);
+			logger.error("Exception : IOException", e);
 		}
 
 		return objectResult;
 	}
 
-	public static <T> String getJsonFromObject(T sourceObject){
+	public  <T> String getJsonFromObject(T sourceObject){
 
-		LOGGER.debug("Getting Json from Object");
+		logger.debug("Getting Json from Object");
 
 		String jsonResult = "";
 
 		try {
 			jsonResult = mapper.writeValueAsString(sourceObject);
 		} catch (JsonParseException | JsonMappingException e) {
-			LOGGER.error("Exception : Json Exception", e);
+			logger.error("Exception : Json Exception", e);
 		} catch (IOException e) {
-			LOGGER.error("Exception : IOException", e);
+			logger.error("Exception : IOException", e);
 		}
 
-		LOGGER.debug("JSON : " + jsonResult);
+		logger.debug("JSON : " + jsonResult);
 		
 		return jsonResult;
 	}

@@ -25,9 +25,7 @@
 			<artifactId>elasticsearch</artifactId>
 			<version>${elasticsearch.version}</version>
 		</dependency>
-		
-		
-		
+	
 		<dependency>
 			<groupId>fr.pilato.spring</groupId>
 			<artifactId>spring-elasticsearch</artifactId>

@@ -42,6 +42,14 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
     private @Value("#{esProp['index.user.type']}") String indexType;
 	@Autowired Client client;
 	
+	
+	/**
+     * Injection of elasticsearch indexer;
+     */
+	@Inject
+	@Named("elasticIndexer")
+	private Indexer indexer;
+	
 	@Inject
 	@Named("userRepository")
 	@Override
@@ -87,7 +95,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 			user.setPassword(passwordEncoder.encodePassword(user.getPassword(), null));
 			// Overloaded method call
 			User created = super.create(user);
-			Indexer.add(client, user, indexName, indexType, user.getId().toString());
+			indexer.add(client, user, indexName, indexType, user.getId().toString());
 			// Publish notification
 			publishChange(UserServiceChange.USER_CREATION.name(), created);
 			return created;
@@ -112,7 +120,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 		}
        
         User userRet =  super.update(user);
-		Indexer.edit(client, user, indexName, indexType, user.getId().toString());
+        indexer.edit(client, user, indexName, indexType, user.getId().toString());
 		return userRet;
 	}
 
@@ -125,7 +133,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 		User deleted = findById(id);
 		// Overloaded method call
 		super.delete(id);
-		Indexer.delete(client, indexName, indexType, deleted.getId().toString());
+		indexer.delete(client, indexName, indexType, deleted.getId().toString());
 		// Publish notification
 		publishChange(UserServiceChange.USER_DELETION.name(), deleted);
 	} // delete().
@@ -137,7 +145,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	@Transactional(readOnly = false)
 	public void delete(User user) {
 		super.delete(user);
-		Indexer.delete(client, indexName, indexType, user.getId().toString());
+		indexer.delete(client, indexName, indexType, user.getId().toString());
 		// Publish notification
 		publishChange(UserServiceChange.USER_DELETION.name(), user);
 	} // delete().

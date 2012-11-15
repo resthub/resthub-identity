@@ -30,6 +30,20 @@ public class SearchServiceTest extends AbstractTransactionalTest {
     protected UserService userService;
 
     /**
+     * Injection of elasticsearch requester;
+     */
+    @Inject
+    @Named("elasticRequester")
+    private Requester requester;
+    
+    /**
+     * Injection of elasticsearch deleter;
+     */
+    @Inject
+    @Named("elasticDeleter")
+    private Deleter deleter;
+    
+    /**
      * Injection of the Group service.
      */
     @Inject
@@ -47,9 +61,9 @@ public class SearchServiceTest extends AbstractTransactionalTest {
  	
  	@AfterMethod
 	public void setup(){
-		Deleter.deleteIndex(client, indexName, userIndex);
-		Deleter.deleteIndex(client, indexName, roleIndex);
-		Deleter.deleteIndex(client, indexName, groupIndex);
+		deleter.deleteIndex(client, indexName, userIndex);
+		deleter.deleteIndex(client, indexName, roleIndex);
+		deleter.deleteIndex(client, indexName, groupIndex);
 	}
     
    /* @Test
@@ -119,7 +133,7 @@ public class SearchServiceTest extends AbstractTransactionalTest {
 		// When requesting j on users
 		// List<AbstractPermissionsOwner> results = searchService.search("j",
 		// true, false);
-		List<User> results = Requester.requestSimpleOr(client,indexName, userIndex,
+		List<User> results = requester.requestSimpleOr(client,indexName, userIndex,
 				"j*", User.class);
 		// Then the first user is retrieved
 		Assertions.assertThat(results.contains(u1))
@@ -166,7 +180,7 @@ public class SearchServiceTest extends AbstractTransactionalTest {
 		// When requesting j on users
 		// List<AbstractPermissionsOwner> results = searchService.search("j",
 		// false, true);
-		List<Group> results = Requester.requestSimpleOr(client,indexName,
+		List<Group> results = requester.requestSimpleOr(client,indexName,
 				groupIndex, "j*", Group.class);
 
 		// Then the first group is retrieved
@@ -216,10 +230,10 @@ public class SearchServiceTest extends AbstractTransactionalTest {
 		// When requesting j on users and groups
 		// List<AbstractPermissionsOwner> results = searchService.search("j",
 		// true, true);
-		List<User> resultsU = Requester.requestSimpleOr(client, indexName, userIndex,
+		List<User> resultsU = requester.requestSimpleOr(client, indexName, userIndex,
 				"j*", User.class);
 
-		List<Group> resultsG = Requester.requestSimpleOr(client, indexName,
+		List<Group> resultsG = requester.requestSimpleOr(client, indexName,
 				groupIndex, "j*", Group.class);
 		// Then the first user is retrieved
 		Assertions.assertThat(resultsU.contains(u1))
@@ -275,10 +289,10 @@ public class SearchServiceTest extends AbstractTransactionalTest {
 		// List<AbstractPermissionsOwner> results =
 		// searchService.search("lastName:g* OR firstName:j* OR name:admin*",
 		// true, true);
-		List<User> resultsU = Requester.requestSimpleOr(client, indexName, userIndex,
+		List<User> resultsU = requester.requestSimpleOr(client, indexName, userIndex,
 				"lastName:g* firstName:j* name:admin*", User.class);
 
-		List<Group> resultsG = Requester.requestSimpleOr(client, indexName,
+		List<Group> resultsG = requester.requestSimpleOr(client, indexName,
 				groupIndex, "lastName:g* firstName:j* name:admin*", Group.class);
 		// Then the first user is retrieved
 		Assertions.assertThat(resultsU.contains(u1))
@@ -307,7 +321,7 @@ public class SearchServiceTest extends AbstractTransactionalTest {
 		try {
 			// When performing a search with a null query
 
-			Requester.requestSimpleOr(client, indexName, userIndex, null, User.class);
+			requester.requestSimpleOr(client, indexName, userIndex, null, User.class);
 			Assertions.fail("An IllegalArgumentException may have been raised");
 		} catch (IllegalArgumentException exc) { // Then an exception is raised
 			Assertions

@@ -36,6 +36,14 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 	/**
 	 * ${@inheritDoc}
 	 */
+	
+	/**
+     * Injection of elasticsearch indexer;
+     */
+	@Inject
+	@Named("elasticIndexer")
+	private Indexer indexer;
+	 
 	@Override
 	@Inject
 	@Named("roleRepository")
@@ -72,7 +80,7 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 
 		// Let the other delete method do the job
 		this.delete(role);
-		Indexer.delete(client, indexName, indexType, role.getId().toString());
+		indexer.delete(client, indexName, indexType, role.getId().toString());
 	}
 
 	/**
@@ -95,7 +103,7 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 
 		// Proceed with the actual delete
 		super.delete(role);
-		Indexer.delete(client, indexName, indexType, role.getId().toString());
+		indexer.delete(client, indexName, indexType, role.getId().toString());
 		this.publishChange(RoleChange.ROLE_DELETION.name(), role);
 	}
 
@@ -126,7 +134,7 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 	public Role create(Role resource) {
 		// Call the standard role creation
 		Role createdRole = super.create(resource);
-		Indexer.add(client, resource, indexName, indexType, resource.getId().toString());
+		indexer.add(client, resource, indexName, indexType, resource.getId().toString());
 		// Publish the creation event
 		this.publishChange(RoleChange.ROLE_CREATION.name(), createdRole);
 		return createdRole;

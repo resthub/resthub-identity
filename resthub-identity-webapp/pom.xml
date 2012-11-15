@@ -21,7 +21,12 @@
 			<artifactId>resthub-identity-core</artifactId>
 			<version>2.0-SNAPSHOT</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+			<version>3.0.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.resthub</groupId>
 			<artifactId>resthub-test</artifactId>

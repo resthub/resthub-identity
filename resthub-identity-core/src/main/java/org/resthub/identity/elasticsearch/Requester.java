@@ -3,6 +3,9 @@ package org.resthub.identity.elasticsearch;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -12,10 +15,18 @@ import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Named("elasticRequester")
 public class Requester {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Indexer.class);
+	private Logger logger = LoggerFactory.getLogger(Indexer.class);
 
+	
+	/**
+     * Injection of Json converter;
+     */
+	@Inject
+	@Named("jsonConverter")
+	private JsonObjectConverter JsonObj;
 	/**
 	 * This method is used to request an index and retrieve anything that
 	 * contains 1 or more words contained in params
@@ -36,7 +47,7 @@ public class Requester {
 	 *            research
 	 * @return A list of objects found by the request
 	 */
-	public static <T> List<T> requestSimpleOr(Client client, String indexName,
+	public <T> List<T> requestSimpleOr(Client client, String indexName,
 			String indexType, String params, Class<T> classExpected) {
 
 		if (params == null) {
@@ -45,7 +56,7 @@ public class Requester {
 		List<T> resultList = new ArrayList<>();
 
 		// Preparing the query
-		LOGGER.debug("Rechercher tout ce qui contient : \""
+		logger.debug("Rechercher tout ce qui contient : \""
 				+ params.replaceAll("\\s", "\" OU \"") + "\"");
 		QueryBuilder queryBuilder = QueryBuilders.queryString(params);
 		// Executing the request
@@ -55,13 +66,13 @@ public class Requester {
 
 		// Results
 		long hits = searchResponse.getHits().getTotalHits();
-		LOGGER.debug("Nombre de resultats de la recherche : " + hits + "\n");
+		logger.debug("Nombre de resultats de la recherche : " + hits + "\n");
 		SearchHit hit = null;
 		for (int i = 0; i < hits; i++) {
 			hit = searchResponse.getHits().getAt(i);
-			LOGGER.debug("* Resultat " + (i + 1) + " : " + hit.sourceAsString()
+			logger.debug("* Resultat " + (i + 1) + " : " + hit.sourceAsString()
 					+ "\n");
-			resultList.add(JsonObjectConverter.getObjectFromJson(
+			resultList.add(JsonObj.getObjectFromJson(
 					hit.sourceAsString(), classExpected));
 		}
 
@@ -88,7 +99,7 @@ public class Requester {
 	 *            research
 	 * @return A list of objects found by the request
 	 */
-	public static <T> List<T> requestSimpleAnd(Client client, String indexName,
+	public <T> List<T> requestSimpleAnd(Client client, String indexName,
 			String indexType, String params, Class<T> classExpected) {
 		if (params == null) {
 			throw new IllegalArgumentException("query must not be null");
@@ -96,7 +107,7 @@ public class Requester {
 		List<T> resultList = new ArrayList<>();
 
 		// Preparing the query
-		LOGGER.debug("Rechercher tout ce qui contient : \""
+		logger.debug("Rechercher tout ce qui contient : \""
 				+ params.replaceAll("\\s", "\" ET \"") + "\"");
 		BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 		String[] keywords = params.split("\\s");
@@ -110,13 +121,13 @@ public class Requester {
 
 		// Results
 		long hits = searchResponse.getHits().getTotalHits();
-		LOGGER.debug("Nombre de resultats de la recherche : " + hits + "\n");
+		logger.debug("Nombre de resultats de la recherche : " + hits + "\n");
 		SearchHit hit = null;
 		for (int i = 0; i < hits; i++) {
 			hit = searchResponse.getHits().getAt(i);
-			LOGGER.debug("* Resultat " + (i + 1) + " : "
+			logger.debug("* Resultat " + (i + 1) + " : "
 					+ hit.getSourceAsString() + "\n");
-			resultList.add(JsonObjectConverter.getObjectFromJson(
+			resultList.add(JsonObj.getObjectFromJson(
 					hit.getSourceAsString(), classExpected));
 		}
 
