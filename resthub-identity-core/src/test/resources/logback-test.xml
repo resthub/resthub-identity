@@ -10,6 +10,10 @@
     <logger name="org.resthub">
         <level value="warn" />
     </logger>
+    
+    <logger name="fr.pilato">
+        <level value="warn" />
+    </logger>
 
     <logger name="org.springframework">
         <level value="warn" />

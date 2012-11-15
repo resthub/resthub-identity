@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<parent>
+		<artifactId>resthub-identity</artifactId>
+		<groupId>org.resthub</groupId>
+		<version>2.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>resthub-identity-webapp</artifactId>
+	<name>RESThub identity manager webapp</name>
+	<description>Provide identity management web application</description>
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.resthub</groupId>
+			<artifactId>resthub-identity-core</artifactId>
+			<version>2.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.resthub</groupId>
+			<artifactId>resthub-test</artifactId>
+			<version>${resthub.spring.stack.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
