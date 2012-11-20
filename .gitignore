@@ -2,7 +2,6 @@ target/
 .classpath
 .project
 .settings/
-resthub-identity-core/.classpath
-resthub-identity-core/.project
-resthub-identity-core/.settings/
-resthub-identity-core/target/
+test-output/
+*.iml
+.idea/

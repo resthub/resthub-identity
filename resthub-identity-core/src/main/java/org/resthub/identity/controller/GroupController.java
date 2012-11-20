@@ -40,11 +40,13 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      * User} to a {@Link Group}
      * 
      * */
-	@Inject
-    UserService userService;
+	
 	
 	@Inject
     RoleService roleService;
+	
+	@Inject
+    UserService userService;
 
     @Inject @Override      
     public void setService(GroupService service) {
@@ -244,5 +246,18 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
     @Secured({ "IM_GROUP_ADMIN" }) @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles/{role}") @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeRoleFromGroup(@PathVariable("name") String name, @PathVariable("role") String role) {
         this.service.removeRoleFromGroup(name, role);
+    }
+    
+    
+    @Secured({ "IM_GROUP_ADMIN" }) @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles") @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeAllRoleFromGroup(@PathVariable("name") String name) {
+    	 List<Role> roles = this.service.getRolesFromGroup(name);
+         if (roles == null) {
+             throw new NotFoundException();
+         }
+        for (Role r : roles){
+        	this.service.removeRoleFromGroup(name, r.getName());
+        }
+        
     }
 }
