@@ -36,6 +36,7 @@ public class Role {
         this.setName(roleName);
     }
 
+
     @Id
     @GeneratedValue
     public Long getId() {
