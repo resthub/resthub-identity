@@ -62,6 +62,32 @@ public class UserController extends ServiceBasedRestController<User, Long, UserS
     		throw new ExpectationFailedException(e.getMessage());
     	}
     }
+
+    
+    
+    @Secured({ "IM_USER_ADMIN" }) @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles") @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeAllRoleFromUser(@PathVariable("login") String login) {
+    	 List<Role> roles = this.service.getAllUserRoles(login);
+         if (roles == null) {
+             throw new NotFoundException();
+         }
+        for (Role r : roles){
+        	this.service.removeRoleFromUser(login, r.getName());
+        }
+        
+    }
+    
+    @Secured({ "IM_USER_ADMIN" }) @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/groups") @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeAllGroupFromUser(@PathVariable("login") String login) {
+    	 List<Group> groups = this.service.getAllUserGroups(login);
+         if (groups == null) {
+             throw new NotFoundException();
+         }
+        for (Group grp : groups){
+        	this.service.removeGroupFromUser(login, grp.getName());
+        }
+        
+    }
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_USER_ADMIN", "IM_USER_READ" }) @Override
