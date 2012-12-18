@@ -17,8 +17,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**
@@ -121,6 +122,7 @@ public abstract class AbstractPermissionsOwner {
      * <b>Only used by Hibernate</b> Please use getRoles() instead.
      */
     @SuppressWarnings("unused")
+    @JsonProperty
     private void setRoles(List<Role> roles) {
         this.roles = roles;
     }
@@ -143,6 +145,7 @@ public abstract class AbstractPermissionsOwner {
      * <b>Only used by Hibernate</b> Please use getGroups() instead.
      */
     @SuppressWarnings("unused")
+    @JsonProperty
     private void setGroups(List<Group> groups) {
         this.groups = groups;
     }

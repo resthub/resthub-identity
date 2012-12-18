@@ -76,6 +76,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
     		throw new ExpectationFailedException(e.getMessage());
     	}
     }
+    
 
     /** Override this methods in order to secure it **/
     
@@ -88,6 +89,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
     		throw new ExpectationFailedException(e.getMessage());
     	}
     }
+    
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_GROUP_ADMIN", "IM_GROUP_READ" }) @Override

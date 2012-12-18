@@ -1,0 +1,69 @@
+div.dataTables_wrapper {
+    position: relative;
+    clear: both;
+    *zoom: 1;
+}
+
+div.dataTables_length {
+    clear: none;
+    display: inline;
+}
+
+div.dataTables_length label {
+    float: left;
+    text-align: left;
+}
+ 
+div.dataTables_length select {
+    width: 75px;
+}
+
+div.dataTables_filter {
+    float: right;
+    text-align: right;
+}
+ 
+div.dataTables_filter label {
+    float: right;
+    width: 460px;
+}
+
+/*
+ * Table information
+ */
+div.dataTables_info {
+    clear: both;
+    float: left;
+}
+ 
+div.dataTables_info {
+    padding-top: 8px;
+}
+ 
+div.dataTables_paginate {
+    float: right;
+    margin: 0;
+}
+ 
+table {
+    margin: 1em 0;
+    clear: both;
+}
+
+table.table thead th {
+    cursor: pointer;
+    *cursor: hand;
+}
+
+table.table thead th.sorting_disabled {
+    cursor: auto;
+    *cursor: auto;
+}
+ 
+table.table thead th { background: url('../img/jquery-datatables/sort_both.png') no-repeat center right; }
+table.table thead th.headerSortUp { background: url('../img/jquery-datatables/sort_desc.png') no-repeat center right; }
+table.table thead th.headerSortDown { background: url('../img/jquery-datatables/sort_asc.png') no-repeat center right; }
+table.table thead th.sorting_disabled { background: none; }
+ 
+table.table thead .headerSortUpDisabled { background: url('../img/jquery-datatables/sort_desc_disabled.png') no-repeat center right; }
+table.table thead .headerSortDownDisabled { background: url('../img/jquery-datatables/sort_asc_disabled.png') no-repeat center right; }
