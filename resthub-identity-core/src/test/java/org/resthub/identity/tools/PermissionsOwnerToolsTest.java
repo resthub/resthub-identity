@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.User;
 import org.testng.annotations.Test;
 
@@ -14,9 +15,9 @@ public class PermissionsOwnerToolsTest {
     public void testWithoutPermissions() {
         // Given a new user without permissions nor Groups
         User u = new User();
-        List<String> lp = u.getPermissions();
+        List<Permission> lp = u.getPermissions();
         if (lp == null) {
-            lp = new ArrayList<String>();
+            lp = new ArrayList<Permission>();
         }
         // When we retrieve InheritedPermission
         lp = PermissionsOwnerTools.getInheritedPermission(u);
@@ -28,13 +29,13 @@ public class PermissionsOwnerToolsTest {
     @Test
     public void testWithPermissions() {
         // Given a new user without permissions nor Groups
-        String p1 = "permission1";
-        String p2 = "permission2";
+        Permission p1 = new Permission("permission1");
+        Permission p2 = new Permission("permission2");
 
         User u = new User();
-        List<String> lp = u.getPermissions();
+        List<Permission> lp = u.getPermissions();
         if (lp == null) {
-            lp = new ArrayList<String>();
+            lp = new ArrayList<Permission>();
         }
         lp.add(p1);
         lp.add(p2);
@@ -52,14 +53,14 @@ public class PermissionsOwnerToolsTest {
     @Test
     public void testWithPermissionsFromGroup() {
         // Given a new user without permissions nor Groups
-        String p1 = "permission1";
-        String p2 = "permission2";
+    	Permission p1 = new Permission("permission1");
+        Permission p2 = new Permission("permission2");
 
         User u = new User();
         Group g = new Group();
         u.getGroups().add(g);
 
-        List<String> lp = u.getPermissions();
+        List<Permission> lp = u.getPermissions();
         lp.add(p1);
         lp = g.getPermissions();
         lp.add(p2);
@@ -76,9 +77,9 @@ public class PermissionsOwnerToolsTest {
     @Test
     public void testWithPermissionsFromGroupFromGroup() {
         // Given a new user without permissions nor Groups
-        String p1 = "permission1";
-        String p2 = "permission2";
-        String p3 = "permission3";
+    	Permission p1 = new Permission("permission1");
+        Permission p2 = new Permission("permission2");
+        Permission p3 = new Permission("permission3");
 
         User u = new User();
         Group g1 = new Group();
@@ -86,7 +87,7 @@ public class PermissionsOwnerToolsTest {
         Group g2 = new Group();
         g1.getGroups().add(g2);
 
-        List<String> lp = u.getPermissions();
+        List<Permission> lp = u.getPermissions();
         lp.add(p1);
 
         lp = g1.getPermissions();

@@ -3,6 +3,7 @@ package org.resthub.identity.security;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.tools.PermissionsOwnerTools;
@@ -42,8 +43,8 @@ public class IdentityUserDetailsAdapter implements UserDetails {
         // Initialized here in order to avoid a LazyException thrown bythe Group
         // retreival
         grantedAuthorities = new ArrayList<GrantedAuthority>();
-        for (String permission : PermissionsOwnerTools.getInheritedPermission(user)) {
-            grantedAuthorities.add(new GrantedAuthorityImpl(permission));
+        for (Permission permission : PermissionsOwnerTools.getInheritedPermission(user)) {
+            grantedAuthorities.add(new GrantedAuthorityImpl(permission.getCode()));
         }
 
     }
