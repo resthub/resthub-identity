@@ -10,4 +10,5 @@ import org.resthub.identity.service.tracability.TracableService;
  */
 public interface PermissionService extends CrudService<Permission, Long>, TracableService {
 
+	public Permission findByCode(String code);
 }

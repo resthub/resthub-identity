@@ -6,11 +6,6 @@ import org.resthub.identity.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-/**
- * 
- * @author Antoine Neveu
- *
- */
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 	
 	/**
@@ -21,6 +16,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	 */
 	List<Category> findByName(String name);
 	
+	/**
+	 * Find a list of {@link Category} whith no parent
+	 * @return the category list, empty if not found
+	 */
 	@Query("SELECT DISTINCT c FROM Category c WHERE c.parent IS NULL")
 	List<Category> findAllTopCategories();
 
