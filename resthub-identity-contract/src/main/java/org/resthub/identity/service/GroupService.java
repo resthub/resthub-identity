@@ -5,6 +5,7 @@ import java.util.List;
 import org.resthub.common.service.CrudService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.service.tracability.TracableService;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,7 +86,7 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 	 *            the name of the Group
 	 * @return permissions of the group.
 	 */
-	List<String> getGroupDirectPermissions(String groupName);
+	List<Permission> getGroupDirectPermissions(String groupName);
 
 	/**
 	 * Add a permission to a group
@@ -95,7 +96,7 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 	 * @param permission
 	 *            the permission to be added
 	 */
-	void addPermissionToGroup(String groupName, String permission);
+	void addPermissionToGroup(String groupName, Permission permission);
 
 	/**
 	 * Remove the permission for the given group
@@ -105,7 +106,7 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 	 * @param permission
 	 *            the permission to delete
 	 */
-	void removePermissionFromGroup(String groupName, String permission);
+	void removePermissionFromGroup(String groupName, Permission permission);
 
 	/**
 	 * 

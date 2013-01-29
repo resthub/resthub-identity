@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.resthub.common.exception.NotFoundException;
 
+import org.resthub.common.exception.NotFoundException;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.exception.ExpectationFailedException;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.UserService;
@@ -162,7 +163,7 @@ public class UserController extends ServiceBasedRestController<User, Long, UserS
             throw new NotFoundException();
         }
         if (user != null) {
-            List<String> permissions = PermissionsOwnerTools.getInheritedPermission(user);
+            List<Permission> permissions = PermissionsOwnerTools.getInheritedPermission(user);
             user.getPermissions().clear();
             user.getPermissions().addAll(permissions);
         }
@@ -231,8 +232,8 @@ public class UserController extends ServiceBasedRestController<User, Long, UserS
      *         otherwise HTTP Error 404
      */
     @Secured({ "IM_USER_ADMIN", "IM_USER_READ" }) @RequestMapping(method = RequestMethod.GET, value = "name/{login}/permissions") @ResponseBody
-    public List<String> getPermissionsFromUser(@PathVariable("login") String login) {
-        List<String> permissions = this.service.getUserPermissions(login);
+    public List<Permission> getPermissionsFromUser(@PathVariable("login") String login) {
+        List<Permission> permissions = this.service.getUserPermissions(login);
         if (permissions == null) {
             throw new NotFoundException();
         }
@@ -246,7 +247,7 @@ public class UserController extends ServiceBasedRestController<User, Long, UserS
      * @Param permission the permission to be added
      */
     @Secured({ "IM_USER_ADMIN" }) @RequestMapping(method = RequestMethod.PUT, value = "name/{login}/permissions/{permission}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addPermissionsToUser(@PathVariable("login") String login, @PathVariable("permission") String permission) {
+    public void addPermissionsToUser(@PathVariable("login") String login, @PathVariable("permission") Permission permission) {
         this.service.addPermissionToUser(login, permission);
     }
 
@@ -257,7 +258,7 @@ public class UserController extends ServiceBasedRestController<User, Long, UserS
      * @Param permisssion the permisssion to be removed
      */
     @Secured({ "IM_USER_ADMIN" }) @RequestMapping(method = RequestMethod.DELETE, value = "name/{login}/permissions/{permission}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePermissionsFromUser(@PathVariable("login") String login, @PathVariable("permission") String permission) {
+    public void deletePermissionsFromUser(@PathVariable("login") String login, @PathVariable("permission") Permission permission) {
         this.service.removePermissionFromUser(login, permission);
     }
 

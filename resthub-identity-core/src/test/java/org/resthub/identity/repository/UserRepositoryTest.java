@@ -10,6 +10,7 @@ import javax.inject.Named;
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.test.AbstractTransactionalTest;
@@ -47,11 +48,16 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 	@Named("userRepository")
 	private UserRepository userRepository;
 	
+	@Inject
+	@Named("permissionRepository")
+	private PermissionRepository permissionRepository;
+	
 	// Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
         roleRepository.deleteAll();
         userRepository.deleteAll();
+        permissionRepository.deleteAll();
     }
     
 	// Cleanup after each test
@@ -59,6 +65,7 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
     public void cleanAfter() {
     	roleRepository.deleteAll();
         userRepository.deleteAll();
+        permissionRepository.deleteAll();
     }
     
 	/*
@@ -138,6 +145,8 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 	}
 
 	private User createTestUser() {
+		Permission p1 = permissionRepository.save(new Permission(USER_PERMISSION_1));
+		Permission p2 = permissionRepository.save(new Permission(USER_PERMISSION_2));
 		User user = new User();
 		user.setLogin(USER_LOGIN + Math.round(Math.random() * 100));
 		user.setFirstName(USER_FIRST_NAME);
@@ -145,7 +154,7 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 		user.setPassword(USER_PASSWORD);
 		user.setEmail(USER_LOGIN + Math.round(Math.random() * 100) + "@test.fr");
 
-		user.getPermissions().addAll(new ArrayList<String>(Arrays.asList(USER_PERMISSION_1, USER_PERMISSION_2)));
+		user.getPermissions().addAll(new ArrayList<Permission>(Arrays.asList(p1, p2)));
 		return user;
 	}
 	

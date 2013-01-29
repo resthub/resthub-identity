@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 
 /**
@@ -23,11 +24,11 @@ public class PermissionsOwnerTools {
      * 
      * @return the List of permissions
      * */
-    public static List<String> getInheritedPermission(AbstractPermissionsOwner owner) {
-        List<String> result = new ArrayList<String>();
-        List<String> tmpPermissions = owner.getPermissions();
+    public static List<Permission> getInheritedPermission(AbstractPermissionsOwner owner) {
+        List<Permission> result = new ArrayList<Permission>();
+        List<Permission> tmpPermissions = owner.getPermissions();
         if (tmpPermissions != null) {
-            for (String permission : tmpPermissions) {
+            for (Permission permission : tmpPermissions) {
                 if (!result.contains(permission)) {
                     result.add(permission);
                 }
@@ -36,7 +37,7 @@ public class PermissionsOwnerTools {
         for(Role userRole : owner.getRoles()) {
         	tmpPermissions = userRole.getPermissions();
             if (tmpPermissions != null) {
-                for (String permission : tmpPermissions) {
+                for (Permission permission : tmpPermissions) {
                     if (!result.contains(permission)) {
                         result.add(permission);
                     }
@@ -50,7 +51,7 @@ public class PermissionsOwnerTools {
                 if (group != null) {
                     tmpPermissions = getInheritedPermission(group);
                     if (tmpPermissions != null) {
-                        for (String permission : tmpPermissions) {
+                        for (Permission permission : tmpPermissions) {
                             if (!result.contains(permission)) {
                                 result.add(permission);
                             }
@@ -60,7 +61,7 @@ public class PermissionsOwnerTools {
                 for(Role groupRole : group.getRoles()) {
                 	tmpPermissions = groupRole.getPermissions();
                     if (tmpPermissions != null) {
-                        for (String permission : tmpPermissions) {
+                        for (Permission permission : tmpPermissions) {
                             if (!result.contains(permission)) {
                                 result.add(permission);
                             }

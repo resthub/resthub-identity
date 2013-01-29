@@ -10,8 +10,10 @@ import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.repository.PermissionRepository;
 import org.resthub.identity.service.UserService.UserServiceChange;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -37,21 +39,29 @@ public class UserServiceTest extends AbstractTransactionalTest {
     @Inject
     @Named("roleService")
     private RoleService roleService;
+    
+    @Inject
+    @Named("permissionRepository")
+    private PermissionRepository permissionRepository;
 
     // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-    	groupService.deleteAll();
+    	
     	roleService.deleteAll();
     	userService.deleteAll();
+    	groupService.deleteAll();
+    	permissionRepository.deleteAll();
     }
     
 	// Cleanup after each test
     @AfterMethod
     public void cleanAfter() {
-    	groupService.deleteAll();
+    	
     	roleService.deleteAll();
     	userService.deleteAll();
+    	groupService.deleteAll();
+    	permissionRepository.deleteAll();
     }
     
     public User createTestEntity() {
@@ -218,11 +228,14 @@ public class UserServiceTest extends AbstractTransactionalTest {
         /* Given a user with permissions */
         String login = "permissionLogin";
         String password = "Password";
+        
+        Permission admin = this.permissionRepository.save(new Permission("ADMIN"));
+        Permission user = this.permissionRepository.save(new Permission("USER"));
 
         // direct permissions
-        List<String> permissions = new ArrayList<String>();
-        permissions.add("ADMIN");
-        permissions.add("USER");
+        List<Permission> permissions = new ArrayList<Permission>();
+        permissions.add(admin);
+        permissions.add(user);
 
         User u = new User();
         u.setLogin(login);
@@ -235,8 +248,8 @@ public class UserServiceTest extends AbstractTransactionalTest {
 
         /* We can get the direct permissions */
         Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
-        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
-        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(admin)).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(user)).as("Permissions not found").isTrue();
 
         userService.delete(u);
 
@@ -247,11 +260,16 @@ public class UserServiceTest extends AbstractTransactionalTest {
         /* Given a user with permissions */
         String login = "permissionLogin";
         String password = "Password";
+        
+        Permission admin = this.permissionRepository.save(new Permission("ADMIN"));
+        Permission user = this.permissionRepository.save(new Permission("USER"));
+        Permission testgroup = this.permissionRepository.save(new Permission("TESTGROUPPERMISSION"));
+        Permission testsubgroup = this.permissionRepository.save(new Permission("TESTSUBGROUPPERMISSION"));
 
         // direct permissions
-        List<String> permissions = new ArrayList<String>();
-        permissions.add("ADMIN");
-        permissions.add("USER");
+        List<Permission> permissions = new ArrayList<Permission>();
+        permissions.add(admin);
+        permissions.add(user);
 
         // a group and a subGroup
         Group group = new Group();
@@ -260,8 +278,8 @@ public class UserServiceTest extends AbstractTransactionalTest {
         subGroup.setName("TestSubGroup");
 
         // add a permission to each group
-        group.getPermissions().add("TESTGROUPPERMISSION");
-        subGroup.getPermissions().add("TESTSUBGROUPPERMISSION");
+        group.getPermissions().add(testgroup);
+        subGroup.getPermissions().add(testsubgroup);
 
         // make subGroup a permission of group
         group.getGroups().add(subGroup);
@@ -281,16 +299,16 @@ public class UserServiceTest extends AbstractTransactionalTest {
 
         /* We can get the direct permissions */
         Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
-        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
-        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(admin)).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(user)).as("Permissions not found").isTrue();
 
         /* now with the permissions from groups */
-        List<String> allPermissions = userService.getUserPermissions(login);
+        List<Permission> allPermissions = userService.getUserPermissions(login);
         Assertions.assertThat(allPermissions.size()).as("Permissions not found").isEqualTo(4);
-        Assertions.assertThat(allPermissions.contains("ADMIN")).as("Permissions not found").isTrue();
-        Assertions.assertThat(allPermissions.contains("USER")).as("Permissions not found").isTrue();
-        Assertions.assertThat(allPermissions.contains("TESTGROUPPERMISSION")).as("Permissions not found").isTrue();
-        Assertions.assertThat(allPermissions.contains("TESTSUBGROUPPERMISSION")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(admin)).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(user)).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(testgroup)).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(testsubgroup)).as("Permissions not found").isTrue();
 
         // TODO : remove this when we will use DBunit
         userService.delete(u);
@@ -303,11 +321,16 @@ public class UserServiceTest extends AbstractTransactionalTest {
         /* Given a user with permissions */
         String login = "permissionLogin";
         String password = "Password";
+        
+        Permission admin = this.permissionRepository.save(new Permission("ADMIN"));
+        Permission user = this.permissionRepository.save(new Permission("USER"));
+        Permission testgroup = this.permissionRepository.save(new Permission("TESTGROUPPERMISSION"));
+        Permission testsubgroup = this.permissionRepository.save(new Permission("TESTSUBGROUPPERMISSION"));
 
         // direct permissions
-        List<String> permissions = new ArrayList<String>();
-        permissions.add("ADMIN");
-        permissions.add("USER");
+        List<Permission> permissions = new ArrayList<Permission>();
+        permissions.add(admin);
+        permissions.add(user);
 
         // a group and a subGroup
         Group group = new Group();
@@ -316,12 +339,12 @@ public class UserServiceTest extends AbstractTransactionalTest {
         subGroup.setName("TestSubGroup");
 
         // add a permission to each group
-        group.getPermissions().add("TESTGROUPPERMISSION");
-        subGroup.getPermissions().add("TESTSUBGROUPPERMISSION");
+        group.getPermissions().add(testgroup);
+        subGroup.getPermissions().add(testsubgroup);
 
         // this is the test: USER is already a direct permission of this user
         // getUserPermission should return only one time the permission USER
-        group.getPermissions().add("USER");
+        group.getPermissions().add(user);
 
         // make subGroup a permission of group
         group.getGroups().add(subGroup);
@@ -341,21 +364,21 @@ public class UserServiceTest extends AbstractTransactionalTest {
 
         /* We can get the direct permissions */
         Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
-        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
-        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(admin)).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(user)).as("Permissions not found").isTrue();
         Assertions.assertThat(u.getPermissions().size()).as("Permissions not found").isEqualTo(2);
-        Assertions.assertThat(u.getPermissions().contains("ADMIN")).as("Permissions not found").isTrue();
-        Assertions.assertThat(u.getPermissions().contains("USER")).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(admin)).as("Permissions not found").isTrue();
+        Assertions.assertThat(u.getPermissions().contains(user)).as("Permissions not found").isTrue();
 
 
         /* now with the permissions from groups */
-        List<String> allPermissions = userService.getUserPermissions(login);
+        List<Permission> allPermissions = userService.getUserPermissions(login);
         Assertions.assertThat(allPermissions.size()).as("Permissions not found").isEqualTo(4);
-        Assertions.assertThat(allPermissions.contains("ADMIN")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(admin)).as("Permissions not found").isTrue();
         // the USER permission should exists only once in the list
-        Assertions.assertThat(allPermissions.contains("USER")).as("Permissions not found").isTrue();
-        Assertions.assertThat(allPermissions.contains("TESTGROUPPERMISSION")).as("Permissions not found").isTrue();
-        Assertions.assertThat(allPermissions.contains("TESTSUBGROUPPERMISSION")).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(user)).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(testgroup)).as("Permissions not found").isTrue();
+        Assertions.assertThat(allPermissions.contains(testsubgroup)).as("Permissions not found").isTrue();
 
         // TODO : remove this when we will use DBunit
         userService.delete(u);

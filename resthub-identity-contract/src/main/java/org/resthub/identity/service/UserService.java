@@ -6,6 +6,7 @@ import org.resthub.common.service.CrudService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.tracability.TracableService;
@@ -109,7 +110,7 @@ public interface UserService extends CrudService<User, Long>, TracableService {
      *         permissions from group to which the user belong are taken into
      *         accounts
      */
-    List<String> getUserPermissions(String login);
+    List<Permission> getUserPermissions(String login);
 
     /**
      * gets the User's direct Permissions
@@ -118,7 +119,7 @@ public interface UserService extends CrudService<User, Long>, TracableService {
      *            the login of the user
      * @return permissions of the user.
      */
-    List<String> getUserDirectPermissions(String login);
+    List<Permission> getUserDirectPermissions(String login);
 
     /**
      * Add a permission to an user
@@ -128,7 +129,7 @@ public interface UserService extends CrudService<User, Long>, TracableService {
      * @param permission
      *            the permission to be added
      */
-    void addPermissionToUser(String userLogin, String permission);
+    void addPermissionToUser(String userLogin, Permission permission);
 
     /**
      * Remove the permission for the given user
@@ -138,7 +139,7 @@ public interface UserService extends CrudService<User, Long>, TracableService {
      * @param permission
      *            the permission to delete
      */
-    void removePermissionFromUser(String userLogin, String permission);
+    void removePermissionFromUser(String userLogin, Permission permission);
 
     /**
      * Add a group from one user's groups

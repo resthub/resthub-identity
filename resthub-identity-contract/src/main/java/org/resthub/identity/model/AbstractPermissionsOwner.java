@@ -3,9 +3,7 @@ package org.resthub.identity.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -14,10 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,7 +37,7 @@ public abstract class AbstractPermissionsOwner {
     /**
      * the list of permissions
      * */
-    protected List<String> permissions = new ArrayList<String>();
+    protected List<Permission> permissions = new ArrayList<Permission>();
 
     /**
      * List of Permissions Owner (Group) in which the Permissions Owner is
@@ -60,7 +55,7 @@ public abstract class AbstractPermissionsOwner {
     }
 
     public AbstractPermissionsOwner(AbstractPermissionsOwner i) {
-        List<String> pPermissions = i.getPermissions();
+        List<Permission> pPermissions = i.getPermissions();
         permissions.addAll(pPermissions);
     }
 
@@ -70,7 +65,7 @@ public abstract class AbstractPermissionsOwner {
      * @param permissions
      *            list of permission to be assigned to the new Identity
      * */
-    public AbstractPermissionsOwner(List<String> permissions) {
+    public AbstractPermissionsOwner(List<Permission> permissions) {
         this.permissions = permissions;
     }
 
@@ -90,11 +85,10 @@ public abstract class AbstractPermissionsOwner {
      * @return the permissions list if permissions have been assigned, otherwise
      *         null
      * */
-    @ElementCollection(fetch = FetchType.EAGER)
-    @JoinTable(name = "permissions_owner_permissions", joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
-    @XmlElementWrapper(name = "permissions")
-    @XmlElement(name = "permission")
-    public List<String> getPermissions() {
+    @ManyToMany
+    @JoinTable(name = "permissions_owner_permissions")
+    @JsonIgnore
+    public List<Permission> getPermissions() {
         return permissions;
     }
 
@@ -102,7 +96,7 @@ public abstract class AbstractPermissionsOwner {
      * <b>Only used by Hibernate</b> Please use getPermissions() instead.
      */
     @SuppressWarnings("unused")
-    private void setPermissions(List<String> permissions) {
+    private void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
 
@@ -135,7 +129,9 @@ public abstract class AbstractPermissionsOwner {
      * 
      */
     @ManyToMany
-    @JoinTable(name = "permissions_owner_groups", joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "permissions_owner", referencedColumnName = "id"))
+    @JoinTable(name = "permissions_owner_groups",
+    		joinColumns = @JoinColumn(name = "permissions_owner", referencedColumnName = "id"),
+    		inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
     @JsonIgnore
     public List<Group> getGroups() {
         return groups;
