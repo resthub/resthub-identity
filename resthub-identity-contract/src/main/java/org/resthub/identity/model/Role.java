@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 
 @Entity
 @Table(name = "idm_roles")
@@ -20,7 +17,7 @@ public class Role {
 
     protected Long id;
     protected String name;
-    protected List<String> permissions = new ArrayList<String>();
+    protected List<Permission> permissions = new ArrayList<Permission>();
 
     /**
      * Hide default constructor not to be able to create roles w/o a name.
@@ -72,11 +69,9 @@ public class Role {
      * 
      * @return the permissions assigned to the role.
      * */
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "role_permission")
-    @XmlElementWrapper(name = "permissions")
-    @XmlElement(name = "permission")
-    public List<String> getPermissions() {
+    public List<Permission> getPermissions() {
         return permissions;
     }
 
@@ -86,7 +81,7 @@ public class Role {
      * @param permissions
      *            List of permissions to assign to the role.
      * */
-    protected void setPermissions(List<String> permissions) {
+    public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
 

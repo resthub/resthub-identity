@@ -11,6 +11,7 @@ import org.resthub.identity.elasticsearch.Indexer;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.repository.AbstractPermissionsOwnerRepository;
@@ -170,8 +171,8 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<String> getUserPermissions(String login) {
-		List<String> p = null;
+	public List<Permission> getUserPermissions(String login) {
+		List<Permission> p = null;
 		User u = this.findByLogin(login);
 		if (u != null) {
 			p = PermissionsOwnerTools.getInheritedPermission(u);
@@ -183,8 +184,8 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<String> getUserDirectPermissions(String login) {
-		List<String> p = null;
+	public List<Permission> getUserDirectPermissions(String login) {
+		List<Permission> p = null;
 		User u = this.findByLogin(login);
 		if (u != null) {
 			p = u.getPermissions();
@@ -197,7 +198,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	 */
 	@Transactional(readOnly = false)
 	@Override
-	public void addPermissionToUser(String userLogin, String permission) {
+	public void addPermissionToUser(String userLogin, Permission permission) {
 		if (userLogin != null && permission != null) {
 			User u = this.findByLogin(userLogin);
 			if (u != null) {
@@ -215,7 +216,7 @@ public class UserServiceImpl extends AbstractTraceableServiceImpl<User, UserRepo
 	 */
 	@Transactional(readOnly = false)
 	@Override
-	public void removePermissionFromUser(String userLogin, String permission) {
+	public void removePermissionFromUser(String userLogin, Permission permission) {
 		if (userLogin != null && permission != null) {
 			User u = this.findByLogin(userLogin);
 			if (u != null) {

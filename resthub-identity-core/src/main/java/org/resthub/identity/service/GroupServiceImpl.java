@@ -9,6 +9,7 @@ import org.elasticsearch.client.Client;
 import org.resthub.identity.elasticsearch.Indexer;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.repository.GroupRepository;
@@ -118,7 +119,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	 */
 	@Override
 	@Transactional
-	public void addPermissionToGroup(String groupName, String permission) {
+	public void addPermissionToGroup(String groupName, Permission permission) {
 		if (groupName != null && permission != null) {
 			Group g = this.findByName(groupName);
 			if (g != null) {
@@ -136,8 +137,8 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	 */
 	@Override
 	@Transactional
-	public List<String> getGroupDirectPermissions(String groupName) {
-		List<String> permissions = null;
+	public List<Permission> getGroupDirectPermissions(String groupName) {
+		List<Permission> permissions = null;
 		if (groupName != null) {
 			Group g = this.findByName(groupName);
 			if (g != null) {
@@ -173,10 +174,10 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	 */
 	@Override
 	@Transactional
-	public void removePermissionFromGroup(String groupName, String permission) {
+	public void removePermissionFromGroup(String groupName, Permission permission) {
 		Group g = this.findByName(groupName);
 		if (g != null && permission != null) {
-			List<String> permissions = g.getPermissions();
+			List<Permission> permissions = g.getPermissions();
 			while (permissions.contains(permission)) {
 				permissions.remove(permission);
 			}

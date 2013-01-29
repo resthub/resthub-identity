@@ -3,11 +3,12 @@ package org.resthub.identity.controller;
 import java.util.List;
 
 import javax.inject.Inject;
-import org.resthub.common.exception.NotFoundException;
 
+import org.resthub.common.exception.NotFoundException;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.exception.ExpectationFailedException;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.GroupService;
@@ -188,8 +189,8 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      *         otherwise HTTP Error 404
      */
     @RequestMapping(method = RequestMethod.GET, value = "/name/{name}/permissions") @ResponseBody
-    public List<String> getPermisionsFromGroup(@PathVariable("name") String name) {
-        List<String> permissions = this.service.getGroupDirectPermissions(name);
+    public List<Permission> getPermisionsFromGroup(@PathVariable("name") String name) {
+        List<Permission> permissions = this.service.getGroupDirectPermissions(name);
         if (permissions == null) {
             throw new NotFoundException();
         }
@@ -205,7 +206,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      *            the permission to be added
      */
     @RequestMapping(method = RequestMethod.PUT, value = "name/{name}/permissions/{permission}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addPermissionsToUser(@PathVariable("name") String login, @PathVariable("permission") String permission) {
+    public void addPermissionsToUser(@PathVariable("name") String login, @PathVariable("permission") Permission permission) {
         this.service.addPermissionToGroup(login, permission);
     }
 
@@ -218,7 +219,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      *            the permission to be removed
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/permissions/{permission}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePermissionsFromUser(@PathVariable("name") String name, @PathVariable("permission") String permission) {
+    public void deletePermissionsFromUser(@PathVariable("name") String name, @PathVariable("permission") Permission permission) {
         this.service.removePermissionFromGroup(name, permission);
     }
 
