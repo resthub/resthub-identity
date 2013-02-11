@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 /**
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * permissions_owner_groups
  */
 @Entity
-@Table(name = "permissions_owner")
+@Table(name = "idm_permissions_owner")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class AbstractPermissionsOwner {
 
@@ -71,6 +72,7 @@ public abstract class AbstractPermissionsOwner {
 
     @Id
     @GeneratedValue
+    @JsonView({IdView.class})
     public Long getId() {
         return id;
     }
@@ -107,7 +109,7 @@ public abstract class AbstractPermissionsOwner {
      */
     @ManyToMany
     @JoinTable(name = "permissions_owner_roles")
-    @JsonIgnore
+    @JsonView({ProfileView.class})
     public List<Role> getRoles() {
         return this.roles;
     }
@@ -116,7 +118,6 @@ public abstract class AbstractPermissionsOwner {
      * <b>Only used by Hibernate</b> Please use getRoles() instead.
      */
     @SuppressWarnings("unused")
-    @JsonProperty
     private void setRoles(List<Role> roles) {
         this.roles = roles;
     }
@@ -169,5 +170,8 @@ public abstract class AbstractPermissionsOwner {
         hash = 43 * hash + (this.id == null ? 0 : this.id.hashCode());
         return hash;
     }
+    
+    public static interface IdView{}
+    public static interface ProfileView{}
 
 }

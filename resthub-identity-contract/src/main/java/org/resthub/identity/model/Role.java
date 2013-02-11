@@ -10,12 +10,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "idm_roles")
 public class Role {
 
+	
     protected Long id;
+	
     protected String name;
     protected List<Permission> permissions = new ArrayList<Permission>();
 
@@ -36,6 +41,7 @@ public class Role {
 
     @Id
     @GeneratedValue
+    @JsonView({IdView.class})
     public Long getId() {
         return id;
     }
@@ -49,7 +55,9 @@ public class Role {
      * 
      * @return the name of the role.
      */
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
+    @NotNull
+    @JsonView({SummarizeView.class})
     public String getName() {
         return this.name;
     }
@@ -71,6 +79,7 @@ public class Role {
      * */
     @ManyToMany
     @JoinTable(name = "role_permission")
+    @JsonView({SummarizeView.class})
     public List<Permission> getPermissions() {
         return permissions;
     }
@@ -108,4 +117,7 @@ public class Role {
         hash = 43 * hash + (this.id == null ? 0 : this.id.hashCode());
         return hash;
     }
+    
+    public static interface IdView{}
+    public static interface SummarizeView extends IdView, Permission.IdView{}
 }

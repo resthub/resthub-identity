@@ -3,6 +3,7 @@ package org.resthub.identity.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * Describes a group.<br/>
@@ -31,7 +32,8 @@ public class Group extends AbstractPermissionsOwner {
      * 
      * @return name of the group
      * */
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    @NotNull
     public String getName() {
         return name;
     }

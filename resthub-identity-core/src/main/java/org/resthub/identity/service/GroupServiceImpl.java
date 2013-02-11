@@ -13,7 +13,7 @@ import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.repository.GroupRepository;
-import org.resthub.identity.repository.UserRepository;
+import org.resthub.identity.repository.AbstractUserRepository;
 import org.resthub.identity.service.RoleService.RoleChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	 * The userRepository<br/>
 	 * This class need it in order to be able to deal with users
 	 */
-	protected UserRepository userRepository;
+	protected AbstractUserRepository userRepository;
     
 	protected RoleService roleService;
 	
@@ -58,7 +58,7 @@ public class GroupServiceImpl extends AbstractTraceableServiceImpl<Group,GroupRe
 	
 	@Inject
 	@Named("userRepository")
-	protected void setUserRepository(UserRepository userRepository) {
+	protected void setUserRepository(AbstractUserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
