@@ -10,7 +10,6 @@ import org.resthub.web.JsonHelper;
 import org.resthub.web.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 //import com.ning.http.client.Response;
 
@@ -70,7 +69,7 @@ public class GroupControllerWebTest extends AbstractWebTest {
         /* Given a new user */
         String firstName = "first";
         String lastName = "last";
-        String password = "Password1";
+        String password = "P@ssw0rd";
         String login = "testLogin";
 
         User u = new User();

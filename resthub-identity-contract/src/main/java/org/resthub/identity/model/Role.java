@@ -119,5 +119,5 @@ public class Role {
     }
     
     public static interface IdView{}
-    public static interface SummarizeView extends IdView, Permission.IdView{}
+    public static interface SummarizeView extends IdView, Permission.SummarizeView{}
 }

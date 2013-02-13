@@ -27,7 +27,7 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 	private static final String USER_LOGIN = "TestUserLogin";
 	private static final String USER_FIRST_NAME = "TestUserFirstName";
 	private static final String USER_LAST_NAME = "TestUserLastName";
-	private static final String USER_PASSWORD = "TestUserPassword";
+	private static final String USER_PASSWORD = "P@ssw0rd";
 
 	private static final String USER_PERMISSION_1 = "ADMIN";
 	private static final String USER_PERMISSION_2 = "USER";

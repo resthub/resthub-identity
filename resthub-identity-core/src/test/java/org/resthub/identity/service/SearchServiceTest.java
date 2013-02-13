@@ -93,7 +93,7 @@ public class SearchServiceTest extends AbstractTransactionalTest {
  	
  	@Test
 	public void shouldUsersBeRetrieved() {
-		String pwd = "password";
+		String pwd = "P@ssw0rd";
 		String login = "login";
 
 		// Given a user with login 'jdujardin'
@@ -215,7 +215,7 @@ public class SearchServiceTest extends AbstractTransactionalTest {
  	
  	@Test
 	public void shouldUserAndGroupsBeRetrieved() {
-		String pwd = "password";
+		String pwd = "P@ssw0rd";
 
 		// Given a user with login 'jdujardin'
 		User u1 = new User();
@@ -277,7 +277,7 @@ public class SearchServiceTest extends AbstractTransactionalTest {
  	
 // 	@Test
 	public void shouldComplexQueriesBeExecuted() {
-		String pwd = "Password1";
+		String pwd = "P@ssw0rd";
 
 		// Given a user with login 'dujardin' and first name 'jean'
 		User u1 = new User();

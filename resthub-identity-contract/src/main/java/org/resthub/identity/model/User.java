@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -80,14 +81,10 @@ public class User extends AbstractPermissionsOwner {
      * gets the Password<br/>
      * The password can not be given in the XML/JSON representation of the user
      * 
-     * Password must have at least one digit, one lower case caracter and one upper case caracter.
-     * 
      * @return user's password
      * */
     @Column
     @NotNull
-//    @Pattern(regexp = "\\(?=.*[0-9]\\)\\(?=.*[a-z]\\)\\(?=.*[A-Z]\\).{6,20}")
-//    @Size(min=6, max=20)
     @JsonView({SummarizeViewWithPassword.class})
     public String getPassword() {
         return password;

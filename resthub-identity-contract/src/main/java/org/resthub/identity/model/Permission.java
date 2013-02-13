@@ -93,7 +93,7 @@ public class Permission {
 	 * @return
 	 */
 	@Column(nullable = false, unique = true)
-	@JsonView({IdView.class})
+	@JsonView({SummarizeView.class})
 	public String getCode() {
 		return code;
 	}
@@ -111,6 +111,7 @@ public class Permission {
 	 * @return
 	 */
 	@Column
+	@JsonView({SummarizeView.class})
 	public String getTitle() {
 		return title;
 	}
@@ -182,4 +183,5 @@ public class Permission {
     }
 	
 	public interface IdView {}
+	public interface SummarizeView extends IdView {}
 }

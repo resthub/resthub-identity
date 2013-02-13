@@ -45,7 +45,7 @@ public class UserControllerWebTest extends AbstractWebTest {
 
     protected User createTestResource() {
         String userLogin = generateRandomLogin();
-        String userPassword = "UserTestPassword1";
+        String userPassword = "P@ssw0rd";
         User u = new User();
         u.setLogin(userLogin);
         u.setPassword(userPassword);
