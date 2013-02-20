@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepository> implements RoleService {
 
 	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
-	protected UserService userService;
+	protected AbstractUserService userService;
 	protected GroupService groupService;
 
 	private @Value("#{esProp['index.name']}") String indexName;
@@ -59,7 +59,7 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 	
 	@Inject
 	@Named("userService")
-	protected void setUserService(UserService userService) {
+	protected void setUserService(AbstractUserService userService) {
 		this.userService = userService;
 	}
 

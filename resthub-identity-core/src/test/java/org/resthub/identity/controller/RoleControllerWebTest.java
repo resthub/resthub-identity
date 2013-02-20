@@ -61,10 +61,14 @@ public class RoleControllerWebTest extends AbstractWebTest {
 
     protected User createTestUser(int id) {
         String userLogin = "UserTestUserLogin" + id;
-        String userPassword = "UserTestUserPassword";
+        String userPassword = "P@ssw0rd" + id;
+        String userEmail = "test" + id + "@test.com";
         User u = new User();
         u.setLogin(userLogin);
         u.setPassword(userPassword);
+        u.setLastName("Test");
+        u.setFirstName("Test");
+        u.setEmail(userEmail);
         return u;
     }
 

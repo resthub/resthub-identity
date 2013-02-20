@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface AbstractUserRepository<R extends User> extends JpaRepository<R, Long> {
 
 	/**
 	 * Find a list of {@link User} from login
@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * 
 	 * @return the list of found users (empty if not found)
 	 */
-	List<User> findByLogin(String login);
+	List<R> findByLogin(String login);
 
 	/**
 	 * Gets the user of a group.
@@ -30,5 +30,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @return A list of users corresponding to the given group.
 	 */
 	@Query("SELECT DISTINCT u FROM User u JOIN u.groups g WHERE g.name = :groupName")
-	List<User> getUsersFromGroup(@Param("groupName") String groupName);
+	List<R> getUsersFromGroup(@Param("groupName") String groupName);
 }

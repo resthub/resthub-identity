@@ -6,9 +6,12 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Email;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 /**
  * Describe a user account.<br/>
@@ -57,7 +60,9 @@ public class User extends AbstractPermissionsOwner {
      * 
      * @return the user login
      * */
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    @NotNull
+    @JsonView({SummarizeView.class})
     public String getLogin() {
         return login;
     }
@@ -78,8 +83,9 @@ public class User extends AbstractPermissionsOwner {
      * 
      * @return user's password
      * */
-    @Column(nullable = false)   
-    @JsonIgnore
+    @Column
+    @NotNull
+    @JsonView({SummarizeViewWithPassword.class})
     public String getPassword() {
         return password;
     }
@@ -90,7 +96,6 @@ public class User extends AbstractPermissionsOwner {
      * @param password
      *            ,the password to be set to the user
      * */
-    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -101,6 +106,8 @@ public class User extends AbstractPermissionsOwner {
      * @return user's FirstName
      * */
     @Column
+    @NotNull
+    @JsonView({SummarizeView.class})
     public String getFirstName() {
         return firstName;
     }
@@ -121,6 +128,8 @@ public class User extends AbstractPermissionsOwner {
      * @return user's lastName
      * */
     @Column
+    @NotNull
+    @JsonView({SummarizeView.class})
     public String getLastName() {
         return lastName;
     }
@@ -140,7 +149,10 @@ public class User extends AbstractPermissionsOwner {
      * 
      * @return user's email;
      * */
-    @Column(/* nullable = false */)
+    @Column(unique = true)
+    @Email
+    @NotNull
+    @JsonView({SummarizeView.class})
     public String getEmail() {
         return email;
     }
@@ -171,8 +183,11 @@ public class User extends AbstractPermissionsOwner {
     }
 
     public String generateDefaultPassword() {
-        String s = "P455W0R[)";
+        String s = "p455W0R[)";
         return s;
     }
+    
+    public static interface SummarizeView extends AbstractPermissionsOwner.IdView {}
+    public static interface SummarizeViewWithPassword extends SummarizeView {}
 
 }

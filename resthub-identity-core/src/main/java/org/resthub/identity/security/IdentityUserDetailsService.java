@@ -10,7 +10,7 @@ import javax.inject.Named;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.RoleService.RoleChange;
-import org.resthub.identity.service.UserService;
+import org.resthub.identity.service.AbstractUserService;
 import org.resthub.identity.service.tracability.ServiceListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
@@ -27,7 +27,7 @@ public class IdentityUserDetailsService implements UserDetailsService, ServiceLi
 
     @Inject
     @Named("userService")
-    private UserService userService;
+    private AbstractUserService userService;
 
     @PostConstruct
     public void init() {
