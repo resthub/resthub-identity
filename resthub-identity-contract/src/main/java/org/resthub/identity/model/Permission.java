@@ -8,7 +8,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.resthub.identity.model.Role.IdView;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 /**
  * Describe a permission.
@@ -72,6 +75,7 @@ public class Permission {
 	 */
 	@Id
     @GeneratedValue
+    @JsonView({IdView.class})
 	public Long getId() {
 		return id;
 	}
@@ -89,6 +93,7 @@ public class Permission {
 	 * @return
 	 */
 	@Column(nullable = false, unique = true)
+	@JsonView({SummarizeView.class})
 	public String getCode() {
 		return code;
 	}
@@ -106,6 +111,7 @@ public class Permission {
 	 * @return
 	 */
 	@Column
+	@JsonView({SummarizeView.class})
 	public String getTitle() {
 		return title;
 	}
@@ -175,4 +181,7 @@ public class Permission {
     public int hashCode() {
         return this.code.hashCode();
     }
+	
+	public interface IdView {}
+	public interface SummarizeView extends IdView {}
 }

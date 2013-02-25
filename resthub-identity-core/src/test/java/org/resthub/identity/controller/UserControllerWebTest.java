@@ -45,10 +45,13 @@ public class UserControllerWebTest extends AbstractWebTest {
 
     protected User createTestResource() {
         String userLogin = generateRandomLogin();
-        String userPassword = "UserTestUserPassword";
+        String userPassword = "P@ssw0rd";
         User u = new User();
         u.setLogin(userLogin);
         u.setPassword(userPassword);
+        u.setFirstName("Test");
+        u.setLastName("Test");
+        u.setEmail(userLogin+"@test.com");
         return u;
     }
 

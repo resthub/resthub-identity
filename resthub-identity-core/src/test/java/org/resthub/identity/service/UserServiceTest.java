@@ -14,7 +14,7 @@ import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.repository.PermissionRepository;
-import org.resthub.identity.service.UserService.UserServiceChange;
+import org.resthub.identity.service.AbstractUserService.UserServiceChange;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
@@ -66,10 +66,16 @@ public class UserServiceTest extends AbstractTransactionalTest {
     
     public User createTestEntity() {
         String userLogin = "UserTestUserName" + Math.round(Math.random() * 100000);
-        String userPassword = "UserTestUserPassword";
+        String userPassword = "P@ssw0rd";
+        String firstName = "alexander";
+        String lastName = "test";
+        String email = userLogin + "@test.com";
         User u = new User();
         u.setLogin(userLogin);
         u.setPassword(userPassword);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         return u;
     }
 
@@ -81,12 +87,22 @@ public class UserServiceTest extends AbstractTransactionalTest {
 
     @Test
     public void testMultiDeletion() throws Exception {
+    	String pwd = "P@ssw0rd";
 
         User u1 = new User();
         u1.setLogin("u1");
+        u1.setPassword(pwd);
+        u1.setFirstName("FirstName");
+        u1.setLastName("LastName");
+        u1.setEmail(u1.getLogin()+ "@test.com");
 
         User u2 = new User();
         u2.setLogin("u2");
+        u2.setPassword(pwd);
+        u2.setFirstName("FirstName");
+        u2.setLastName("LastName");
+        u2.setEmail(u2.getLogin()+ "@test.com");
+        
 
         u1 = userService.create(u1);
         u2 = userService.create(u2);
@@ -104,14 +120,16 @@ public class UserServiceTest extends AbstractTransactionalTest {
         String firstName = "alexander";
         String firstNameAbr = "alex";
         String lastName = "testUpdate";
-        String password = "testPassword";
+        String password = "P@ssw0rd";
         String login = "testLogin";
+        String email = login + "@test.com";
 
         User u = new User();
         u.setFirstName(firstName);
         u.setLastName(lastName);
         u.setPassword(password);
         u.setLogin(login);
+        u.setEmail(email);
         u = userService.create(u);
 
         // when we try to change some info (firstName) about the user and that
@@ -134,10 +152,16 @@ public class UserServiceTest extends AbstractTransactionalTest {
         /* Given a new user */
 
         String login = "alexOK";
-        String password = "alex-pass";
+        String password = "P@ssw0rd";
+        String firstName = "alexander";
+        String lastName = "test";
+        String email = login + "@test.com";
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         userService.create(u);
         // userService.create(u);
 
@@ -158,12 +182,18 @@ public class UserServiceTest extends AbstractTransactionalTest {
         /* Given a new user */
 
         String login = "alexOK";
-        String password1 = "alex-pass";
-        String password2 = "NewAlex-pass";
+        String password1 = "P@ssw0rd";
+        String password2 = "NewAlex-P@ssw0rd";
+        String firstName = "alexander";
+        String lastName = "test";
+        String email = login + "@test.com";
 
         User u = new User();
         u.setLogin(login);
         u.setPassword(password1);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         userService.create(u);
 
         /* After that the password is updates */
@@ -185,12 +215,18 @@ public class UserServiceTest extends AbstractTransactionalTest {
     public void shouldGetNullWhenBadPassword() {
         /* Given a new user */
         String login = "alexBadPassword";
-        String password = "alex-pass";
+        String password = "P@ssw0rd";
         String badPassword = "alex-bad-pass";
+        String email = login + "@test.com";
+        String firstName = "first";
+        String lastName = "last";
 
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         userService.create(u);
         // userService.create(u);
         /* When we search him providing a bad password */
@@ -206,12 +242,18 @@ public class UserServiceTest extends AbstractTransactionalTest {
     public void shouldGetNullWhenBadLogin() {
         String login = "alexBadLogin";
         String badLogin = "alex";
-        String password = "alex-password";
+        String password = "P@ssw0rd";
+        String email = login + "@test.com";
+        String firstName = "first";
+        String lastName = "last";
         /* Given a new user */
 
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         userService.create(u);
 
         /* When we search him providing a bad login */
@@ -227,7 +269,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
     public void testDirectPermissions() {
         /* Given a user with permissions */
         String login = "permissionLogin";
-        String password = "Password";
+        String password = "P@ssw0rd";
+        String email = login + "@test.com";
+        String firstName = "first";
+        String lastName = "last";
         
         Permission admin = this.permissionRepository.save(new Permission("ADMIN"));
         Permission user = this.permissionRepository.save(new Permission("USER"));
@@ -240,6 +285,9 @@ public class UserServiceTest extends AbstractTransactionalTest {
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         u.getPermissions().addAll(permissions);
         userService.create(u);
 
@@ -259,7 +307,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
     public void testGroupsPermissions() {
         /* Given a user with permissions */
         String login = "permissionLogin";
-        String password = "Password";
+        String password = "P@ssw0rd";
+        String email = login + "@test.com";
+        String firstName = "first";
+        String lastName = "last";
         
         Permission admin = this.permissionRepository.save(new Permission("ADMIN"));
         Permission user = this.permissionRepository.save(new Permission("USER"));
@@ -290,6 +341,9 @@ public class UserServiceTest extends AbstractTransactionalTest {
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         u.getPermissions().addAll(permissions);
         u.getGroups().add(group);
         userService.create(u);
@@ -320,7 +374,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
     public void testDuplicatePermissions() {
         /* Given a user with permissions */
         String login = "permissionLogin";
-        String password = "Password";
+        String password = "P@ssw0rd";
+        String email = login + "@test.com";
+        String firstName = "first";
+        String lastName = "last";
         
         Permission admin = this.permissionRepository.save(new Permission("ADMIN"));
         Permission user = this.permissionRepository.save(new Permission("USER"));
@@ -355,6 +412,9 @@ public class UserServiceTest extends AbstractTransactionalTest {
         User u = new User();
         u.setLogin(login);
         u.setPassword(password);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
         u.getPermissions().addAll(permissions);
         u.getGroups().add(group);
         userService.create(u);
@@ -404,14 +464,16 @@ public class UserServiceTest extends AbstractTransactionalTest {
         /* Given a new user */
         String firstName = "first";
         String lastName = "last";
-        String password = "pass";
+        String password = "P@ssw0rd";
         String login = "testLogin";
+        String email = login + "@test.com";
 
         User u = new User();
         u.setFirstName(firstName);
         u.setLastName(lastName);
         u.setPassword(password);
         u.setLogin(login);
+        u.setEmail(email);
 
         /* Given a link between this user and the group */
         u.getGroups().add(g);
@@ -774,6 +836,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
         // Given a user
         User u = new User();
         u.setLogin("user" + new Random().nextInt());
+        u.setPassword("P@ssw0rd");
+        u.setFirstName("FirstName");
+        u.setLastName("LastName");
+        u.setEmail(u.getLogin()+ "@test.com");
 
         // When saving it
         u = userService.create(u);
@@ -794,6 +860,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
         // Given a created user
         User u = new User();
         u.setLogin("user" + new Random().nextInt());
+        u.setPassword("P@ssw0rd");
+        u.setFirstName("FirstName");
+        u.setLastName("LastName");
+        u.setEmail(u.getLogin()+ "@test.com");
         u = userService.create(u);
 
         // When removing it by id
@@ -814,6 +884,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
         // Given a created user
         User u = new User();
         u.setLogin("user" + new Random().nextInt());
+        u.setPassword("P@ssw0rd");
+        u.setFirstName("FirstName");
+        u.setLastName("LastName");
+        u.setEmail(u.getLogin()+ "@test.com");
         u = userService.create(u);
 
         // When removing it
@@ -834,6 +908,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
         // Given a created user
         User u = new User();
         u.setLogin("user" + new Random().nextInt());
+        u.setPassword("P@ssw0rd");
+        u.setFirstName("FirstName");
+        u.setLastName("LastName");
+        u.setEmail(u.getLogin()+ "@test.com");
         u = userService.create(u);
 
         // Given a group
@@ -867,6 +945,10 @@ public class UserServiceTest extends AbstractTransactionalTest {
         // Given a created user in this group
         User u = new User();
         u.setLogin("user" + new Random().nextInt());
+        u.setPassword("P@ssw0rd");
+        u.setFirstName("FirstName");
+        u.setLastName("LastName");
+        u.setEmail(u.getLogin()+ "@test.com");
         u = userService.create(u);
         userService.addGroupToUser(u.getLogin(), g.getName());
 
