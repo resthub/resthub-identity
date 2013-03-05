@@ -100,8 +100,11 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
     
     /** Override this methods in order to secure it **/
     @Secured({ "IM_GROUP_ADMIN", "IM_GROUP_READ" }) @RequestMapping(value = "/findAllPerPage", method = RequestMethod.GET) @Override
-    public Page<Group> findPaginated(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false)  Integer size) {
-        return super.findPaginated(page, size);
+    public Page<Group> findPaginated(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                          @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                          @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direction,
+                          @RequestParam(value = "properties", required = false) String properties) {
+        return super.findPaginated(page, size, direction, properties);
     }
     
     /** Override this methods in order to secure it **/

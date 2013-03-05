@@ -30,6 +30,20 @@
 			<groupId>fr.pilato.spring</groupId>
 			<artifactId>spring-elasticsearch</artifactId>
 			<version>${elasticsearch.spring.integration.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 	
 		<dependency>
@@ -86,6 +100,16 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+        <dependency>
+            <groupId>org.resthub</groupId>
+            <artifactId>resthub-jpa</artifactId>
+            <version>${resthub.spring.stack.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.resthub</groupId>
+            <artifactId>resthub-web-server</artifactId>
+            <version>${resthub.spring.stack.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.resthub</groupId>
 			<artifactId>resthub-test</artifactId>
