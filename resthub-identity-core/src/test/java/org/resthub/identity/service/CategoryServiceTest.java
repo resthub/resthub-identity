@@ -8,7 +8,7 @@ import javax.inject.Named;
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Category;
 import org.resthub.identity.model.Permission;
-import org.resthub.identity.repository.PermissionRepository;
+import org.resthub.identity.core.repository.PermissionRepository;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;

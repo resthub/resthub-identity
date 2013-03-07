@@ -13,7 +13,7 @@ import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
-import org.resthub.identity.repository.PermissionRepository;
+import org.resthub.identity.core.repository.PermissionRepository;
 import org.resthub.identity.service.AbstractUserService.UserServiceChange;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;

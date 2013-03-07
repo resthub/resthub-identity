@@ -26,6 +26,10 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 		 * Group creation. Arguments : 1- created group.
 		 */
 		GROUP_CREATION,
+        /**
+         * Group update. Arguments : 1- updated group.
+         */
+        GROUP_UPDATE,
 		/**
 		 * Group deletion. Arguments : 1- deleted group.
 		 */

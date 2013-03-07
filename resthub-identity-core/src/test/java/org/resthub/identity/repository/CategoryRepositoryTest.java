@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.repository.CategoryRepository;
 import org.resthub.identity.model.Category;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;

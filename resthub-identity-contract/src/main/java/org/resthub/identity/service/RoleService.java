@@ -22,6 +22,10 @@ public interface RoleService extends CrudService<Role, Long>, TracableService {
          */
         ROLE_CREATION,
         /**
+         * Role update. Arguments : 1- updated role.
+         */
+        ROLE_UPDATE,
+        /**
          * Role deletion. Arguments : 1- deleted role.
          */
         ROLE_DELETION,

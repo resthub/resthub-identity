@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.repository.PermissionRepository;
 import org.resthub.identity.model.Permission;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;

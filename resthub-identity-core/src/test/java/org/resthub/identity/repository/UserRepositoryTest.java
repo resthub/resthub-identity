@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.repository.*;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;

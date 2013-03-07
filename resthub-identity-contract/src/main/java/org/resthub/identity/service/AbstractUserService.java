@@ -28,6 +28,11 @@ public interface AbstractUserService<T extends User> extends CrudService<T, Long
          * User creation. Arguments : 1- created user.
          */
         USER_CREATION,
+
+        /**
+         * User update. Arguments : 1- updated user.
+         */
+        USER_UPDATE,
         /**
          * User deletion. Arguments : 1- deleted user.
          */
