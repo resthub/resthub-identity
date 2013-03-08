@@ -12,9 +12,9 @@ import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GenericUserService;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
-import org.resthub.identity.service.UserService;
 import org.resthub.web.controller.ServiceBasedRestController;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
     RoleService roleService;
 	
 	@Inject @Named("userService")
-    UserService userService;
+    GenericUserService userService;
 
     @Inject @Override      
     public void setService(GroupService service) {
@@ -54,7 +54,7 @@ public class GroupController extends ServiceBasedRestController<Group, Long, Gro
      *            the userService bean
      * */
     @Inject
-    public void setUserService(UserService userService) {
+    public void setUserService(GenericUserService userService) {
         this.userService = userService;
     }
 

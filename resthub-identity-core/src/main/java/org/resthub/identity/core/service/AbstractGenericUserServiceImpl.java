@@ -20,7 +20,7 @@ import org.resthub.identity.core.repository.AbstractUserRepository;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
 import org.resthub.identity.core.tools.PermissionsOwnerTools;
-import org.resthub.identity.service.UserService;
+import org.resthub.identity.service.GenericUserService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
  * It is a bean whose name is userService
  * 
  * */
-public abstract class AbstractUserServiceImpl<T extends User, TRepository extends AbstractUserRepository<T>> extends CrudServiceImpl<T, Long, TRepository> implements UserService<T>, ApplicationEventPublisherAware {
+public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository extends AbstractUserRepository<T>> extends CrudServiceImpl<T, Long, TRepository> implements GenericUserService<T>, ApplicationEventPublisherAware {
 
 	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
 	protected GroupService groupService;

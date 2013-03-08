@@ -11,8 +11,8 @@ import org.resthub.identity.core.listener.GroupTestListener;
 import org.resthub.identity.core.event.GroupEvent;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GenericUserService;
 import org.resthub.identity.service.GroupService;
-import org.resthub.identity.service.UserService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
@@ -24,7 +24,7 @@ public class GroupServiceTest extends AbstractTransactionalTest {
 
     @Inject
     @Named("userService")
-    private UserService<User> userService;
+    private GenericUserService<User> userService;
     
     @Inject
     @Named("groupService")

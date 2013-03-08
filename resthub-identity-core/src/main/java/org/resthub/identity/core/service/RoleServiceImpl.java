@@ -15,12 +15,11 @@ import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GenericUserService;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
-import org.resthub.identity.service.UserService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -30,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleServiceImpl extends CrudServiceImpl<Role, Long, RoleRepository> implements RoleService, ApplicationEventPublisherAware {
 
 	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
-	protected UserService userService;
+	protected GenericUserService userService;
 	protected GroupService groupService;
 
     private ApplicationEventPublisher applicationEventPublisher = null;
@@ -54,7 +53,7 @@ public class RoleServiceImpl extends CrudServiceImpl<Role, Long, RoleRepository>
 	
 	@Inject
 	@Named("userService")
-	protected void setUserService(UserService userService) {
+	protected void setUserService(GenericUserService userService) {
 		this.userService = userService;
 	}
 

@@ -13,7 +13,7 @@ import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
-import org.resthub.identity.service.UserService;
+import org.resthub.identity.service.GenericUserService;
 import org.resthub.web.controller.ServiceBasedRestController;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -37,10 +37,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  Specific permissions are given when useful
  */
 @Controller @RequestMapping("/api/user")
-public class UserController extends ServiceBasedRestController<User, Long, UserService> {
+public class UserController extends ServiceBasedRestController<User, Long, GenericUserService> {
 
     @Inject @Named("userService") @Override
-    public void setService(UserService service) {
+    public void setService(GenericUserService service) {
         this.service = service;
     }
 

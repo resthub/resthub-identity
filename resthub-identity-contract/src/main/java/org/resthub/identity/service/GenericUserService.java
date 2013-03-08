@@ -15,7 +15,7 @@ import org.resthub.identity.model.User;
  *
  * @author Guillaume Zurbach
  */
-public interface UserService<T extends User> extends CrudService<T, Long> {
+public interface GenericUserService<T extends User> extends CrudService<T, Long> {
 
 
 

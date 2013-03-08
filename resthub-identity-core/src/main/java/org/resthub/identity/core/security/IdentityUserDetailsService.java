@@ -9,7 +9,7 @@ import javax.inject.Named;
 import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
-import org.resthub.identity.service.UserService;
+import org.resthub.identity.service.GenericUserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
@@ -26,7 +26,7 @@ public class IdentityUserDetailsService implements UserDetailsService, Applicati
 
     @Inject
     @Named("userService")
-    private UserService userService;
+    private GenericUserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
