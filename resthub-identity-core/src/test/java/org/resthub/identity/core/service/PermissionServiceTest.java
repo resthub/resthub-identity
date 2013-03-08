@@ -24,13 +24,13 @@ public class PermissionServiceTest extends AbstractTransactionalTest {
 	// Cleanup before each test
 	@BeforeMethod
     public void cleanBefore() {
-    	this.permissionService.deleteAll();
+    	this.permissionService.deleteAllWithCascade();
     }
     
 	// Cleanup after each test
     @AfterMethod
     public void cleanAfter() {
-    	this.permissionService.deleteAll();
+    	this.permissionService.deleteAllWithCascade();
     }
 
 	@Test
@@ -55,5 +55,25 @@ public class PermissionServiceTest extends AbstractTransactionalTest {
 		Assertions.assertThat(p).as("Permission not found").isNotNull();
 		Assertions.assertThat(p.getCode()).as("Permission not found").isEqualTo("TEST_PERMISSION_2");
 	}
+
+    @Test
+    public void testChildPermission(){
+        Permission permissionWithChildren = new Permission("TEST_PERMISSION_WITH_CHILDREN");
+        permissionWithChildren.addPermission(new Permission("CHILD_PERMISSION_1"));
+        permissionWithChildren.addPermission(new Permission("CHILD_PERMISSION_2"));
+        permissionWithChildren.addPermission(new Permission("CHILD_PERMISSION_3"));
+        Permission childPermission4 = new Permission("CHILD_PERMISSION_4");
+        childPermission4.addPermission(new Permission("CHILD_PERMISSION_LEVEL_2"));
+        permissionWithChildren.addPermission(childPermission4);
+        this.permissionService.create(permissionWithChildren);
+
+        Permission p = this.permissionService.findByCode("TEST_PERMISSION_WITH_CHILDREN");
+
+        Assertions.assertThat(p).as("Permission not found").isNotNull();
+        Assertions.assertThat(p.getCode()).as("Permission not found").isEqualTo("TEST_PERMISSION_WITH_CHILDREN");
+        Assertions.assertThat(p.getPermissions().size()).isEqualTo(4);
+        Assertions.assertThat(p.getPermissions().get(0).getPermissions().size()).isEqualTo(0);
+        Assertions.assertThat(p.getPermissions().get(3).getPermissions().size()).isEqualTo(1);
+    }
     
 }
