@@ -3,15 +3,14 @@ package org.resthub.identity.core.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
-import org.resthub.identity.service.RoleService.RoleChange;
-import org.resthub.identity.service.AbstractUserService;
-import org.resthub.identity.service.tracability.ServiceListener;
+import org.resthub.identity.service.UserService;
+import org.springframework.context.ApplicationListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,16 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Named("identityUserDetailsService")
 @Transactional
-public class IdentityUserDetailsService implements UserDetailsService, ServiceListener {
+public class IdentityUserDetailsService implements UserDetailsService, ApplicationListener<RoleEvent> {
 
     @Inject
     @Named("userService")
-    private AbstractUserService userService;
-
-    @PostConstruct
-    public void init() {
-        userService.addListener(this);
-    }
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
@@ -56,7 +50,7 @@ public class IdentityUserDetailsService implements UserDetailsService, ServiceLi
     }
 
     @Override
-    public void onChange(String type, Object... arguments) {
+    public void onApplicationEvent(RoleEvent event) {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication auth = context.getAuthentication();
         IdentityUserDetailsAdapter userDetails = null;
@@ -65,10 +59,9 @@ public class IdentityUserDetailsService implements UserDetailsService, ServiceLi
             userDetails = (IdentityUserDetailsAdapter) auth.getPrincipal();
 
             // Update roles for logged users
-            if (userDetails != null
-                    && (type.equals(RoleChange.ROLE_ADDED_TO_USER.name()) || type
-                            .equals(RoleChange.ROLE_REMOVED_FROM_USER.name()))) {
-                User user = (User) arguments[1];
+            if (userDetails != null && (event.getType() == RoleEvent.RoleEventType.ROLE_ADDED_TO_USER
+                    ||event.getType() == RoleEvent.RoleEventType.ROLE_REMOVED_FROM_USER)) {
+                User user = event.getUser();
                 if (userDetails.getUsername().equals(user.getLogin())) {
                     List<Role> roles = new ArrayList<Role>();
                     userService.getRolesFromRootElement(roles, user);

@@ -6,7 +6,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.resthub.identity.core.repository.UserRepository;
+import org.resthub.common.service.CrudServiceImpl;
+import org.resthub.identity.core.event.RoleEvent;
+import org.resthub.identity.core.event.UserEvent;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.AbstractPermissionsOwner;
 import org.resthub.identity.model.Group;
@@ -15,11 +17,12 @@ import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.core.repository.AbstractPermissionsOwnerRepository;
 import org.resthub.identity.core.repository.AbstractUserRepository;
-import org.resthub.identity.service.AbstractUserService;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
-import org.resthub.identity.service.RoleService.RoleChange;
 import org.resthub.identity.core.tools.PermissionsOwnerTools;
+import org.resthub.identity.service.UserService;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -31,12 +34,18 @@ import org.springframework.util.Assert;
  * It is a bean whose name is userService
  * 
  * */
-public abstract class AbstractUserServiceImpl<T extends User, TRepository extends AbstractUserRepository<T>> extends AbstractTraceableServiceImpl<T, TRepository> implements AbstractUserService<T> {
+public abstract class AbstractUserServiceImpl<T extends User, TRepository extends AbstractUserRepository<T>> extends CrudServiceImpl<T, Long, TRepository> implements UserService<T>, ApplicationEventPublisherAware {
 
 	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
 	protected GroupService groupService;
 	protected RoleService roleService;
 	protected PasswordEncoder passwordEncoder;
+
+    private ApplicationEventPublisher applicationEventPublisher = null;
+
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
 
     @Override @Inject @Named("userRepository")
     public void setRepository(TRepository userRepository) {
@@ -82,7 +91,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 			// Overloaded method call
 			T created = super.create(user);
 			// Publish notification
-			publishChange(UserServiceChange.USER_CREATION.name(), created);
+            this.applicationEventPublisher.publishEvent(new UserEvent(UserEvent.UserEventType.USER_CREATION, created));
 			return created;
 		} else {
 			throw new AlreadyExistingEntityException("User " + user.getLogin() + " already exists.");
@@ -105,7 +114,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 		}
        
         T userRet =  super.update(user);
-        publishChange(UserServiceChange.USER_UPDATE.name(), userRet);
+        this.applicationEventPublisher.publishEvent(new UserEvent(UserEvent.UserEventType.USER_UPDATE, userRet));
 
 		return userRet;
 	}
@@ -120,7 +129,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 		// Overloaded method call
 		super.delete(id);
 		// Publish notification
-		publishChange(UserServiceChange.USER_DELETION.name(), deleted);
+        this.applicationEventPublisher.publishEvent(new UserEvent(UserEvent.UserEventType.USER_DELETION, deleted));
 	} // delete().
 
 	/**
@@ -131,7 +140,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 	public void delete(T user) {
 		super.delete(user);
 		// Publish notification
-		publishChange(UserServiceChange.USER_DELETION.name(), user);
+        this.applicationEventPublisher.publishEvent(new UserEvent(UserEvent.UserEventType.USER_DELETION, user));
 	} // delete().
 
 	/**
@@ -225,7 +234,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 				this.repository.save(u);
 			}
 			// Publish notification
-			publishChange(UserServiceChange.USER_ADDED_TO_GROUP.name(), u, g);
+            this.applicationEventPublisher.publishEvent(new UserEvent(UserEvent.UserEventType.USER_ADDED_TO_GROUP, u , g));
 		}
 	}
 
@@ -243,7 +252,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 				this.repository.save(u);
 			}
 			// Publish notification
-			publishChange(UserServiceChange.USER_REMOVED_FROM_GROUP.name(), u, g);
+            this.applicationEventPublisher.publishEvent(new UserEvent(UserEvent.UserEventType.USER_REMOVED_FROM_GROUP, u , g));
 		}
 	}
 
@@ -326,7 +335,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 				if (!u.getRoles().contains(r)) {
 					u.getRoles().add(r);
 					this.update(u);
-					this.publishChange(RoleChange.ROLE_ADDED_TO_USER.name(), r, u);
+                    this.applicationEventPublisher.publishEvent(new RoleEvent(RoleEvent.RoleEventType.ROLE_ADDED_TO_USER, r, u));
 				}
 			}
 		}
@@ -345,7 +354,7 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 				if (u.getRoles().contains(r)) {
 					u.getRoles().remove(r);
 					this.update(u);
-					this.publishChange(RoleChange.ROLE_REMOVED_FROM_USER.name(), r, u);
+                    this.applicationEventPublisher.publishEvent(new RoleEvent(RoleEvent.RoleEventType.ROLE_REMOVED_FROM_USER, r, u));
 				}
 			}
 		}
@@ -442,8 +451,4 @@ public abstract class AbstractUserServiceImpl<T extends User, TRepository extend
 		return null;
 	}
 
-//	@Override
-//	public Long getIdFromEntity(User user) {
-//		return user.getId();
-//	}
 }

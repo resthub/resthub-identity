@@ -1,21 +1,19 @@
 package org.resthub.identity.webapp.service;
 
+import org.resthub.identity.core.event.UserEvent;
 import org.resthub.identity.model.User;
 import org.resthub.identity.core.repository.UserRepository;
 import org.resthub.identity.core.service.AbstractUserServiceImpl;
-import org.resthub.identity.service.UserService;
-import org.resthub.identity.service.tracability.ServiceListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.elasticsearch.client.Client;
 import org.resthub.identity.webapp.elasticsearch.Indexer;
-import org.springframework.util.Assert;
-
+import org.springframework.context.ApplicationListener;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class WebAppUserServiceImpl extends AbstractUserServiceImpl<User, UserRepository> implements UserService, ServiceListener {
+public class WebAppUserServiceImpl extends AbstractUserServiceImpl<User, UserRepository> implements ApplicationListener<UserEvent> {
 
     private @Value("#{esProp['index.name']}") String indexName;
     private @Value("#{esProp['index.user.type']}") String indexType;
@@ -29,10 +27,6 @@ public class WebAppUserServiceImpl extends AbstractUserServiceImpl<User, UserRep
     @Named("elasticIndexer")
     private Indexer indexer;
 
-    public WebAppUserServiceImpl() {
-        this.addListener(this);
-    }
-
     @Override
 	@Inject
 	@Named("userRepository")
@@ -41,14 +35,13 @@ public class WebAppUserServiceImpl extends AbstractUserServiceImpl<User, UserRep
 	}
 
     @Override
-    public void onChange(String type, Object... arguments) {
-        Assert.notEmpty(arguments);
-        User user = (User)arguments[0];
-        if(type.equals(UserServiceChange.USER_CREATION.name())) {
+    public void onApplicationEvent(UserEvent event) {
+        User user = event.getUser();
+        if(event.getType() == UserEvent.UserEventType.USER_CREATION) {
             indexer.add(client, user, indexName, indexType, user.getId().toString());
-        } else if(type.equals(UserServiceChange.USER_UPDATE.name())) {
+        } else if(event.getType() == UserEvent.UserEventType.USER_UPDATE) {
             indexer.edit(client, user, indexName, indexType, user.getId().toString());
-        } else if(type.equals(UserServiceChange.USER_DELETION.name())) {
+        } else if(event.getType() == UserEvent.UserEventType.USER_DELETION) {
             indexer.delete(client, indexName, indexType, user.getId().toString());
         }
     }

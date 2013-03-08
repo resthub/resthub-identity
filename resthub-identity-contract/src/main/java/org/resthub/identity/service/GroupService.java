@@ -7,42 +7,13 @@ import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
-import org.resthub.identity.service.tracability.TracableService;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Group services interface.
  * 
  * @author Guillaume Zurbach
  */
-public interface GroupService extends CrudService<Group, Long>, TracableService {
-
-	/**
-	 * Kind of changes notified by this service
-	 */
-	enum GroupServiceChange {
-
-		/**
-		 * Group creation. Arguments : 1- created group.
-		 */
-		GROUP_CREATION,
-        /**
-         * Group update. Arguments : 1- updated group.
-         */
-        GROUP_UPDATE,
-		/**
-		 * Group deletion. Arguments : 1- deleted group.
-		 */
-		GROUP_DELETION,
-		/**
-		 * Group addition to a group. Arguments : 1- added group. 2- concerned parent group.
-		 */
-		GROUP_ADDED_TO_GROUP,
-		/**
-		 * Group removal from a group. Arguments : 1- removed group. 2- concerned parent group.
-		 */
-		GROUP_REMOVED_FROM_GROUP
-	};
+public interface GroupService extends CrudService<Group, Long> {
 
 	/**
 	 * Create a new group.
@@ -120,7 +91,6 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 	 * 				the name of the group
 	 * @return
 	 */
-	@Transactional
 	List<Group> getGroupsFromGroup(String groupName);
 	
 	/**
@@ -131,7 +101,6 @@ public interface GroupService extends CrudService<Group, Long>, TracableService 
 	 * @param subGroupName
 	 *            the name of the group to add from the group's group list
 	 */
-	@Transactional
 	void addGroupToGroup(String groupName, String subGroupName);
 	
 	/**

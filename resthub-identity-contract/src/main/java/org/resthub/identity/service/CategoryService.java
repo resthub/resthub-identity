@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.resthub.common.service.CrudService;
 import org.resthub.identity.model.Category;
-import org.resthub.identity.service.tracability.TracableService;
 
 /**
  * Category service interface
  *
  */
-public interface CategoryService extends CrudService<Category, Long>, TracableService {
+public interface CategoryService extends CrudService<Category, Long> {
 
 	/**
 	 * Retrieves a category by his name

@@ -53,7 +53,7 @@ public class Requester {
 		if (params == null) {
 			throw new IllegalArgumentException("query must not be null");
 		}
-		List<T> resultList = new ArrayList<>();
+		List<T> resultList = new ArrayList<T>();
 
 		// Preparing the query
 		logger.debug("Rechercher tout ce qui contient : \""
@@ -104,7 +104,7 @@ public class Requester {
 		if (params == null) {
 			throw new IllegalArgumentException("query must not be null");
 		}
-		List<T> resultList = new ArrayList<>();
+		List<T> resultList = new ArrayList<T>();
 
 		// Preparing the query
 		logger.debug("Rechercher tout ce qui contient : \""

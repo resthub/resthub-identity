@@ -10,7 +10,7 @@ import org.resthub.common.exception.NotFoundException;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.RoleService;
-import org.resthub.identity.service.AbstractUserService;
+import org.resthub.identity.service.UserService;
 import org.resthub.web.controller.ServiceBasedRestController;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RoleController extends ServiceBasedRestController<Role, Long, RoleService> {
 
     @Inject @Named("userService")
-    protected AbstractUserService userService;
+    protected UserService userService;
 
     @Inject @Named("roleService") @Override
     public void setService(RoleService service) {
@@ -81,7 +81,7 @@ public class RoleController extends ServiceBasedRestController<Role, Long, RoleS
     /**
      * Gets all the users that have a role, direct or inherited.
      * 
-     * @param filters
+     * @param name
      *            A list of roles to look for.
      * @return A list of users having at least one of the roles defined as
      *         parameter.

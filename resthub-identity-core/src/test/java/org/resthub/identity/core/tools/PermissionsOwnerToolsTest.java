@@ -1,4 +1,4 @@
-package org.resthub.identity.tools;
+package org.resthub.identity.core.tools;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,13 @@
 package org.resthub.identity.webapp.service;
 
 import org.elasticsearch.client.Client;
+import org.resthub.identity.core.event.GroupEvent;
 import org.resthub.identity.core.service.GroupServiceImpl;
 import org.resthub.identity.model.Group;
-import org.resthub.identity.service.*;
-import org.resthub.identity.service.tracability.ServiceListener;
 import org.resthub.identity.webapp.elasticsearch.Indexer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.Assert;
+import org.springframework.context.ApplicationListener;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,7 +17,7 @@ import javax.inject.Named;
  *
  * It's a bean whose name is "groupService"
  * */
-public class WebAppGroupServiceImpl extends GroupServiceImpl implements ServiceListener {
+public class WebAppGroupServiceImpl extends GroupServiceImpl implements ApplicationListener<GroupEvent> {
 
 	private @Value("#{esProp['index.name']}") String indexName;
     private @Value("#{esProp['index.group.type']}") String indexType;
@@ -32,19 +31,14 @@ public class WebAppGroupServiceImpl extends GroupServiceImpl implements ServiceL
     @Named("elasticIndexer")
     private Indexer indexer;
 
-    public WebAppGroupServiceImpl() {
-        this.addListener(this);
-    }
-
     @Override
-    public void onChange(String type, Object... arguments) {
-        Assert.notEmpty(arguments);
-        Group group = (Group)arguments[0];
-        if(type.equals(GroupService.GroupServiceChange.GROUP_CREATION.name())) {
+    public void onApplicationEvent(GroupEvent event) {
+        Group group = event.getGroup();
+        if(event.getType() == GroupEvent.GroupEventType.GROUP_CREATION) {
             indexer.add(client, group, indexName, indexType, group.getId().toString());
-        } else if(type.equals(GroupService.GroupServiceChange.GROUP_UPDATE.name())) {
+        } else if(event.getType() == GroupEvent.GroupEventType.GROUP_UPDATE) {
             indexer.edit(client, group, indexName, indexType, group.getId().toString());
-        } else if(type.equals(GroupService.GroupServiceChange.GROUP_DELETION.name())) {
+        } else if(event.getType() == GroupEvent.GroupEventType.GROUP_DELETION) {
             indexer.delete(client, indexName, indexType, group.getId().toString());
         }
     }

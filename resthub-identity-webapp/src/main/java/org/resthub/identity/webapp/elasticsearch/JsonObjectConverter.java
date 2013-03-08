@@ -26,9 +26,11 @@ public class JsonObjectConverter {
 
 		try {
 			objectResult = mapper.readValue(sourceJson, classExpected);
-		} catch (JsonParseException | JsonMappingException e) {
+		} catch (JsonParseException e) {
 			logger.error("Exception : Json Exception", e);
-		} catch (IOException e) {
+		} catch (JsonMappingException e) {
+            logger.error("Exception : Json Exception", e);
+        } catch (IOException e) {
 			logger.error("Exception : IOException", e);
 		}
 
@@ -43,9 +45,11 @@ public class JsonObjectConverter {
 
 		try {
 			jsonResult = mapper.writeValueAsString(sourceObject);
-		} catch (JsonParseException | JsonMappingException e) {
+		} catch (JsonParseException e) {
 			logger.error("Exception : Json Exception", e);
-		} catch (IOException e) {
+        } catch (JsonMappingException e) {
+            logger.error("Exception : Json Exception", e);
+        } catch (IOException e) {
 			logger.error("Exception : IOException", e);
 		}
 

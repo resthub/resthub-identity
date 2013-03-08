@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.model.Category;
 import org.resthub.identity.core.repository.CategoryRepository;
 import org.resthub.identity.service.CategoryService;
@@ -14,8 +15,7 @@ import org.springframework.util.Assert;
 /**
  * An implementation of a CategoryService.
  */
-@Named("categoryService")
-public class CategoryServiceImpl extends AbstractTraceableServiceImpl<Category,CategoryRepository> implements CategoryService {
+public class CategoryServiceImpl extends CrudServiceImpl<Category, Long, CategoryRepository> implements CategoryService {
 
 	@Override
 	@Inject

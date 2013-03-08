@@ -32,5 +32,7 @@
     <bean id="userService" class="org.resthub.identity.core.service.UserServiceImpl" />
     <bean id="roleService" class="org.resthub.identity.core.service.RoleServiceImpl" />
     <bean id="groupService" class="org.resthub.identity.core.service.GroupServiceImpl" />
+    <bean id="categoryService" class="org.resthub.identity.core.service.CategoryServiceImpl" />
+    <bean id="permissionService" class="org.resthub.identity.core.service.PermissionServiceImpl" />
 
 </beans>

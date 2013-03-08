@@ -6,6 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.resthub.common.service.CrudServiceImpl;
+import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.core.repository.AbstractPermissionsOwnerRepository;
 import org.resthub.identity.core.repository.RoleRepository;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
@@ -16,6 +18,8 @@ import org.resthub.identity.model.User;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
 import org.resthub.identity.service.UserService;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +27,17 @@ import org.springframework.transaction.annotation.Transactional;
  * Default implementation of a Role Service (can be override by creating a bean with the same name after this one)
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepository> implements RoleService {
+public class RoleServiceImpl extends CrudServiceImpl<Role, Long, RoleRepository> implements RoleService, ApplicationEventPublisherAware {
 
 	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
 	protected UserService userService;
 	protected GroupService groupService;
+
+    private ApplicationEventPublisher applicationEventPublisher = null;
+
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
 
 	@Override
 	@Inject
@@ -87,7 +97,7 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 
 		// Proceed with the actual delete
 		super.delete(role);
-		this.publishChange(RoleChange.ROLE_DELETION.name(), role);
+        this.applicationEventPublisher.publishEvent(new RoleEvent(RoleEvent.RoleEventType.ROLE_DELETION, role));
 	}
 
 	/**
@@ -118,7 +128,7 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
 		// Call the standard role creation
 		Role createdRole = super.create(resource);
 		// Publish the creation event
-		this.publishChange(RoleChange.ROLE_CREATION.name(), createdRole);
+        this.applicationEventPublisher.publishEvent(new RoleEvent(RoleEvent.RoleEventType.ROLE_CREATION, createdRole));
 		return createdRole;
 	}
 
@@ -130,7 +140,7 @@ public class RoleServiceImpl extends AbstractTraceableServiceImpl<Role, RoleRepo
         Role existingRole = this.findByName(role.getName());
         if (existingRole == null || existingRole.getId() == role.getId()) {
             role = super.update(role);
-            publishChange(RoleChange.ROLE_UPDATE.name(), role);
+            this.applicationEventPublisher.publishEvent(new RoleEvent(RoleEvent.RoleEventType.ROLE_UPDATE, role));
         } else {
             throw new AlreadyExistingEntityException("Role " + role.getName() + " already exists.");
         }
