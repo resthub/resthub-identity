@@ -12,9 +12,9 @@ import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GenericGroupService;
+import org.resthub.identity.service.GenericRoleService;
 import org.resthub.identity.service.GenericUserService;
-import org.resthub.identity.service.GroupService;
-import org.resthub.identity.service.RoleService;
 import org.resthub.web.controller.ServiceBasedRestController;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -33,34 +33,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Only ADMINS can access to this API
  */
 @Controller @RequestMapping("/api/group")
-public class GroupController extends ServiceBasedRestController<Group, Long, GroupService> {
+public class GroupController extends ServiceBasedRestController<Group, Long, GenericGroupService> {
 
 	@Inject @Named("roleService")
-    RoleService roleService;
+    private GenericRoleService roleService;
 	
 	@Inject @Named("userService")
-    GenericUserService userService;
+    private GenericUserService userService;
 
     @Inject @Override      
-    public void setService(GroupService service) {
+    public void setService(GenericGroupService service) {
         this.service = service;
     }
 
-    /**
-     * Automatically called to inject the userService beans<br/>
-     * This class need it to deal properly with user <br/>
-     * 
-     * @param userService
-     *            the userService bean
-     * */
-    @Inject
-    public void setUserService(GenericUserService userService) {
-        this.userService = userService;
-    }
-
     /** Override this methods in order to secure it **/
-    
-    
     @Secured({ "IM_GROUP_ADMIN" }) @Override
     public Group create(@RequestBody Group group) {
     	try{

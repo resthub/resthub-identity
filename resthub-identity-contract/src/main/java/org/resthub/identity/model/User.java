@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -21,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonView;
  */
 @Entity
 @Table(name = "idm_users")
-public class User extends AbstractPermissionsOwner {
+public class User extends PermissionsOwner {
 
 	/**
      * List of attributes for a user
@@ -187,7 +186,7 @@ public class User extends AbstractPermissionsOwner {
         return s;
     }
     
-    public static interface SummarizeView extends AbstractPermissionsOwner.IdView {}
+    public static interface SummarizeView extends PermissionsOwner.IdView {}
     public static interface SummarizeViewWithPassword extends SummarizeView {}
 
 }

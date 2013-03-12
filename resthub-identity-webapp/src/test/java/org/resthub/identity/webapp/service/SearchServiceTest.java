@@ -8,12 +8,12 @@ import javax.inject.Named;
 
 import org.elasticsearch.client.Client;
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.service.GenericGroupService;
 import org.resthub.identity.service.GenericUserService;
 import org.resthub.identity.webapp.elasticsearch.Deleter;
 import org.resthub.identity.webapp.elasticsearch.Requester;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
-import org.resthub.identity.service.GroupService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +50,7 @@ public class SearchServiceTest extends AbstractTransactionalTest {
      */
     @Inject
     @Named("groupService")
-    protected GroupService groupService;
+    protected GenericGroupService groupService;
 
     
     private @Value("#{esProp['index.name']}") String indexName;

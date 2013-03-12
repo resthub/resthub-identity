@@ -7,7 +7,7 @@ import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Role;
-import org.resthub.identity.service.RoleService;
+import org.resthub.identity.service.GenericRoleService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
@@ -28,7 +28,7 @@ public class RoleServiceTest extends AbstractTransactionalTest {
 
     @Inject
     @Named("roleService")
-    private RoleService roleService;
+    private GenericRoleService<Role> roleService;
 
     // Cleanup after each test
     @BeforeMethod

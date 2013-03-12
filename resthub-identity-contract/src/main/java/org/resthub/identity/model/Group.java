@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 /* "Group" conflicts with SQL keyword */
 @Table(name = "idm_groups")
-public class Group extends AbstractPermissionsOwner {
+public class Group extends PermissionsOwner {
 
     /**
      * name of the group

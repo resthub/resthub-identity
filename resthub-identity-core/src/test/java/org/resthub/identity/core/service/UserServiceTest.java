@@ -16,9 +16,9 @@ import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.core.repository.PermissionRepository;
+import org.resthub.identity.service.GenericGroupService;
+import org.resthub.identity.service.GenericRoleService;
 import org.resthub.identity.service.GenericUserService;
-import org.resthub.identity.service.GroupService;
-import org.resthub.identity.service.RoleService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
@@ -38,11 +38,11 @@ public class UserServiceTest extends AbstractTransactionalTest {
 
     @Inject
     @Named("groupService")
-    private GroupService groupService;
+    private GenericGroupService<Group> groupService;
     
     @Inject
     @Named("roleService")
-    private RoleService roleService;
+    private GenericRoleService<Role> roleService;
     
     @Inject
     @Named("permissionRepository")

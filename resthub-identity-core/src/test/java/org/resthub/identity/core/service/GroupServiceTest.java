@@ -11,8 +11,8 @@ import org.resthub.identity.core.listener.GroupTestListener;
 import org.resthub.identity.core.event.GroupEvent;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GenericGroupService;
 import org.resthub.identity.service.GenericUserService;
-import org.resthub.identity.service.GroupService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
@@ -28,7 +28,7 @@ public class GroupServiceTest extends AbstractTransactionalTest {
     
     @Inject
     @Named("groupService")
-    private GroupService groupService;
+    private GenericGroupService<Group> groupService;
 
     @Inject
     @Named("groupTestListener")
@@ -173,7 +173,7 @@ public class GroupServiceTest extends AbstractTransactionalTest {
         g = groupService.create(g);
 
         // When adding the user to the group
-        ((GroupService) groupService).addGroupToGroup(g.getName(), subG.getName());
+        ((GenericGroupService) groupService).addGroupToGroup(g.getName(), subG.getName());
 
         // Then a deletion notification has been received
         List<GroupEvent> ge = testListener.groupEvents;
@@ -196,10 +196,10 @@ public class GroupServiceTest extends AbstractTransactionalTest {
         Group subG = new Group();
         subG.setName("group" + new Random().nextInt());
         subG = groupService.create(subG);
-        ((GroupService) groupService).addGroupToGroup(g.getName(), subG.getName());
+        ((GenericGroupService) groupService).addGroupToGroup(g.getName(), subG.getName());
 
         // When adding the user to the group
-        ((GroupService) groupService).removeGroupFromGroup(g.getName(), subG.getName());
+        ((GenericGroupService) groupService).removeGroupFromGroup(g.getName(), subG.getName());
 
         // Then a deletion notification has been received
         List<GroupEvent> ge = testListener.groupEvents;

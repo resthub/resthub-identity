@@ -8,6 +8,6 @@ import org.resthub.identity.service.GenericUserService;
 /**
  * Default implementation of a User Service (can be override by creating a bean with the same name after this one)
  */
-public class UserServiceImpl extends AbstractGenericUserServiceImpl<User, UserRepository> implements GenericUserService<User> {
+public class UserServiceImpl extends GenericUserServiceImpl<User, UserRepository> implements GenericUserService<User> {
 	
 }

@@ -1,13 +1,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+    xmlns:repository="http://www.springframework.org/schema/data/repository"
     xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                             http://www.springframework.org/schema/context
                             http://www.springframework.org/schema/context/spring-context-3.1.xsd
                             http://www.springframework.org/schema/data/jpa
-                            http://www.springframework.org/schema/data/jpa/spring-jpa-1.1.xsd
+                            http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd
+                            http://www.springframework.org/schema/data/repository
+                            http://www.springframework.org/schema/data/repository/spring-repository-1.4.xsd
                             http://www.springframework.org/schema/util
                             http://www.springframework.org/schema/util/spring-util.xsd">
 
@@ -23,9 +27,11 @@
 		<prop key="transactionManagerRef">transactionManager</prop>
 	</util:properties>
 
-	<jpa:repositories base-package="org.resthub.identity.core.repository"
-		entity-manager-factory-ref="${entityManagerFactoryRef}"
-		transaction-manager-ref="${transactionManagerRef}" />
+	<jpa:repositories base-package="org.resthub.identity.core.repository" entity-manager-factory-ref="${entityManagerFactoryRef}" transaction-manager-ref="${transactionManagerRef}">
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericGroupRepository" />
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericUserRepository" />
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericRoleRepository" />
+    </jpa:repositories>
 
 	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 

@@ -4,11 +4,8 @@ import java.util.List;
 
 import org.resthub.common.service.CrudService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
-import org.resthub.identity.model.AbstractPermissionsOwner;
-import org.resthub.identity.model.Group;
-import org.resthub.identity.model.Permission;
-import org.resthub.identity.model.Role;
-import org.resthub.identity.model.User;
+import org.resthub.identity.model.*;
+import org.resthub.identity.model.PermissionsOwner;
 
 /**
  * User services interface.
@@ -174,7 +171,7 @@ public interface GenericUserService<T extends User> extends CrudService<T, Long>
      */
     List<Group> getAllUserGroups(String userLogin);
 
-    void getGroupsFromRootElement(List<Group> groups, AbstractPermissionsOwner owner);
+    void getGroupsFromRootElement(List<Group> groups, PermissionsOwner owner);
 
     /**
      * Get all the roles a user owns.
@@ -185,5 +182,5 @@ public interface GenericUserService<T extends User> extends CrudService<T, Long>
      */
     List<Role> getAllUserRoles(String userLogin);
 
-    void getRolesFromRootElement(List<Role> roles, AbstractPermissionsOwner owner);
+    void getRolesFromRootElement(List<Role> roles, PermissionsOwner owner);
 }

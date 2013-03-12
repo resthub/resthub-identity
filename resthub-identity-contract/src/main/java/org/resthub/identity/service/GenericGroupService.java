@@ -13,7 +13,7 @@ import org.resthub.identity.model.Role;
  * 
  * @author Guillaume Zurbach
  */
-public interface GroupService extends CrudService<Group, Long> {
+public interface GenericGroupService<T extends Group> extends CrudService<T, Long> {
 
 	/**
 	 * Create a new group.
@@ -23,7 +23,7 @@ public interface GroupService extends CrudService<Group, Long> {
 	 * @return new group
 	 */
 	@Override
-	Group create(Group group) throws AlreadyExistingEntityException;
+    T create(T group) throws AlreadyExistingEntityException;
 
 	/**
 	 * Update existing group.
@@ -33,7 +33,7 @@ public interface GroupService extends CrudService<Group, Long> {
 	 * @return group updated
 	 */
 	@Override
-	Group update(Group group) throws AlreadyExistingEntityException;
+    T update(T group) throws AlreadyExistingEntityException;
 
 	/**
 	 * Finds group by name.
@@ -42,7 +42,7 @@ public interface GroupService extends CrudService<Group, Long> {
 	 *            the group's Name
 	 * @return the group or null if no group with this name is found
 	 */
-	Group findByName(String name);
+    T findByName(String name);
 
 	/**
 	 * Remove a group from one group's group
@@ -91,7 +91,7 @@ public interface GroupService extends CrudService<Group, Long> {
 	 * 				the name of the group
 	 * @return
 	 */
-	List<Group> getGroupsFromGroup(String groupName);
+	List<T> getGroupsFromGroup(String groupName);
 	
 	/**
 	 * Add a group from one group's groups

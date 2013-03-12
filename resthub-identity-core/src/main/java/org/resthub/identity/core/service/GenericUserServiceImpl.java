@@ -9,16 +9,13 @@ import javax.inject.Named;
 import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.core.event.UserEvent;
+import org.resthub.identity.core.repository.PermissionsOwnerRepository;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
-import org.resthub.identity.model.AbstractPermissionsOwner;
-import org.resthub.identity.model.Group;
-import org.resthub.identity.model.Permission;
-import org.resthub.identity.model.Role;
-import org.resthub.identity.model.User;
-import org.resthub.identity.core.repository.AbstractPermissionsOwnerRepository;
-import org.resthub.identity.core.repository.AbstractUserRepository;
-import org.resthub.identity.service.GroupService;
-import org.resthub.identity.service.RoleService;
+import org.resthub.identity.model.*;
+import org.resthub.identity.model.PermissionsOwner;
+import org.resthub.identity.core.repository.GenericUserRepository;
+import org.resthub.identity.service.GenericGroupService;
+import org.resthub.identity.service.GenericRoleService;
 import org.resthub.identity.core.tools.PermissionsOwnerTools;
 import org.resthub.identity.service.GenericUserService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -34,11 +31,11 @@ import org.springframework.util.Assert;
  * It is a bean whose name is userService
  * 
  * */
-public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository extends AbstractUserRepository<T>> extends CrudServiceImpl<T, Long, TRepository> implements GenericUserService<T>, ApplicationEventPublisherAware {
+public abstract class GenericUserServiceImpl<T extends User, TRepository extends GenericUserRepository<T>> extends CrudServiceImpl<T, Long, TRepository> implements GenericUserService<T>, ApplicationEventPublisherAware {
 
-	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
-	protected GroupService groupService;
-	protected RoleService roleService;
+	protected PermissionsOwnerRepository permissionsOwnerRepository;
+	protected GenericGroupService groupService;
+	protected GenericRoleService roleService;
 	protected PasswordEncoder passwordEncoder;
 
     private ApplicationEventPublisher applicationEventPublisher = null;
@@ -53,20 +50,20 @@ public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository
     }
 
     @Inject
-    @Named("abstractPermissionsOwnerRepository")
-    public void setAbstractPermissionsOwnerRepository(AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository) {
-		this.abstractPermissionsOwnerRepository = abstractPermissionsOwnerRepository;
+    @Named("permissionsOwnerRepository")
+    public void setAbstractPermissionsOwnerRepository(PermissionsOwnerRepository permissionsOwnerRepository) {
+		this.permissionsOwnerRepository = permissionsOwnerRepository;
 	}   
 	
 	@Inject
 	@Named("groupService")
-	public void setGroupService(GroupService groupService) {
+	public void setGroupService(GenericGroupService groupService) {
 		this.groupService = groupService;
 	}
 
 	@Inject
 	@Named("roleService")
-	public void setRoleService(RoleService roleService) {
+	public void setRoleService(GenericRoleService roleService) {
 		this.roleService = roleService;
 	}
 
@@ -277,11 +274,11 @@ public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository
 															// the result
 
 		// Start by finding the entities directly linked to the roles
-		List<AbstractPermissionsOwner> withRoles = abstractPermissionsOwnerRepository.getWithRoles(roles);
+		List<PermissionsOwner> withRoles = permissionsOwnerRepository.getWithRoles(roles);
 
 		// The query may have brought a mix of users and groups,
 		// this loop will process them individually to form the final result.
-		for (AbstractPermissionsOwner owner : withRoles) {
+		for (PermissionsOwner owner : withRoles) {
 			this.getUsersFromRootElement(usersWithRole, owner);
 		}
 
@@ -297,7 +294,7 @@ public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository
 	 * @param owner
 	 *            Root element to begin exploration.
 	 */
-	private void getUsersFromRootElement(List<T> users, AbstractPermissionsOwner owner) {
+	private void getUsersFromRootElement(List<T> users, PermissionsOwner owner) {
 		// Stop the processing if one of the parameters is null
 		if (users != null && owner != null) {
 			// The root element may be user or a group
@@ -311,11 +308,11 @@ public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository
 			} else if (owner instanceof Group) {
 				// If we have a group, we must get both users and groups having
 				// this group as parent
-				List<AbstractPermissionsOwner> withGroupAsParent = abstractPermissionsOwnerRepository
+				List<PermissionsOwner> withGroupAsParent = permissionsOwnerRepository
 						.getWithGroupAsParent((Group) owner);
 
 				// Each result will be recursively evaluated using this method.
-				for (AbstractPermissionsOwner child : withGroupAsParent) {
+				for (PermissionsOwner child : withGroupAsParent) {
 					this.getUsersFromRootElement(users, child);
 				}
 			}
@@ -379,7 +376,7 @@ public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void getGroupsFromRootElement(List<Group> groups, AbstractPermissionsOwner owner) {
+	public void getGroupsFromRootElement(List<Group> groups, PermissionsOwner owner) {
 		// Stop the processing if one of the parameters is null
 		if (groups != null && owner != null) {
 			// Add the roles we find on our path if needed.
@@ -410,7 +407,7 @@ public abstract class AbstractGenericUserServiceImpl<T extends User, TRepository
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void getRolesFromRootElement(List<Role> roles, AbstractPermissionsOwner owner) {
+	public void getRolesFromRootElement(List<Role> roles, PermissionsOwner owner) {
 		// Stop the processing if one of the parameters is null
 		if (roles != null && owner != null) {
 			// Add the roles we find on our path if needed.

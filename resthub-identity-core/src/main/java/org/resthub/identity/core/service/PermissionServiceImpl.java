@@ -16,9 +16,7 @@ import org.springframework.util.Assert;
  */
 public class PermissionServiceImpl extends CrudServiceImpl<Permission, Long, PermissionRepository> implements PermissionService {
 
-	@Override
-	@Inject
-	@Named("permissionRepository")
+	@Override @Inject @Named("permissionRepository")
 	public void setRepository(PermissionRepository permissionRepository) {
 		super.setRepository(permissionRepository);
 	}

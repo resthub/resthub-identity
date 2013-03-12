@@ -3,7 +3,7 @@ package org.resthub.identity.core.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.resthub.identity.model.AbstractPermissionsOwner;
+import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
@@ -24,7 +24,7 @@ public class PermissionsOwnerTools {
      * 
      * @return the List of permissions
      * */
-    public static List<Permission> getInheritedPermission(AbstractPermissionsOwner owner) {
+    public static List<Permission> getInheritedPermission(PermissionsOwner owner) {
         List<Permission> result = new ArrayList<Permission>();
         List<Permission> tmpPermissions = owner.getPermissions();
         if (tmpPermissions != null) {

@@ -2,7 +2,7 @@ package org.resthub.identity.webapp.service;
 
 import org.elasticsearch.client.Client;
 import org.resthub.identity.core.event.GroupEvent;
-import org.resthub.identity.core.service.GroupServiceImpl;
+import org.resthub.identity.core.service.GenericGroupServiceImpl;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.webapp.elasticsearch.Indexer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import javax.inject.Named;
  *
  * It's a bean whose name is "groupService"
  * */
-public class WebAppGroupServiceImpl extends GroupServiceImpl implements ApplicationListener<GroupEvent> {
+public class WebAppGroupServiceImpl extends GenericGroupServiceImpl implements ApplicationListener<GroupEvent> {
 
 	private @Value("#{esProp['index.name']}") String indexName;
     private @Value("#{esProp['index.group.type']}") String indexType;

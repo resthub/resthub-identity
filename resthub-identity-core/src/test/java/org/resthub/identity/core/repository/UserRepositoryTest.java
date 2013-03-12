@@ -8,12 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
-import org.resthub.identity.core.repository.*;
-import org.resthub.identity.model.AbstractPermissionsOwner;
-import org.resthub.identity.model.Group;
-import org.resthub.identity.model.Permission;
-import org.resthub.identity.model.Role;
-import org.resthub.identity.model.User;
+import org.resthub.identity.model.*;
+import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
@@ -42,8 +38,8 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 	protected RoleRepository roleRepository;
 	
 	@Inject
-	@Named("abstractPermissionsOwnerRepository")
-	protected AbstractPermissionsOwnerRepository abstractPermissionsOwnerRepository;
+	@Named("permissionsOwnerRepository")
+	protected PermissionsOwnerRepository permissionsOwnerRepository;
 
 	@Inject
 	@Named("userRepository")
@@ -124,7 +120,7 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 		user.getRoles().add(role);
 		userRepository.save(user);
 
-		List<AbstractPermissionsOwner> users = abstractPermissionsOwnerRepository.getWithRoles(Arrays.asList(role.getName()));
+		List<PermissionsOwner> users = permissionsOwnerRepository.getWithRoles(Arrays.asList(role.getName()));
 		Assertions.assertThat(users).as("Users should not be null").isNotNull();
 		Assertions.assertThat(users.isEmpty()).as("Users should not empty").isFalse();
 	}

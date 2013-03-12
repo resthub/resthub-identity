@@ -9,8 +9,8 @@ import org.resthub.common.exception.NotFoundException;
 
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GenericRoleService;
 import org.resthub.identity.service.GenericUserService;
-import org.resthub.identity.service.RoleService;
 import org.resthub.web.controller.ServiceBasedRestController;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller @RequestMapping("/api/role")
-public class RoleController extends ServiceBasedRestController<Role, Long, RoleService> {
+public class RoleController extends ServiceBasedRestController<Role, Long, GenericRoleService> {
 
     @Inject @Named("userService")
     protected GenericUserService userService;
 
     @Inject @Named("roleService") @Override
-    public void setService(RoleService service) {
+    public void setService(GenericRoleService service) {
         this.service = service;
     }
 

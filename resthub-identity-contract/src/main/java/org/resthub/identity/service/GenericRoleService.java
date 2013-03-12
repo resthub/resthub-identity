@@ -9,7 +9,7 @@ import org.resthub.identity.model.Role;
  * 
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public interface RoleService extends CrudService<Role, Long> {
+public interface GenericRoleService<T extends Role> extends CrudService<T, Long> {
 
     /**
      * Find the role with its name.
@@ -18,7 +18,7 @@ public interface RoleService extends CrudService<Role, Long> {
      *            Name to search.
      * @return The corresponding role.
      */
-    Role findByName(String name);
+    T findByName(String name);
 
     /**
      * Find the role with its name according to a pattern.
@@ -27,5 +27,5 @@ public interface RoleService extends CrudService<Role, Long> {
      *            The pattern to look for.
      * @return A list of roles corresponding to the pattern.
      */
-    List<Role> findByNameLike(String pattern);
+    List<T> findByNameLike(String pattern);
 }

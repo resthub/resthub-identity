@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Entity
 @Table(name = "idm_permissions_owner")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AbstractPermissionsOwner {
+public abstract class PermissionsOwner {
 
     private Long id;
 
@@ -51,11 +51,11 @@ public abstract class AbstractPermissionsOwner {
     protected List<Role> roles = new ArrayList<Role>();
 
     /** Default constructor */
-    public AbstractPermissionsOwner() {
+    public PermissionsOwner() {
 
     }
 
-    public AbstractPermissionsOwner(AbstractPermissionsOwner i) {
+    public PermissionsOwner(PermissionsOwner i) {
         List<Permission> pPermissions = i.getPermissions();
         permissions.addAll(pPermissions);
     }
@@ -66,7 +66,7 @@ public abstract class AbstractPermissionsOwner {
      * @param permissions
      *            list of permission to be assigned to the new Identity
      * */
-    public AbstractPermissionsOwner(List<Permission> permissions) {
+    public PermissionsOwner(List<Permission> permissions) {
         this.permissions = permissions;
     }
 
@@ -155,7 +155,7 @@ public abstract class AbstractPermissionsOwner {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AbstractPermissionsOwner other = (AbstractPermissionsOwner) obj;
+        final PermissionsOwner other = (PermissionsOwner) obj;
 
         if ((this.id == null) ? (other.getId() != null) : !this.id.equals(other.getId())) {
             return false;
