@@ -1,0 +1,37 @@
+package org.resthub.identity.core.repository;
+
+import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface GenericGroupRepository<T extends Group> extends JpaRepository<T, Long> {
+
+	/**
+	 * Find a {@link org.resthub.identity.model.Group} from its name
+	 * 
+	 * @param name name to search for
+	 * 
+	 * @return the found Group
+	 */
+	T findByName(String name);
+	
+	/**
+	 * Gets the groups of a group.
+	 *
+	 * @param groupName The name of the group.
+	 * @return A list of groups corresponding to the given group.
+	 */
+	List<T> findGroupsFromGroup(@Param("groupName") String groupName);
+	
+	/**
+	 * Gets the groups of a group.
+	 *
+	 * @param groupName The name of the group.
+	 * @return A list of groups corresponding to the given group.
+	 */
+	List<Role> findRolesFromGroup(@Param("groupName") String groupName);
+}

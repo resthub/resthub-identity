@@ -1,17 +1,14 @@
 package org.resthub.identity.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.resthub.identity.model.Role.IdView;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Describe a permission.
@@ -24,7 +21,9 @@ public class Permission {
 	private String code;
 	private String title;
 	private String description;
-	private Category category;
+    private List<Permission> permissions;
+    private Permission parent;
+    private Application application;
 	
 	/**
 	 * Default constructor
@@ -35,39 +34,67 @@ public class Permission {
 	
 	/**
 	 * 
-	 * @param name
-	 * 			name of the Permission to create
+	 * @param code code of the Permission to create
 	 */
 	public Permission(String code){
 		this.code = code;
 	}
+
+    /**
+     *
+     * @param code code of the Permission to create
+     * @param application application of the Permission to create
+     */
+    public Permission(String code, Application application){
+        this.code = code;
+        this.application = application;
+    }
 	
 	/**
 	 * 
-	 * @param name
-	 * 			name of the Permission to create
-	 * @param title
-	 * 			title of the Permission to create
+	 * @param code code of the Permission to create
+	 * @param title title of the Permission to create
 	 */
 	public Permission(String code, String title){
 		this.code = code;
 		this.title = title;
 	}
+
+    /**
+     *
+     * @param code code of the Permission to create
+     * @param title title of the Permission to create
+     * @param application application of the Permission to create
+     */
+    public Permission(String code, String title, Application application){
+        this.code = code;
+        this.title = title;
+        this.application = application;
+    }
 	
 	/**
-	 * 
-	 * @param code
-	 * 			name of the Permission to create
-	 * @param title
-	 * 			title of the Permission to create
-	 * @param description
-	 * 			description of the Permission to create
+	 * @param code name of the Permission to create
+	 * @param title title of the Permission to create
+	 * @param description description of the Permission to create
 	 */
 	public Permission(String code, String title, String description){
 		this.code = code;
 		this.title = title;
 		this.description = description;
 	}
+
+    /**
+     * @param code name of the Permission to create
+     * @param title title of the Permission to create
+     * @param description description of the Permission to create
+     * @param application application of the Permission to create
+     */
+    public Permission(String code, String title, String description, Application application){
+        this.code = code;
+        this.title = title;
+        this.description = description;
+        this.application = application;
+    }
 	
 	/**
 	 * Retrieve the id of the permission
@@ -140,26 +167,57 @@ public class Permission {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	/**
-	 * Retrieve the category of the permission
-	 * @return
-	 */
-	@ManyToOne
-	@JoinColumn(name="category_id")
-	@JsonIgnore
-	public Category getCategory() {
-		return category;
-	}
-	
-	/**
-	 * Set the category of the permission
-	 * @param category
-	 */
-	public void setCategory(Category category) {
-		this.category = category;
-	}
 
+    /**
+     * Retrieve the permissions of the category
+     * @return the permissions of the category
+     */
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    public List<Permission> getPermissions() {
+        if (this.permissions == null){
+            this.permissions = new ArrayList<Permission>();
+        }
+        return permissions;
+    }
+
+    @ManyToOne(optional = true)
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
+
+    /**
+     * Set the permissions of the category
+     * @param permissions
+     */
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    /**
+     * Add a child permission
+     */
+    public void addPermission(Permission permission) {
+        getPermissions().add(permission);
+    }
+
+    @ManyToOne
+    @JsonIgnore
+    public Permission getParent() {
+        return parent;
+    }
+
+    /**
+     * Set the parent permission
+     * @param parent
+     */
+    public void setParent(Permission parent) {
+        this.parent = parent;
+    }
+	
 	@Override
 	public boolean equals(Object obj){
 		if (obj == null) {

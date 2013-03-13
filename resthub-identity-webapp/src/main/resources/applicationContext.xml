@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:component-scan base-package="org.resthub.identity.webapp" />
+
+    <util:properties id="esProp" location="classpath:es.properties" />
+
+    <!-- Node for Embedded ES -->
+    <bean id="esNode"
+          class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean">
+    </bean>
+
+    <!-- Client for Embedded ES -->
+    <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/>
+
+    <bean id="userService" class="org.resthub.identity.webapp.service.WebAppUserServiceImpl" />
+    <bean id="roleService" class="org.resthub.identity.webapp.service.WebAppRoleServiceImpl" />
+    <bean id="groupService" class="org.resthub.identity.webapp.service.WebAppGroupServiceImpl" />
+
+</beans>
