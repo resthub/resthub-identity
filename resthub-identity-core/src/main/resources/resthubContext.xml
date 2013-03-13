@@ -1,59 +1,45 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:elasticsearch="http://www.pilato.fr/schema/elasticsearch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+    xmlns:repository="http://www.springframework.org/schema/data/repository"
+    xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                             http://www.springframework.org/schema/context
                             http://www.springframework.org/schema/context/spring-context-3.1.xsd
-                            http://www.springframework.org/schema/mvc
-                            http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
                             http://www.springframework.org/schema/data/jpa
-                            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+                            http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd
+                            http://www.springframework.org/schema/data/repository
+                            http://www.springframework.org/schema/data/repository/spring-repository-1.4.xsd
                             http://www.springframework.org/schema/util
                             http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<context:annotation-config />
-	<context:component-scan base-package="org.resthub.identity" />
+	<context:component-scan base-package="org.resthub.identity.core" />
 	
 	<context:property-placeholder location="classpath*:identity.properties"
 		properties-ref="identityProperties" ignore-resource-not-found="true"
 		ignore-unresolvable="true" />
-
-	<util:properties id="esProp"
-		location="classpath:elasticSearchProperties.properties" />
 
 	<util:properties id="identityProperties">
 		<prop key="entityManagerFactoryRef">entityManagerFactory</prop>
 		<prop key="transactionManagerRef">transactionManager</prop>
 	</util:properties>
 
-	<jpa:repositories base-package="org.resthub.identity.repository"
-		entity-manager-factory-ref="${entityManagerFactoryRef}"
-		transaction-manager-ref="${transactionManagerRef}" />
+	<jpa:repositories base-package="org.resthub.identity.core.repository" entity-manager-factory-ref="${entityManagerFactoryRef}" transaction-manager-ref="${transactionManagerRef}">
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericGroupRepository" />
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericUserRepository" />
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericRoleRepository" />
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericApplicationRepository" />
+    </jpa:repositories>
 
-	<bean id="passwordEncoder"
-		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 
-	<!-- Node for Embedded ES -->
-	<bean id="esNode"
-		class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean">
-	</bean>
-	
-	<!-- Client for Embedded ES -->
-    <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/> 
-	
-
-	<!-- Client for Non Embedded ES -->
-
-	<!--<bean id="esClient"
-		class="fr.pilato.spring.elasticsearch.ElasticsearchTransportClientFactoryBean">
-		<property name="esNodes">
-			<list>
-				<value>localhost:9300</value>
-			</list>
-		</property>
-	</bean>  -->
+    <bean id="userService" class="org.resthub.identity.core.service.UserServiceImpl" />
+    <bean id="roleService" class="org.resthub.identity.core.service.RoleServiceImpl" />
+    <bean id="groupService" class="org.resthub.identity.core.service.GroupServiceImpl" />
+    <bean id="applicationService" class="org.resthub.identity.core.service.ApplicationServiceImpl" />
+    <bean id="permissionService" class="org.resthub.identity.core.service.PermissionServiceImpl" />
 
 </beans>

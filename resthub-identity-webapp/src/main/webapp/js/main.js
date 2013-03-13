@@ -40,7 +40,11 @@ require.config({
 				'Backbone',
 				'jquery-ui-editors'
 			]
-		}
+		},'bootstrap': {
+            deps: [
+                'jquery'
+            ]
+        }
     },
 
     // Libraries
