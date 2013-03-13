@@ -23,6 +23,7 @@ public class Permission {
 	private String description;
     private List<Permission> permissions;
     private Permission parent;
+    private Application application;
 	
 	/**
 	 * Default constructor
@@ -38,6 +39,16 @@ public class Permission {
 	public Permission(String code){
 		this.code = code;
 	}
+
+    /**
+     *
+     * @param code code of the Permission to create
+     * @param application application of the Permission to create
+     */
+    public Permission(String code, Application application){
+        this.code = code;
+        this.application = application;
+    }
 	
 	/**
 	 * 
@@ -48,21 +59,42 @@ public class Permission {
 		this.code = code;
 		this.title = title;
 	}
+
+    /**
+     *
+     * @param code code of the Permission to create
+     * @param title title of the Permission to create
+     * @param application application of the Permission to create
+     */
+    public Permission(String code, String title, Application application){
+        this.code = code;
+        this.title = title;
+        this.application = application;
+    }
 	
 	/**
-	 * 
-	 * @param code
-	 * 			name of the Permission to create
-	 * @param title
-	 * 			title of the Permission to create
-	 * @param description
-	 * 			description of the Permission to create
+	 * @param code name of the Permission to create
+	 * @param title title of the Permission to create
+	 * @param description description of the Permission to create
 	 */
 	public Permission(String code, String title, String description){
 		this.code = code;
 		this.title = title;
 		this.description = description;
 	}
+
+    /**
+     * @param code name of the Permission to create
+     * @param title title of the Permission to create
+     * @param description description of the Permission to create
+     * @param application application of the Permission to create
+     */
+    public Permission(String code, String title, String description, Application application){
+        this.code = code;
+        this.title = title;
+        this.description = description;
+        this.application = application;
+    }
 	
 	/**
 	 * Retrieve the id of the permission
@@ -146,6 +178,15 @@ public class Permission {
             this.permissions = new ArrayList<Permission>();
         }
         return permissions;
+    }
+
+    @ManyToOne(optional = true)
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
     /**

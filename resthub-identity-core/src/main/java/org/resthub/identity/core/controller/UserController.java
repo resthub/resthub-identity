@@ -149,9 +149,7 @@ public class UserController extends ServiceBasedRestController<User, Long, Gener
      * layer, so we can't get the User object corresponding to another user than
      * the one logged
      * </p>
-     * 
-     * @param login
-     *            , given by the filter layer, once the token has been checked
+     *
      * @return the Logged User Object, in XMl or JSON type if everything OK,
      *         otherwise (It shouldn't append) an HTTP error 404
      * */
@@ -237,6 +235,24 @@ public class UserController extends ServiceBasedRestController<User, Long, Gener
     @Secured({ "IM_USER_ADMIN", "IM_USER_READ" }) @RequestMapping(method = RequestMethod.GET, value = "name/{login}/permissions") @ResponseBody
     public List<Permission> getPermissionsFromUser(@PathVariable("login") String login) {
         List<Permission> permissions = this.service.getUserPermissions(login);
+        if (permissions == null) {
+            throw new NotFoundException();
+        }
+        return permissions;
+    }
+
+    /**
+     * Gets the permissions of a user related to an application
+     *
+     * @Param login the login of the user to search insides groups
+     * @Param application the wanted application
+     *
+     * @return a list of permissions, in XML or JSON if the group can be found
+     *         otherwise HTTP Error 404
+     */
+    @Secured({ "IM_USER_ADMIN", "IM_USER_READ" }) @RequestMapping(method = RequestMethod.GET, value = "name/{login}/permissions/{application}") @ResponseBody
+    public List<Permission> getPermissionsFromUserAndApplication(@PathVariable("login") String login, @PathVariable("application") String application) {
+        List<Permission> permissions = this.service.getUserPermissions(login, application);
         if (permissions == null) {
             throw new NotFoundException();
         }

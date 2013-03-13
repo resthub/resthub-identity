@@ -11,15 +11,6 @@ import org.springframework.data.repository.query.Param;
 public interface GroupRepository extends GenericGroupRepository<Group> {
 
 	/**
-	 * Find a list of {@link Group} from name
-	 * 
-	 * @param name name to search for
-	 * 
-	 * @return the list of found Group (empty if not found)
-	 */
-	List<Group> findByName(String name);
-	
-	/**
 	 * Gets the groups of a group.
 	 * 
 	 * @param groupName The name of the group.

@@ -8,14 +8,13 @@ import java.util.List;
 public interface GenericRoleRepository<T extends Role> extends JpaRepository<T, Long> {
 
 	/**
-	 * Find a list of {@link org.resthub.identity.model.Role} from name
+	 * Find a {@link org.resthub.identity.model.Role} from its name
 	 * 
-	 * @param name
-	 *            name to search for
+	 * @param name name to search for
 	 * 
-	 * @return the list of found roles (empty if not found)
+	 * @return the found role
 	 */
-	List<T> findByName(String name);
+	T findByName(String name);
 
 	/**
 	 * Find the role with its name according to a pattern.

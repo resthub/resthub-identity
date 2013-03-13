@@ -104,9 +104,7 @@ public class GenericRoleServiceImpl<T extends Role, TRepository extends GenericR
 	 */
 	@Override
 	public T findByName(String name) {
-		List<T> roles = this.repository.findByName(name);
-		int size = roles.size();
-		return (size > 0) ? roles.get(0) : null;
+		return this.repository.findByName(name);
 	}
 
 	/**

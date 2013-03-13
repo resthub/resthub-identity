@@ -11,11 +11,9 @@ import javax.inject.Named;
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.core.listener.UserTestListener;
 import org.resthub.identity.core.event.UserEvent;
-import org.resthub.identity.model.Group;
-import org.resthub.identity.model.Permission;
-import org.resthub.identity.model.Role;
-import org.resthub.identity.model.User;
+import org.resthub.identity.model.*;
 import org.resthub.identity.core.repository.PermissionRepository;
+import org.resthub.identity.service.GenericApplicationService;
 import org.resthub.identity.service.GenericGroupService;
 import org.resthub.identity.service.GenericRoleService;
 import org.resthub.identity.service.GenericUserService;
@@ -43,7 +41,11 @@ public class UserServiceTest extends AbstractTransactionalTest {
     @Inject
     @Named("roleService")
     private GenericRoleService<Role> roleService;
-    
+
+    @Inject
+    @Named("applicationService")
+    private GenericApplicationService<Application> applicationService;
+
     @Inject
     @Named("permissionRepository")
     private PermissionRepository permissionRepository;
@@ -59,7 +61,8 @@ public class UserServiceTest extends AbstractTransactionalTest {
     	roleService.deleteAll();
     	userService.deleteAll();
     	groupService.deleteAll();
-    	permissionRepository.deleteAll();
+        permissionRepository.deleteAll();
+        applicationService.deleteAll();
     }
     
 	// Cleanup after each test
@@ -70,6 +73,7 @@ public class UserServiceTest extends AbstractTransactionalTest {
     	userService.deleteAll();
     	groupService.deleteAll();
     	permissionRepository.deleteAll();
+        applicationService.deleteAll();
     }
     
     public User createTestEntity() {
@@ -965,5 +969,47 @@ public class UserServiceTest extends AbstractTransactionalTest {
 
         userService.delete(u);
         groupService.delete(g);
+    }
+
+    @Test
+    public void testDirectPermissionsFilteredByApplication() {
+
+        Application app1 = applicationService.create(new Application("app1"));
+        Application app2 = applicationService.create(new Application("app2"));
+
+        /* Given a user with permissions */
+        String login = "permissionLogin";
+        String password = "P@ssw0rd";
+        String email = login + "@test.com";
+        String firstName = "first";
+        String lastName = "last";
+
+        Permission admin = this.permissionRepository.save(new Permission("ADMIN", app1));
+        Permission user = this.permissionRepository.save(new Permission("USER", app2));
+
+        // direct permissions
+        List<Permission> permissions = new ArrayList<Permission>();
+        permissions.add(admin);
+        permissions.add(user);
+
+        User u = new User();
+        u.setLogin(login);
+        u.setPassword(password);
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+        u.setEmail(email);
+        u.getPermissions().addAll(permissions);
+        userService.create(u);
+
+        /* When we retrieved him after a search */
+        List<Permission> retreivedPermissions = userService.getUserPermissions(login, app1.getName());
+
+        /* We can get the direct permissions */
+        Assertions.assertThat(retreivedPermissions.size()).as("Permissions not found").isEqualTo(1);
+        Assertions.assertThat(retreivedPermissions.contains(admin)).as("Permissions not found").isTrue();
+        Assertions.assertThat(retreivedPermissions.contains(user)).as("Permissions not found").isFalse();
+
+        userService.delete(u);
+
     }
 }

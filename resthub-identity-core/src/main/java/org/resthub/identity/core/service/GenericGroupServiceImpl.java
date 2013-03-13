@@ -66,14 +66,7 @@ public class GenericGroupServiceImpl<T extends Group, TRepository extends Generi
 	@Override
 	public T findByName(String name) {
 		Assert.notNull(name, "Group name can't be null");
-		List<T> result = this.repository.findByName(name);
-		int size = result.size();
-        T g = null;
-		if (size == 1) {
-			g = result.get(0);
-		}
-		return g;
-
+		return this.repository.findByName(name);
 	}
 	
 	/**

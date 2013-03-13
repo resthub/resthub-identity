@@ -85,6 +85,17 @@ public interface GenericUserService<T extends User> extends CrudService<T, Long>
     List<Permission> getUserPermissions(String login);
 
     /**
+     * gets the User's inherited Permissions for a given application
+     *
+     * @param login the login of the user
+     * @param application the application name
+     * @return permissions of the user. In this implementation inherited
+     *         permissions from group to which the user belong are taken into
+     *         accounts
+     */
+    List<Permission> getUserPermissions(String login, String application);
+
+    /**
      * gets the User's direct Permissions
      *
      * @param login

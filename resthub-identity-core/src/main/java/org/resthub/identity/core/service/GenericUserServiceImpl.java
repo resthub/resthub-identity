@@ -16,6 +16,7 @@ import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.identity.core.repository.GenericUserRepository;
 import org.resthub.identity.service.GenericGroupService;
 import org.resthub.identity.service.GenericRoleService;
+import org.resthub.identity.service.GenericApplicationService;
 import org.resthub.identity.core.tools.PermissionsOwnerTools;
 import org.resthub.identity.service.GenericUserService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -37,6 +38,7 @@ public abstract class GenericUserServiceImpl<T extends User, TRepository extends
 	protected GenericGroupService groupService;
 	protected GenericRoleService roleService;
 	protected PasswordEncoder passwordEncoder;
+    protected GenericApplicationService applicationService;
 
     private ApplicationEventPublisher applicationEventPublisher = null;
 
@@ -60,6 +62,12 @@ public abstract class GenericUserServiceImpl<T extends User, TRepository extends
 	public void setGroupService(GenericGroupService groupService) {
 		this.groupService = groupService;
 	}
+
+    @Inject
+    @Named("applicationService")
+    public void setApplicationService(GenericApplicationService applicationService) {
+        this.applicationService = applicationService;
+    }
 
 	@Inject
 	@Named("roleService")
@@ -168,6 +176,27 @@ public abstract class GenericUserServiceImpl<T extends User, TRepository extends
 		}
 		return p;
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Permission> getUserPermissions(String login, String applicationName) {
+        List<Permission> permissions = null;
+        User u = this.findByLogin(login);
+        Assert.notNull(u);
+        permissions = PermissionsOwnerTools.getInheritedPermission(u);
+        Application application = applicationService.findByName(applicationName);
+        Assert.notNull(application);
+        for(int i = permissions.size() -1; i >= 0; i--) {
+            Permission p = permissions.get(i);
+            if(p.getApplication() != application) {
+                permissions.remove(p);
+            }
+        }
+        return permissions;
+    }
 
 	/**
 	 * {@inheritDoc}

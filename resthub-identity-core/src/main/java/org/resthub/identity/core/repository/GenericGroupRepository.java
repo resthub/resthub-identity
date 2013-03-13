@@ -11,14 +11,13 @@ import java.util.List;
 public interface GenericGroupRepository<T extends Group> extends JpaRepository<T, Long> {
 
 	/**
-	 * Find a list of {@link org.resthub.identity.model.Group} from name
+	 * Find a {@link org.resthub.identity.model.Group} from its name
 	 * 
-	 * @param name
-	 *            name to search for
+	 * @param name name to search for
 	 * 
-	 * @return the list of found Group (empty if not found)
+	 * @return the found Group
 	 */
-	List<T> findByName(String name);
+	T findByName(String name);
 	
 	/**
 	 * Gets the groups of a group.

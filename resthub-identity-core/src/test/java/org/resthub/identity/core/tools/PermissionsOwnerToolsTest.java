@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.core.tools.PermissionsOwnerTools;
+import org.resthub.identity.model.Application;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.User;

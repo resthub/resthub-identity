@@ -31,6 +31,7 @@
         <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericGroupRepository" />
         <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericUserRepository" />
         <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericRoleRepository" />
+        <repository:exclude-filter type="regex" expression="org\.resthub\.identity\.core\.repository\.GenericApplicationRepository" />
     </jpa:repositories>
 
 	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
@@ -38,6 +39,7 @@
     <bean id="userService" class="org.resthub.identity.core.service.UserServiceImpl" />
     <bean id="roleService" class="org.resthub.identity.core.service.RoleServiceImpl" />
     <bean id="groupService" class="org.resthub.identity.core.service.GroupServiceImpl" />
+    <bean id="applicationService" class="org.resthub.identity.core.service.ApplicationServiceImpl" />
     <bean id="permissionService" class="org.resthub.identity.core.service.PermissionServiceImpl" />
 
 </beans>

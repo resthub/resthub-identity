@@ -1,8 +1,10 @@
 package org.resthub.identity.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Application {
@@ -49,5 +51,12 @@ public class Application {
         this.id = id;
     }
 
+    @Column(nullable = false, unique=true)
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }
