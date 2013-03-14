@@ -3,6 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
 	<groupId>org.resthub</groupId>
 	<artifactId>resthub-identity</artifactId>
 	<version>2.0-SNAPSHOT</version>
@@ -85,31 +91,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<repositories>
-        <repository>
-            <id>rc</id>
-            <url>https://oss.sonatype.org/content/repositories/orgresthub-992/</url>
-        </repository>
-		<repository>
-			<id>snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-
-	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>pullrequest-releases</id>
-			<url>http://nexus.pullrequest.org/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>pullrequest-snapshots</id>
-			<url>http://nexus.pullrequest.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 </project>
