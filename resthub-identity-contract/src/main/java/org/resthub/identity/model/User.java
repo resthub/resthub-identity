@@ -22,7 +22,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Table(name = "idm_users")
 public class User extends PermissionsOwner {
 
-	/**
+    private static final long serialVersionUID = 1816038988064591623L;
+    /**
      * List of attributes for a user
      * */
     protected String firstName = null;

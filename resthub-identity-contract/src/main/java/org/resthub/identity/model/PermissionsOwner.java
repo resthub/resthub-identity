@@ -1,5 +1,6 @@
 package org.resthub.identity.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Entity
 @Table(name = "idm_permissions_owner")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class PermissionsOwner {
+public abstract class PermissionsOwner implements Serializable  {
+
+    private static final long serialVersionUID = 5506055534017559927L;
 
     private Long id;
 
