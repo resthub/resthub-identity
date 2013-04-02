@@ -6,25 +6,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserWithPassword extends User {
 
-	public UserWithPassword() {
-		super();
-	}
+    private static final long serialVersionUID = 2388104110338965708L;
 
-	public UserWithPassword(User u) {
-		super(u);
-	}
+    public UserWithPassword() {
+        super();
+    }
 
-	
-	@Override
-	@Column(nullable = false)
-	@JsonIgnore(value=false)
-	public String getPassword() {
-		return super.getPassword();
-	}
+    public UserWithPassword(User u) {
+        super(u);
+    }
 
-	@Override
-	public void setPassword(String password) {
-		super.setPassword(password);
-	}
+    @Override
+    @Column(nullable = false)
+    @JsonIgnore(value = false)
+    public String getPassword() {
+        return super.getPassword();
+    }
+
+    @Override
+    public void setPassword(String password) {
+        super.setPassword(password);
+    }
 
 }

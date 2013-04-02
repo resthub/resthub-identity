@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "idm_groups")
 public class Group extends PermissionsOwner {
 
+    private static final long serialVersionUID = -4082240647340997479L;
     /**
      * name of the group
      * */

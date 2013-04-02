@@ -1,5 +1,6 @@
 package org.resthub.identity.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "idm_roles")
-public class Role {
+public class Role implements Serializable {
 
-	
+    private static final long serialVersionUID = -34014168150871855L;
+
     protected Long id;
 	
     protected String name;
