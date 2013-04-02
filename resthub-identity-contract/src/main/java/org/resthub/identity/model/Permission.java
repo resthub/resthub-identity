@@ -7,6 +7,7 @@ import org.resthub.identity.model.Role.IdView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +16,11 @@ import java.util.List;
  */
 @Entity
 @Table(name = "idm_permissions")
-public class Permission {
+public class Permission implements Serializable {
 	
-	private Long id;
+    private static final long serialVersionUID = 9093076599125616233L;
+    
+    private Long id;
 	private String code;
 	private String title;
 	private String description;
