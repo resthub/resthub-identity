@@ -57,7 +57,6 @@ public class Role implements Serializable {
      * 
      * @return the name of the role.
      */
-    @Column(unique = true)
     @NotNull
     @JsonView({SummarizeView.class})
     public String getName() {
