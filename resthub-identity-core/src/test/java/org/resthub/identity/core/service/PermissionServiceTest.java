@@ -39,7 +39,7 @@ public class PermissionServiceTest extends AbstractTransactionalTest {
 		this.permissionService.create(new Permission("TEST_PERMISSION_2"));
 		this.permissionService.create(new Permission("TEST_PERMISSION_3"));
 		
-		List<Permission> permissions = this.permissionService.findAll();
+		List<Permission> permissions = (List<Permission>) this.permissionService.findAll();
 		
 		Assertions.assertThat(permissions.size()).as("Permissions not found").isEqualTo(3);
 	}
