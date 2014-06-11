@@ -2,8 +2,6 @@ package org.resthub.identity.webapp.service;
 
 import org.resthub.identity.core.event.UserEvent;
 import org.resthub.identity.model.User;
-import org.resthub.identity.core.repository.UserRepository;
-import org.resthub.identity.core.service.GenericUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.elasticsearch.client.Client;
@@ -13,7 +11,7 @@ import org.springframework.context.ApplicationListener;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class WebAppUserServiceImpl extends GenericUserServiceImpl<User, UserRepository> implements ApplicationListener<UserEvent> {
+public class WebAppUserServiceImpl implements ApplicationListener<UserEvent> {
 
     private @Value("#{esProp['index.name']}") String indexName;
     private @Value("#{esProp['index.user.type']}") String indexType;
@@ -26,13 +24,6 @@ public class WebAppUserServiceImpl extends GenericUserServiceImpl<User, UserRepo
     @Inject
     @Named("elasticIndexer")
     private Indexer indexer;
-
-    @Override
-	@Inject
-	@Named("userRepository")
-	public void setRepository(UserRepository userRepository) {
-		super.setRepository(userRepository);
-	}
 
     @Override
     public void onApplicationEvent(UserEvent event) {

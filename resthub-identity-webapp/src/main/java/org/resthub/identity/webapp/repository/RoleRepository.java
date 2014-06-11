@@ -1,4 +1,4 @@
-package org.resthub.identity.core.repository;
+package org.resthub.identity.webapp.repository;
 
 import org.resthub.identity.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

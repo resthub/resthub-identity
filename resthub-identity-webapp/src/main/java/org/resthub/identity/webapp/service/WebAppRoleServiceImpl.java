@@ -2,7 +2,7 @@ package org.resthub.identity.webapp.service;
 
 import org.elasticsearch.client.Client;
 import org.resthub.identity.core.event.RoleEvent;
-import org.resthub.identity.core.service.RoleServiceImpl;
+import org.resthub.identity.core.service.AbstractRoleService;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.webapp.elasticsearch.Indexer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import javax.inject.Named;
  * Default implementation of a Role Service (can be override by creating a bean with the same name after this one)
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public class WebAppRoleServiceImpl extends RoleServiceImpl implements ApplicationListener<RoleEvent> {
+public class WebAppRoleServiceImpl extends AbstractRoleService implements ApplicationListener<RoleEvent> {
 
 	private @Value("#{esProp['index.name']}") String indexName;
     private @Value("#{esProp['index.role.type']}") String indexType;

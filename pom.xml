@@ -31,7 +31,7 @@
 		<module>resthub-identity-contract</module>
 		<module>resthub-identity-core</module>
 		<module>resthub-identity-webapp</module>
-	</modules>
+    </modules>
 
 	<build>
 		<plugins>

@@ -1,4 +1,4 @@
-package org.resthub.identity.core.repository;
+package org.resthub.identity.webapp.repository;
 
 import org.resthub.identity.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserRepository<T extends User, ID extends Serializable> extends JpaRepository<T, ID> {
 
     /**
-     * Find a list of {@link User} from login
+     * Find a list of {@link org.resthub.identity.model.User} from login
      *
      * @param login
      *            login to search for

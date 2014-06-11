@@ -1,16 +1,16 @@
-package org.resthub.identity.core.repository;
-
-import java.io.Serializable;
-import java.util.List;
+package org.resthub.identity.webapp.repository;
 
 import org.resthub.identity.model.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.io.Serializable;
+import java.util.List;
 
 
 public interface PermissionRepository<T extends Permission, ID extends Serializable> extends JpaRepository<T, ID> {
 	
 	/**
-	 * Find a list of {@link Permission} from code
+	 * Find a list of {@link org.resthub.identity.model.Permission} from code
 	 * 
 	 * @param code
 	 *            code to search for
