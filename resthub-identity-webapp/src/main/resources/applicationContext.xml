@@ -27,8 +27,9 @@
     <!-- Client for Embedded ES -->
     <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/>
 
+    <!--
     <bean id="userService" class="org.resthub.identity.webapp.service.WebAppUserServiceImpl" />
     <bean id="roleService" class="org.resthub.identity.webapp.service.WebAppRoleServiceImpl" />
     <bean id="groupService" class="org.resthub.identity.webapp.service.WebAppGroupServiceImpl" />
-
+    -->
 </beans>

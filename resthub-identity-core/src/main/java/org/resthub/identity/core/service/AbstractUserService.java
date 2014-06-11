@@ -3,8 +3,8 @@ package org.resthub.identity.core.service;
 import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.core.event.UserEvent;
-import org.resthub.identity.core.repository.PermissionsOwnerRepository;
-import org.resthub.identity.core.repository.UserRepository;
+import org.resthub.identity.core.repository.AbstractPermissionsOwnerRepository;
+import org.resthub.identity.core.repository.AbstractUserRepository;
 import org.resthub.identity.service.ApplicationService;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
@@ -13,6 +13,7 @@ import org.resthub.identity.core.tools.PermissionsOwnerTools;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.*;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -27,8 +28,8 @@ import java.util.List;
 /**
  * Default implementation of a User Service (can be override by creating a bean with the same name after this one)
  */
-public abstract class AbstractUserService<T extends User, ID extends Serializable, R extends UserRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements UserService<T, ID> {
-    protected PermissionsOwnerRepository permissionsOwnerRepository;
+public abstract class AbstractUserService<T extends User, ID extends Serializable, R extends AbstractUserRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements UserService<T, ID>, ApplicationEventPublisherAware {
+    protected AbstractPermissionsOwnerRepository permissionsOwnerRepository;
     protected GroupService groupService;
     protected RoleService roleService;
     protected PasswordEncoder passwordEncoder;
@@ -49,7 +50,7 @@ public abstract class AbstractUserService<T extends User, ID extends Serializabl
 
     @Inject
     @Named("permissionsOwnerRepository")
-    public void setAbstractPermissionsOwnerRepository(PermissionsOwnerRepository permissionsOwnerRepository) {
+    public void setAbstractPermissionsOwnerRepository(AbstractPermissionsOwnerRepository permissionsOwnerRepository) {
         this.permissionsOwnerRepository = permissionsOwnerRepository;
     }
 

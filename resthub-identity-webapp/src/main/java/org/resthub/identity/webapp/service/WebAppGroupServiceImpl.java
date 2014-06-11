@@ -13,16 +13,20 @@ import javax.inject.Named;
 
 /**
  * An implementation of a Group Service<br/>
- *
+ * <p>
  * It's a bean whose name is "groupService"
- * */
+ */
+@Named("webAppGroupService")
 public class WebAppGroupServiceImpl implements ApplicationListener<GroupEvent> {
 
-	private @Value("#{esProp['index.name']}") String indexName;
-    private @Value("#{esProp['index.group.type']}") String indexType;
-
-    @Autowired Client client;
-    
+    @Autowired
+    Client client;
+    private
+    @Value("#{esProp['index.name']}")
+    String indexName;
+    private
+    @Value("#{esProp['index.group.type']}")
+    String indexType;
     /**
      * Injection of elasticsearch indexer;
      */
@@ -33,11 +37,11 @@ public class WebAppGroupServiceImpl implements ApplicationListener<GroupEvent> {
     @Override
     public void onApplicationEvent(GroupEvent event) {
         Group group = event.getGroup();
-        if(event.getType() == GroupEvent.GroupEventType.GROUP_CREATION) {
+        if (event.getType() == GroupEvent.GroupEventType.GROUP_CREATION) {
             indexer.add(client, group, indexName, indexType, group.getId().toString());
-        } else if(event.getType() == GroupEvent.GroupEventType.GROUP_UPDATE) {
+        } else if (event.getType() == GroupEvent.GroupEventType.GROUP_UPDATE) {
             indexer.edit(client, group, indexName, indexType, group.getId().toString());
-        } else if(event.getType() == GroupEvent.GroupEventType.GROUP_DELETION) {
+        } else if (event.getType() == GroupEvent.GroupEventType.GROUP_DELETION) {
             indexer.delete(client, indexName, indexType, group.getId().toString());
         }
     }

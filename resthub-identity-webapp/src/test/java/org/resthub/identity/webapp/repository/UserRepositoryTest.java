@@ -8,10 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
-import org.resthub.identity.core.repository.PermissionRepository;
-import org.resthub.identity.core.repository.PermissionsOwnerRepository;
-import org.resthub.identity.core.repository.RoleRepository;
-import org.resthub.identity.core.repository.UserRepository;
+import org.resthub.identity.core.repository.*;
 import org.resthub.identity.model.*;
 import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.test.AbstractTransactionalTest;
@@ -35,11 +32,11 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 
 	@Inject
 	@Named("groupRepository")
-	protected org.resthub.identity.core.repository.GroupRepository<Group, Long> groupRepository;
+	protected AbstractGroupRepository<Group, Long> groupRepository;
 	
 	@Inject
 	@Named("roleRepository")
-	protected RoleRepository<Role, Long> roleRepository;
+	protected RoleRepository roleRepository;
 	
 	@Inject
 	@Named("permissionsOwnerRepository")
@@ -47,11 +44,11 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 
 	@Inject
 	@Named("userRepository")
-	private UserRepository<User, Long> userRepository;
+	private UserRepository userRepository;
 	
 	@Inject
 	@Named("permissionRepository")
-	private PermissionRepository<Permission, Long> permissionRepository;
+	private PermissionRepository permissionRepository;
 	
 	// Cleanup after each test
     @BeforeMethod

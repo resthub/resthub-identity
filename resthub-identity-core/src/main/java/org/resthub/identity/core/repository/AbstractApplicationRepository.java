@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.io.Serializable;
 import java.util.List;
 
-public interface ApplicationRepository<T extends Application, ID extends Serializable> extends JpaRepository<T, ID> {
+public interface AbstractApplicationRepository<T extends Application, ID extends Serializable> extends JpaRepository<T, ID> {
     /**
      * Find an {@link org.resthub.identity.model.Application} from its name
      *

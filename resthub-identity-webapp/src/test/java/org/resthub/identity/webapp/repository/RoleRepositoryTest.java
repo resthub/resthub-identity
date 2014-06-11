@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.repository.AbstractRoleRepository;
 import org.resthub.identity.model.Role;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,7 +20,7 @@ public class RoleRepositoryTest extends AbstractTransactionalTest {
 
 	@Inject
 	@Named("roleRepository")
-	private org.resthub.identity.core.repository.RoleRepository<Role, Long> roleRepository;
+	private AbstractRoleRepository<Role, Long> roleRepository;
 	
 	// Cleanup after each test
     @BeforeMethod

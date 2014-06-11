@@ -1,7 +1,9 @@
 package org.resthub.identity.core.repository;
 
+import java.io.Serializable;
 import java.util.List;
 
+import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.identity.model.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +15,7 @@ import org.springframework.data.repository.query.Param;
  * 
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public interface PermissionsOwnerRepository extends JpaRepository<PermissionsOwner, Long> {
+public interface AbstractPermissionsOwnerRepository<T extends PermissionsOwner, ID extends Serializable> extends JpaRepository<T, ID> {
 
 	/**
 	 * Gets all the AbstractPermissionsOwners that have a role.
@@ -23,7 +25,7 @@ public interface PermissionsOwnerRepository extends JpaRepository<PermissionsOwn
 	 * @return A list of AbstractPermissionsOwners having at least one of the roles defined as parameter.
 	 */
 	@Query("SELECT DISTINCT e FROM PermissionsOwner e JOIN e.roles r WHERE r.name IN :roles")
-	List<PermissionsOwner> getWithRoles(@Param("roles") List<String> roles);
+	List<T> getWithRoles(@Param("roles") List<String> roles);
 
 	/**
 	 * Gets all the AbstractPermissionsOwners that have the specified group as parent.
@@ -33,5 +35,5 @@ public interface PermissionsOwnerRepository extends JpaRepository<PermissionsOwn
 	 * @return The list of AbstractPermissionsOwners that are associated with the group.
 	 */
 	@Query("SELECT DISTINCT e FROM PermissionsOwner e JOIN e.groups g WHERE g = :group")
-	List<PermissionsOwner> getWithGroupAsParent(@Param("group") Group group);
+	List<T> getWithGroupAsParent(@Param("group") Group group);
 }

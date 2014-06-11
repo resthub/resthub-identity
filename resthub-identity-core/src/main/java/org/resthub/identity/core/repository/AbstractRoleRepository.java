@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.io.Serializable;
 import java.util.List;
 
-public interface RoleRepository<T extends Role, ID extends Serializable> extends JpaRepository<T, ID> {
+public interface AbstractRoleRepository<T extends Role, ID extends Serializable> extends JpaRepository<T, ID> {
     /**
      * Find a {@link org.resthub.identity.model.Role} from its name
      *

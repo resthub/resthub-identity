@@ -7,7 +7,7 @@ import org.resthub.identity.model.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface PermissionRepository<T extends Permission, ID extends Serializable> extends JpaRepository<T, ID> {
+public interface AbstractPermissionRepository<T extends Permission, ID extends Serializable> extends JpaRepository<T, ID> {
 	
 	/**
 	 * Find a list of {@link Permission} from code

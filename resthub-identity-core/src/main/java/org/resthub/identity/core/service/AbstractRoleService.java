@@ -2,8 +2,8 @@ package org.resthub.identity.core.service;
 
 import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.core.event.RoleEvent;
-import org.resthub.identity.core.repository.PermissionsOwnerRepository;
-import org.resthub.identity.core.repository.RoleRepository;
+import org.resthub.identity.core.repository.AbstractPermissionsOwnerRepository;
+import org.resthub.identity.core.repository.AbstractRoleRepository;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
 import org.resthub.identity.service.UserService;
@@ -13,6 +13,7 @@ import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -21,8 +22,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractRoleService<T extends Role, ID extends Serializable, R extends RoleRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements RoleService<T, ID> {
-    protected PermissionsOwnerRepository permissionsOwnerRepository;
+public abstract class AbstractRoleService<T extends Role, ID extends Serializable, R extends AbstractRoleRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements RoleService<T, ID>, ApplicationEventPublisherAware {
+    protected AbstractPermissionsOwnerRepository permissionsOwnerRepository;
     protected UserService userService;
     protected GroupService groupService;
 
@@ -41,7 +42,7 @@ public abstract class AbstractRoleService<T extends Role, ID extends Serializabl
 
     @Inject
     @Named("permissionsOwnerRepository")
-    public void setPermissionsOwnerRepository(PermissionsOwnerRepository permissionsOwnerRepository) {
+    public void setPermissionsOwnerRepository(AbstractPermissionsOwnerRepository permissionsOwnerRepository) {
         this.permissionsOwnerRepository = permissionsOwnerRepository;
     }
 

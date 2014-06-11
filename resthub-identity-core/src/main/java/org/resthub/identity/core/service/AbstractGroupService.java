@@ -3,8 +3,8 @@ package org.resthub.identity.core.service;
 import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.core.event.GroupEvent;
 import org.resthub.identity.core.event.RoleEvent;
-import org.resthub.identity.core.repository.GroupRepository;
-import org.resthub.identity.core.repository.UserRepository;
+import org.resthub.identity.core.repository.AbstractGroupRepository;
+import org.resthub.identity.core.repository.AbstractUserRepository;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
@@ -13,6 +13,7 @@ import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -25,12 +26,12 @@ import java.util.List;
 /**
  * Default implementation of a Group Service (can be override by creating a bean with the same name after this one)
  */
-public abstract class AbstractGroupService<T extends Group, ID extends Serializable, R extends GroupRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements GroupService<T, ID> {
+public abstract class AbstractGroupService<T extends Group, ID extends Serializable, R extends AbstractGroupRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements GroupService<T, ID>, ApplicationEventPublisherAware {
     /**
      * The userRepository<br/>
      * This class need it in order to be able to deal with users
      */
-    protected UserRepository userRepository;
+    protected AbstractUserRepository userRepository;
 
     protected RoleService roleService;
 
@@ -49,7 +50,7 @@ public abstract class AbstractGroupService<T extends Group, ID extends Serializa
 
     @Inject
     @Named("userRepository")
-    protected void setUserRepository(UserRepository userRepository) {
+    protected void setUserRepository(AbstractUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

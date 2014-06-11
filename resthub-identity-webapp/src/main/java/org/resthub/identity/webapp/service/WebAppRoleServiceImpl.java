@@ -14,30 +14,35 @@ import javax.inject.Named;
 
 /**
  * Default implementation of a Role Service (can be override by creating a bean with the same name after this one)
+ *
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
+@Named("webAppRoleService")
 public class WebAppRoleServiceImpl extends AbstractRoleService implements ApplicationListener<RoleEvent> {
 
-	private @Value("#{esProp['index.name']}") String indexName;
-    private @Value("#{esProp['index.role.type']}") String indexType;
-	@Autowired Client client;
-
-	
-	/**
+    @Autowired
+    Client client;
+    private
+    @Value("#{esProp['index.name']}")
+    String indexName;
+    private
+    @Value("#{esProp['index.role.type']}")
+    String indexType;
+    /**
      * Injection of elasticsearch indexer;
      */
-	@Inject
-	@Named("elasticIndexer")
-	private Indexer indexer;
+    @Inject
+    @Named("elasticIndexer")
+    private Indexer indexer;
 
     @Override
     public void onApplicationEvent(RoleEvent event) {
         Role role = event.getRole();
-        if(event.getType() == RoleEvent.RoleEventType.ROLE_CREATION) {
+        if (event.getType() == RoleEvent.RoleEventType.ROLE_CREATION) {
             indexer.add(client, role, indexName, indexType, role.getId().toString());
-        } else if(event.getType() == RoleEvent.RoleEventType.ROLE_UPDATE) {
+        } else if (event.getType() == RoleEvent.RoleEventType.ROLE_UPDATE) {
             indexer.edit(client, role, indexName, indexType, role.getId().toString());
-        } else if(event.getType() == RoleEvent.RoleEventType.ROLE_DELETION) {
+        } else if (event.getType() == RoleEvent.RoleEventType.ROLE_DELETION) {
             indexer.delete(client, indexName, indexType, role.getId().toString());
         }
     }

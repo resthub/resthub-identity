@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.repository.AbstractGroupRepository;
 import org.resthub.identity.model.Group;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,7 +20,7 @@ public class GroupRepositoryTest extends AbstractTransactionalTest {
 
 	@Inject
 	@Named("groupRepository")
-	private org.resthub.identity.core.repository.GroupRepository<Group, Long> groupRepository;
+	private AbstractGroupRepository<Group, Long> groupRepository;
 
 	// Cleanup after each test
     @BeforeMethod

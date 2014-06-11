@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.repository.AbstractPermissionRepository;
 import org.resthub.identity.model.Permission;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,7 +20,7 @@ public class PermissionRepositoryTest extends AbstractTransactionalTest {
 
 	@Inject
 	@Named("permissionRepository")
-	private org.resthub.identity.core.repository.PermissionRepository<Permission, Long> permissionRepository;
+	private AbstractPermissionRepository<Permission, Long> permissionRepository;
 
 	// Cleanup after each test
     @BeforeMethod
