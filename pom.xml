@@ -18,7 +18,7 @@
 	<description>RESThub identity management in order to allow you to build quickly identity functionnalities on your applications</description>
 
 	<properties>
-		<resthub.spring.stack.version>2.1.6</resthub.spring.stack.version>
+		<resthub.spring.stack.version>2.1.0</resthub.spring.stack.version>
 		<spring.security.version>3.1.6.RELEASE</spring.security.version>
 		<elasticsearch.spring.integration.version>0.0.2</elasticsearch.spring.integration.version>
 		<elasticsearch.version>0.20.5</elasticsearch.version>
