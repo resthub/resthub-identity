@@ -2,6 +2,7 @@ package org.resthub.identity.webapp.controller;
 
 import org.resthub.identity.core.controller.AbstractUserController;
 import org.resthub.identity.core.security.IdentityRoles;
+import org.resthub.identity.core.service.impl.DefaultUserService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.exception.ExpectationFailedException;
 import org.resthub.identity.model.User;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Primary
 @Controller
 @RequestMapping("/api/user")
-public class UserController extends AbstractUserController<User, Long, UserService<User, Long>> {
+public class UserController extends AbstractUserController<User, Long, DefaultUserService> {
     /**
      * Override this methods in order to secure it *
      */
