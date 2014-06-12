@@ -1,24 +1,22 @@
-package org.resthub.identity.webapp.repository;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+package org.resthub.identity.core.repository.impl;
 
 import org.fest.assertions.api.Assertions;
-import org.resthub.identity.core.repository.*;
+import org.resthub.identity.core.repository.AbstractGroupRepository;
 import org.resthub.identity.model.*;
-import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @ActiveProfiles("resthub-jpa")
-public class UserRepositoryTest extends AbstractTransactionalTest {
+public class DefaultUserRepositoryTest extends AbstractTransactionalTest {
 
 	private static final String GROUP_NAME = "TestGroup";
 
@@ -36,19 +34,19 @@ public class UserRepositoryTest extends AbstractTransactionalTest {
 	
 	@Inject
 	@Named("roleRepository")
-	protected RoleRepository roleRepository;
+	protected DefaultRoleRepository roleRepository;
 	
 	@Inject
 	@Named("permissionsOwnerRepository")
-	protected PermissionsOwnerRepository permissionsOwnerRepository;
+	protected DefaultPermissionsOwnerRepository permissionsOwnerRepository;
 
 	@Inject
 	@Named("userRepository")
-	private UserRepository userRepository;
+	private DefaultUserRepository userRepository;
 	
 	@Inject
 	@Named("permissionRepository")
-	private PermissionRepository permissionRepository;
+	private DefaultPermissionRepository permissionRepository;
 	
 	// Cleanup after each test
     @BeforeMethod

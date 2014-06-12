@@ -1,4 +1,4 @@
-package org.resthub.identity.webapp.listener;
+package org.resthub.identity.core.listener;
 
 import org.resthub.identity.core.event.GroupEvent;
 import org.springframework.context.ApplicationListener;

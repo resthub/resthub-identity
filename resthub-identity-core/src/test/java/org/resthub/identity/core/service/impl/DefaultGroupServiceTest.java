@@ -1,8 +1,8 @@
-package org.resthub.identity.webapp.service;
+package org.resthub.identity.core.service.impl;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.core.event.GroupEvent;
-import org.resthub.identity.webapp.listener.GroupTestListener;
+import org.resthub.identity.core.listener.GroupTestListener;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
 import org.resthub.identity.service.GroupService;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 @ActiveProfiles("resthub-jpa")
-public class GroupServiceTest extends AbstractTransactionalTest {
+public class DefaultGroupServiceTest extends AbstractTransactionalTest {
 
     @Inject
     @Named("userService")

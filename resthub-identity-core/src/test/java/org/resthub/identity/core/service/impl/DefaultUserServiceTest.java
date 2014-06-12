@@ -1,8 +1,8 @@
-package org.resthub.identity.webapp.service;
+package org.resthub.identity.core.service.impl;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.core.event.UserEvent;
-import org.resthub.identity.webapp.listener.UserTestListener;
+import org.resthub.identity.core.listener.UserTestListener;
 import org.resthub.identity.model.*;
 import org.resthub.identity.service.*;
 import org.resthub.test.AbstractTransactionalTest;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 @ActiveProfiles("resthub-jpa")
-public class UserServiceTest extends AbstractTransactionalTest {
+public class DefaultUserServiceTest extends AbstractTransactionalTest {
 
     /*
      * The UserService is needed because we have specific method for password

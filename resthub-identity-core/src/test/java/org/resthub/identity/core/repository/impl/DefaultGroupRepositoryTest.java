@@ -1,7 +1,4 @@
-package org.resthub.identity.webapp.repository;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+package org.resthub.identity.core.repository.impl;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.core.repository.AbstractGroupRepository;
@@ -12,8 +9,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 @ActiveProfiles("resthub-jpa")
-public class GroupRepositoryTest extends AbstractTransactionalTest {
+public class DefaultGroupRepositoryTest extends AbstractTransactionalTest {
 
 	private static final String GROUP_NAME = "TestGroup";
 	private static final String NEW_GROUP_NAME = "NewGroup";

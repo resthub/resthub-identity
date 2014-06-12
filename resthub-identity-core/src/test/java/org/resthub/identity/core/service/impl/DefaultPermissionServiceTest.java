@@ -1,4 +1,4 @@
-package org.resthub.identity.webapp.service;
+package org.resthub.identity.core.service.impl;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Permission;
@@ -14,7 +14,7 @@ import javax.inject.Named;
 import java.util.List;
 
 @ActiveProfiles("resthub-jpa")
-public class PermissionServiceTest extends AbstractTransactionalTest {
+public class DefaultPermissionServiceTest extends AbstractTransactionalTest {
 
     @Inject
     @Named("permissionService")

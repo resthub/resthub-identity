@@ -1,7 +1,4 @@
-package org.resthub.identity.webapp.repository;
-
-import javax.inject.Inject;
-import javax.inject.Named;
+package org.resthub.identity.core.repository.impl;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.core.repository.AbstractRoleRepository;
@@ -12,8 +9,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 @ActiveProfiles("resthub-jpa")
-public class RoleRepositoryTest extends AbstractTransactionalTest {
+public class DefaultRoleRepositoryTest extends AbstractTransactionalTest {
 
 	private static final String ROLE_NAME = "TestRole";
 	private static final String NEW_ROLE_NAME = "NewRole";

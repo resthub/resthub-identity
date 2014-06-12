@@ -1,4 +1,4 @@
-package org.resthub.identity.webapp.service;
+package org.resthub.identity.core.service.impl;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Role;
@@ -14,7 +14,7 @@ import javax.inject.Named;
 import java.util.List;
 
 @ActiveProfiles("resthub-jpa")
-public class RoleServiceTest extends AbstractTransactionalTest {
+public class DefaultRoleServiceTest extends AbstractTransactionalTest {
 
     @Inject
     @Named("roleService")

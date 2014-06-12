@@ -2,10 +2,10 @@ package org.resthub.identity.webapp.service;
 
 import org.elasticsearch.client.Client;
 import org.fest.assertions.api.Assertions;
-import org.resthub.identity.service.GroupService;
-import org.resthub.identity.service.UserService;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GroupService;
+import org.resthub.identity.service.UserService;
 import org.resthub.identity.webapp.elasticsearch.Deleter;
 import org.resthub.identity.webapp.elasticsearch.Requester;
 import org.resthub.test.AbstractTransactionalTest;
