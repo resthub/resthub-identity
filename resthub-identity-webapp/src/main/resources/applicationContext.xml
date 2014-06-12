@@ -30,5 +30,6 @@
     -->
 
     <bean id="groupController" class="org.resthub.identity.webapp.controller.GroupController" primary="true" />
+    <bean id="userController" class="org.resthub.identity.webapp.controller.UserController" primary="true" />
     <bean id="groupService" class="org.resthub.identity.webapp.service.impl.GroupServiceImpl" primary="true" />
 </beans>

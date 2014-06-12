@@ -25,7 +25,7 @@ public class GroupController extends AbstractGroupController<Group, String, Grou
     @Inject
     @Named("groupService")
     @Override
-    public void setService(GroupService service) {
+    public void setService(GroupService<Group, String> service) {
         LOGGER.info("Entering in specific group controller !");
         super.setService(service);
     }
