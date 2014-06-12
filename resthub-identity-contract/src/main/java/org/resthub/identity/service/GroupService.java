@@ -4,6 +4,7 @@ import org.resthub.common.service.CrudService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
+import org.resthub.identity.model.Role;
 
 import java.io.Serializable;
 import java.util.List;
@@ -91,7 +92,7 @@ public interface GroupService<T extends Group, ID extends Serializable> extends 
      *
      * @param groupName Group name.
      */
-    List<T> getRolesFromGroup(String groupName);
+    List<Role> getRolesFromGroup(String groupName);
 
     /**
      * Add a role to a group.

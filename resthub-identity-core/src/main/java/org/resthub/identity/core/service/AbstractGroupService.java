@@ -245,7 +245,7 @@ public abstract class AbstractGroupService<T extends Group, ID extends Serializa
      */
     @Override
     @Transactional(readOnly = true)
-    public List<T> getRolesFromGroup(String groupName) {
+    public List<Role> getRolesFromGroup(String groupName) {
         return this.repository.findRolesFromGroup(groupName);
     }
 

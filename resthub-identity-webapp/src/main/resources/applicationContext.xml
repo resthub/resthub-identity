@@ -15,11 +15,7 @@
     <util:properties id="esProp" location="classpath:es.properties" />
 
     <!-- Node for Embedded ES -->
-    <bean id="esNode"
-          class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean">
-    </bean>
-
-    <!-- Client for Embedded ES -->
+    <bean id="esNode" class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean" />
     <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/>
 
     <!--
@@ -28,5 +24,6 @@
     <bean id="groupService" class="org.resthub.identity.webapp.service.WebAppGroupServiceImpl" />
     -->
 
-    <bean id="applicationService" class="org.resthub.identity.webapp.service.impl.ApplicationServiceImpl" />
+    <!--<bean id="groupController" class="org.resthub.identity.webapp.controller.GroupController" />-->
+    <bean id="groupService" class="org.resthub.identity.webapp.service.impl.GroupServiceImpl" />
 </beans>

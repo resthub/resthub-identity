@@ -1,4 +1,4 @@
-package org.resthub.identity.webapp.controller;
+package org.resthub.identity.core.controller.impl;
 
 
 import org.fest.assertions.api.Assertions;
@@ -17,9 +17,9 @@ import org.testng.annotations.Test;
  * 
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public class RoleControllerWebTest extends AbstractWebTest {
+public class DefaultRoleControllerWebTest extends AbstractWebTest {
 
-    public RoleControllerWebTest() {
+    public DefaultRoleControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
         this.useOpenEntityManagerInViewFilter = true;
     }

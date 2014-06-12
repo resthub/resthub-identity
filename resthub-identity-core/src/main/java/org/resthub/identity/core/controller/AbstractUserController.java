@@ -1,8 +1,7 @@
-package org.resthub.identity.webapp.controller;
+package org.resthub.identity.core.controller;
 
 import org.resthub.common.exception.NotFoundException;
-import org.resthub.identity.core.controller.SecuredServiceBasedRestController;
-import org.resthub.identity.service.UserService;
+import org.resthub.identity.core.security.IdentityRoles;
 import org.resthub.identity.core.tools.PermissionsOwnerTools;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.exception.ExpectationFailedException;
@@ -10,44 +9,41 @@ import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.UserService;
+import org.resthub.web.controller.ServiceBasedRestController;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * Front controller for User Management<br/>
- * Only ADMINS can access to the globality of this API<br/>
- * Specific permissions are given when useful
+ * Created by bastien on 03/06/14.
  */
-@Controller
-@RequestMapping("/api/user")
-public class UserController extends SecuredServiceBasedRestController<User, Long, UserService> {
-
+public abstract class AbstractUserController<T extends User, ID extends Serializable, S extends UserService<T, ID>> extends ServiceBasedRestController<T, ID, S> {
     @Inject
     @Named("userService")
     @Override
-    public void setService(UserService service) {
+    public void setService(S service) {
         this.service = service;
     }
 
     /**
      * Override this methods in order to secure it *
      */
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.USER)
     @Override
-    public User create(@RequestBody User user) {
+    public T create(@RequestBody T resource) {
         try {
-            return super.create(user);
+            return super.create(resource);
         } catch (AlreadyExistingEntityException e) {
             throw new ExpectationFailedException(e.getMessage());
         }
@@ -56,16 +52,64 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Override this methods in order to secure it *
      */
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.USER)
     @Override
-    public User update(@PathVariable("id") Long id, @RequestBody User user) {
+    public T update(@PathVariable("id") ID id, @RequestBody T resource) {
         try {
-            return super.update(id, user);
+            return super.update(id, resource);
         } catch (AlreadyExistingEntityException e) {
             throw new ExpectationFailedException(e.getMessage());
         }
     }
 
+    /**
+     * Override this methods in order to secure it *
+     */
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER)
+    @Override
+    public Iterable<T> findAll() {
+        return super.findAll();
+    }
+
+    /**
+     * Override this methods in order to secure it *
+     */
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER)
+    @RequestMapping(value = "/findAllPerPage", method = RequestMethod.GET)
+    @Override
+    public Page<T> findPaginated(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
+                                 @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direction,
+                                 @RequestParam(value = "properties", required = false) String properties) {
+        return super.findPaginated(page, size, direction, properties);
+    }
+
+    /**
+     * Override this methods in order to secure it *
+     */
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER)
+    @Override
+    public T findById(@PathVariable("id") ID id) {
+        return super.findById(id);
+    }
+
+    /**
+     * Override this methods in order to secure it *
+     */
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.USER)
+    @Override
+    public void delete() {
+        super.delete();
+    }
+
+    /**
+     * Override this methods in order to secure it *
+     */
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.USER)
+    @Override
+    public void delete(@PathVariable("id") ID id) {
+        super.delete(id);
+    }
 
     @Secured({"IM_USER_ADMIN"})
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles")
@@ -93,55 +137,6 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
             this.service.removeGroupFromUser(login, grp.getName());
         }
 
-    }
-
-    /**
-     * Override this methods in order to secure it *
-     */
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
-    @Override
-    public Iterable<User> findAll() {
-        return super.findAll();
-    }
-
-    /**
-     * Override this methods in order to secure it *
-     */
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
-    @RequestMapping(value = "/findAllPerPage", method = RequestMethod.GET)
-    @Override
-    public Page<User> findPaginated(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                                    @RequestParam(value = "size", required = false, defaultValue = "10") Integer size,
-                                    @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direction,
-                                    @RequestParam(value = "properties", required = false) String properties) {
-        return super.findPaginated(page, size, direction, properties);
-    }
-
-    /**
-     * Override this methods in order to secure it *
-     */
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
-    @Override
-    public User findById(@PathVariable("id") Long id) {
-        return super.findById(id);
-    }
-
-    /**
-     * Override this methods in order to secure it *
-     */
-    @Secured({"IM_USER_ADMIN"})
-    @Override
-    public void delete() {
-        super.delete();
-    }
-
-    /**
-     * Override this methods in order to secure it *
-     */
-    @Secured({"IM_USER_ADMIN"})
-    @Override
-    public void delete(@PathVariable(value = "id") Long id) {
-        super.delete(id);
     }
 
     /**
@@ -202,18 +197,18 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     @Secured({"IS_AUTHENTICATED_FULLY"})
     @RequestMapping(method = RequestMethod.PUT, value = "me")
     @ResponseBody
-    public User updateMe(User user) {
+    public T updateMe(T user) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         UserDetails userDetails = (UserDetails) securityContext.getAuthentication().getPrincipal();
         Assert.notNull(userDetails);
         Assert.isTrue(userDetails.getUsername().equals(user.getLogin()));
-        User retreivedUser = this.service.findByLogin(userDetails.getUsername());
+        T retreivedUser = this.service.findByLogin(userDetails.getUsername());
 
         if (retreivedUser == null) {
             throw new NotFoundException();
         }
 
-        retreivedUser = super.update(retreivedUser.getId(), user);
+        retreivedUser = super.update((ID) retreivedUser.getId(), user);
 
         return retreivedUser;
     }
@@ -221,9 +216,9 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Gets the groups depending of the user
      *
+     * @param login the login of the user to search insides groups
      * @return a list of group, in XML or JSON if the group can be found
      * otherwise HTTP Error 404
-     * @Param login the login of the user to search insides groups
      */
     @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
     @RequestMapping(method = RequestMethod.GET, value = "name/{login}/groups")
@@ -235,8 +230,8 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Puts a group inside the groups lists of a user
      *
-     * @Param login the login of the user for which we should add a group
-     * @Param group the name of the group the be added
+     * @param login the login of the user for which we should add a group
+     * @param group the name of the group the be added
      */
     @Secured({"IM_USER_ADMIN"})
     @RequestMapping(method = RequestMethod.PUT, value = "name/{login}/groups/{group}")
@@ -248,8 +243,8 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Deletes a group from the groups lists of a user
      *
-     * @Param login the login of the user for which we should remove a group
-     * @Param group the name of the group the be removed
+     * @param userLogin the login of the user for which we should remove a group
+     * @param groupName the name of the group the be removed
      */
     @Secured({"IM_USER_ADMIN"})
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{login}/groups/{groups}")
@@ -261,9 +256,9 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Gets the permissions of a user
      *
+     * @param login the login of the user to search insides groups
      * @return a list of permissions, in XML or JSON if the group can be found
      * otherwise HTTP Error 404
-     * @Param login the login of the user to search insides groups
      */
     @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
     @RequestMapping(method = RequestMethod.GET, value = "name/{login}/permissions")
@@ -279,10 +274,10 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Gets the permissions of a user related to an application
      *
+     * @param login       the login of the user to search insides groups
+     * @param application the wanted application
      * @return a list of permissions, in XML or JSON if the group can be found
      * otherwise HTTP Error 404
-     * @Param login the login of the user to search insides groups
-     * @Param application the wanted application
      */
     @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
     @RequestMapping(method = RequestMethod.GET, value = "name/{login}/permissions/{application}")
@@ -298,8 +293,8 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Add a permission to a user
      *
-     * @Param login the login of the user in which we should add a group
-     * @Param permission the permission to be added
+     * @param login      the login of the user in which we should add a group
+     * @param permission the permission to be added
      */
     @Secured({"IM_USER_ADMIN"})
     @RequestMapping(method = RequestMethod.PUT, value = "name/{login}/permissions/{permission}")
@@ -311,8 +306,8 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
     /**
      * Remove a permisssion for one User
      *
-     * @Param login the login of the user in which we should remove a permission
-     * @Param permisssion the permisssion to be removed
+     * @param login      the login of the user in which we should remove a permission
+     * @param permission the permisssion to be removed
      */
     @Secured({"IM_USER_ADMIN"})
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{login}/permissions/{permission}")
@@ -356,8 +351,6 @@ public class UserController extends SecuredServiceBasedRestController<User, Long
      *
      * @param username The user name.
      * @param password The password of the user.
-     * @return True of false whether the user provided a correct identity or
-     * not.
      */
     @RequestMapping(method = RequestMethod.POST, value = "checkuser")
     @ResponseStatus(HttpStatus.NO_CONTENT)

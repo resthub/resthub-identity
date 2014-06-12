@@ -29,6 +29,11 @@
 	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 
     <!--
+    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController" />
+    <bean id="roleController" class="org.resthub.identity.core.controller.impl.DefaultRoleController" />
+    <bean id="userController" class="org.resthub.identity.core.controller.impl.DefaultUserController" />
+-->
+    <!--
     <bean id="userService" class="org.resthub.identity.core.service.AbstractUserService" />
     <bean id="roleService" class="org.resthub.identity.core.service.AbstractRoleService" />
     <bean id="groupService" class="org.resthub.identity.core.service.AbstractGroupService" />

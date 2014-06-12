@@ -1,4 +1,4 @@
-package org.resthub.identity.webapp.controller;
+package org.resthub.identity.core.controller.impl;
 
 
 import org.fest.assertions.api.Assertions;
@@ -15,9 +15,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class UserControllerWebTest extends AbstractWebTest {
+public class DefaultUserControllerWebTest extends AbstractWebTest {
 
-    public UserControllerWebTest() {
+    public DefaultUserControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
         this.useOpenEntityManagerInViewFilter = true;
         
