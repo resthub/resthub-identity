@@ -3,7 +3,9 @@ package org.resthub.identity.core.controller.impl;
 import org.resthub.identity.core.controller.AbstractGroupController;
 import org.resthub.identity.core.repository.AbstractGroupRepository;
 import org.resthub.identity.core.service.AbstractGroupService;
+import org.resthub.identity.core.service.impl.DefaultGroupService;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.service.GroupService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller(value = "groupController")
 @RequestMapping("/api/group")
-public class DefaultGroupController extends AbstractGroupController<Group, Long, AbstractGroupService<Group, Long, AbstractGroupRepository<Group, Long>>> {
+public class DefaultGroupController extends AbstractGroupController<Group, Long, GroupService<Group, Long>> {
 
 }

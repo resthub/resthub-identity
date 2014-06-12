@@ -5,6 +5,7 @@ import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
+import org.springframework.context.ApplicationEventPublisherAware;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Default implementation of a Group Service (can be override by creating a bean with the same name after this one)<br/>
  */
-public interface GroupService<T extends Group, ID extends Serializable> extends CrudService<T, ID> {
+public interface GroupService<T extends Group, ID extends Serializable> extends CrudService<T, ID>, ApplicationEventPublisherAware {
     /**
      * Create a new group.
      *

@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Default implementation of a Group Service (can be override by creating a bean with the same name after this one)
  */
-public abstract class AbstractGroupService<T extends Group, ID extends Serializable, R extends AbstractGroupRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements GroupService<T, ID>, ApplicationEventPublisherAware {
+public abstract class AbstractGroupService<T extends Group, ID extends Serializable, R extends AbstractGroupRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements GroupService<T, ID> {
     /**
      * The userRepository<br/>
      * This class need it in order to be able to deal with users

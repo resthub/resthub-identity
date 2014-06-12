@@ -1,9 +1,9 @@
 package org.resthub.identity.core.service.impl;
 
-import org.resthub.identity.core.repository.AbstractPermissionRepository;
 import org.resthub.identity.core.repository.impl.DefaultPermissionRepository;
 import org.resthub.identity.core.service.AbstractPermissionService;
 import org.resthub.identity.model.Permission;
+import org.resthub.identity.service.PermissionService;
 
 import javax.inject.Named;
 
@@ -11,5 +11,5 @@ import javax.inject.Named;
  * Created by Bastien on 11/06/14.
  */
 @Named("permissionService")
-public class DefaultPermissionService extends AbstractPermissionService<Permission, Long, AbstractPermissionRepository<Permission, Long>> {
+public class DefaultPermissionService extends AbstractPermissionService<Permission, Long, DefaultPermissionRepository> implements PermissionService<Permission, Long> {
 }

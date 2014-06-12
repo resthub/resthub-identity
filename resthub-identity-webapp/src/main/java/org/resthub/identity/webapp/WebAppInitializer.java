@@ -18,6 +18,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
     	appContext.getEnvironment().setActiveProfiles("resthub-jpa", "resthub-web-server","resthub-client-logging");
         String[] locations = { "classpath*:resthubContext.xml", "classpath*:applicationContext.xml" };
         appContext.setConfigLocations(locations);
+        appContext.setAllowBeanDefinitionOverriding(true);
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(appContext));
         dispatcher.setLoadOnStartup(1);

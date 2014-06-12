@@ -3,6 +3,7 @@ package org.resthub.identity.service;
 import org.resthub.common.service.CrudService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.*;
+import org.springframework.context.ApplicationEventPublisherAware;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * <p>
  * It is a bean whose name is userService
  */
-public interface UserService<T extends User, ID extends Serializable> extends CrudService<T, ID> {
+public interface UserService<T extends User, ID extends Serializable> extends CrudService<T, ID>, ApplicationEventPublisherAware {
     /**
      * Create a new user.
      *

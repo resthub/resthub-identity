@@ -12,16 +12,16 @@
                             http://www.springframework.org/schema/util
                             http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<context:annotation-config />
-	<context:component-scan base-package="org.resthub.identity.core" />
+    <context:annotation-config/>
+    <context:component-scan base-package="org.resthub.identity.core"/>
 
-    <jpa:repositories base-package="org.resthub.identity.core.repository" />
+    <jpa:repositories base-package="org.resthub.identity.core.repository"/>
 
-	<context:property-placeholder location="classpath*:identity.properties"
-		properties-ref="identityProperties" ignore-resource-not-found="true"
-		ignore-unresolvable="true" />
+    <context:property-placeholder location="classpath*:identity.properties"
+                                  properties-ref="identityProperties" ignore-resource-not-found="true"
+                                  ignore-unresolvable="true"/>
 
-	<util:properties id="identityProperties">
+    <util:properties id="identityProperties">
         <prop key="roles.prefix">ROLE_</prop>
         <prop key="roles.crud.create">CREATE_</prop>
         <prop key="roles.crud.read">READ_</prop>
@@ -30,19 +30,18 @@
         <prop key="roles.application.user">USER</prop>
         <prop key="roles.application.group">GROUP</prop>
         <prop key="roles.application.role">ROLE</prop>
-	</util:properties>
+    </util:properties>
 
-	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
 
 
-    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController" primary="false" />
-    <!--<bean id="roleController" class="org.resthub.identity.core.controller.impl.DefaultRoleController" />
-    <bean id="userController" class="org.resthub.identity.core.controller.impl.DefaultUserController" />
+    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController" primary="false"/>
+    <bean id="roleController" class="org.resthub.identity.core.controller.impl.DefaultRoleController" primary="false"/>
+    <bean id="userController" class="org.resthub.identity.core.controller.impl.DefaultUserController" primary="false"/>
 
-    <bean id="userService" class="org.resthub.identity.core.service.impl.DefaultUserService" />
-    <bean id="roleService" class="org.resthub.identity.core.service.impl.DefaultRoleService" />
-    -->
-    <bean id="groupService" class="org.resthub.identity.core.service.impl.DefaultGroupService" primary="false" />
-    <!--<bean id="applicationService" class="org.resthub.identity.core.service.impl.DefaultApplicationService" />
-    <bean id="permissionService" class="org.resthub.identity.core.service.impl.DefaultPermissionService" />-->
+    <bean id="userService" class="org.resthub.identity.core.service.impl.DefaultUserService" primary="false"/>
+    <bean id="roleService" class="org.resthub.identity.core.service.impl.DefaultRoleService" primary="false"/>
+    <bean id="groupService" class="org.resthub.identity.core.service.impl.DefaultGroupService" primary="false"/>
+    <bean id="applicationService" class="org.resthub.identity.core.service.impl.DefaultApplicationService" primary="false"/>
+    <bean id="permissionService" class="org.resthub.identity.core.service.impl.DefaultPermissionService" primary="false"/>
 </beans>

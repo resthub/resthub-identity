@@ -5,11 +5,12 @@ import org.resthub.identity.core.repository.AbstractRoleRepository;
 import org.resthub.identity.core.service.AbstractRoleService;
 import org.resthub.identity.core.service.impl.DefaultRoleService;
 import org.resthub.identity.model.Role;
+import org.resthub.identity.service.RoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
+@Controller(value = "roleController")
 @RequestMapping("/api/role")
-public class DefaultRoleController extends AbstractRoleController<Role, Long, AbstractRoleService<Role, Long, AbstractRoleRepository<Role, Long>>> {
+public class DefaultRoleController extends AbstractRoleController<Role, Long, RoleService<Role, Long>> {
 
 }

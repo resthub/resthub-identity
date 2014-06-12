@@ -2,6 +2,7 @@ package org.resthub.identity.webapp.service.impl;
 
 import org.resthub.identity.core.service.AbstractGroupService;
 import org.resthub.identity.model.Group;
+import org.resthub.identity.service.GroupService;
 import org.resthub.identity.webapp.repository.GroupRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import javax.inject.Named;
  */
 @Primary
 @Named("groupService")
-public class GroupServiceImpl extends AbstractGroupService<Group, String, GroupRepository> {
+public class GroupServiceImpl extends AbstractGroupService<Group, String, GroupRepository> implements GroupService<Group, String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(GroupServiceImpl.class);
 
     @Inject

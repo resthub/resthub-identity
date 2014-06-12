@@ -1,9 +1,9 @@
 package org.resthub.identity.core.service.impl;
 
-import org.resthub.identity.core.repository.AbstractUserRepository;
 import org.resthub.identity.core.repository.impl.DefaultUserRepository;
 import org.resthub.identity.core.service.AbstractUserService;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.UserService;
 
 import javax.inject.Named;
 
@@ -11,5 +11,5 @@ import javax.inject.Named;
  * Created by Bastien on 11/06/14.
  */
 @Named("userService")
-public class DefaultUserService extends AbstractUserService<User, Long, AbstractUserRepository<User, Long>> {
+public class DefaultUserService extends AbstractUserService<User, Long, DefaultUserRepository> implements UserService<User, Long> {
 }

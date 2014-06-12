@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Default implementation of a User Service (can be override by creating a bean with the same name after this one)
  */
-public abstract class AbstractUserService<T extends User, ID extends Serializable, R extends AbstractUserRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements UserService<T, ID>, ApplicationEventPublisherAware {
+public abstract class AbstractUserService<T extends User, ID extends Serializable, R extends AbstractUserRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements UserService<T, ID> {
     protected AbstractPermissionsOwnerRepository permissionsOwnerRepository;
     protected GroupService groupService;
     protected RoleService roleService;
