@@ -3,6 +3,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                             http://www.springframework.org/schema/context
@@ -10,7 +11,9 @@
                             http://www.springframework.org/schema/data/jpa
                             http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd
                             http://www.springframework.org/schema/util
-                            http://www.springframework.org/schema/util/spring-util.xsd">
+                            http://www.springframework.org/schema/util/spring-util.xsd
+                            http://www.springframework.org/schema/security
+                            http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
     <context:annotation-config/>
     <context:component-scan base-package="org.resthub.identity.core"/>
@@ -32,6 +35,18 @@
         <prop key="roles.application.role">ROLE</prop>
     </util:properties>
 
+    <security:global-method-security secured-annotations="enabled" proxy-target-class="true"/>
+
+    <security:http auto-config="true">
+        <security:intercept-url pattern="/main*" access="ROLE_ADMIN,ROLE_REGULAR_USER"/>
+        <security:form-login login-page="/login" default-target-url="/main"
+                             authentication-failure-url="/loginError"/>
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider ref="identityUserDetailsService" />
+    </security:authentication-manager>
+
     <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
 
 
@@ -42,6 +57,8 @@
     <bean id="userService" class="org.resthub.identity.core.service.impl.DefaultUserService" primary="false"/>
     <bean id="roleService" class="org.resthub.identity.core.service.impl.DefaultRoleService" primary="false"/>
     <bean id="groupService" class="org.resthub.identity.core.service.impl.DefaultGroupService" primary="false"/>
-    <bean id="applicationService" class="org.resthub.identity.core.service.impl.DefaultApplicationService" primary="false"/>
-    <bean id="permissionService" class="org.resthub.identity.core.service.impl.DefaultPermissionService" primary="false"/>
+    <bean id="applicationService" class="org.resthub.identity.core.service.impl.DefaultApplicationService"
+          primary="false"/>
+    <bean id="permissionService" class="org.resthub.identity.core.service.impl.DefaultPermissionService"
+          primary="false"/>
 </beans>

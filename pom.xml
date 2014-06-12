@@ -19,7 +19,7 @@
 
 	<properties>
 		<resthub.spring.stack.version>2.1.6</resthub.spring.stack.version>
-		<spring.security.version>3.1.6.RELEASE</spring.security.version>
+		<spring.security.version>3.2.4.RELEASE</spring.security.version>
 		<elasticsearch.spring.integration.version>0.0.2</elasticsearch.spring.integration.version>
 		<elasticsearch.version>0.20.5</elasticsearch.version>
 		<log4joverself4.version>1.6.6</log4joverself4.version>

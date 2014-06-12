@@ -29,7 +29,8 @@
     <bean id="groupService" class="org.resthub.identity.webapp.service.WebAppGroupServiceImpl" />
     -->
 
-    <bean id="groupController" class="org.resthub.identity.webapp.controller.GroupController" primary="true" />
-    <bean id="userController" class="org.resthub.identity.webapp.controller.UserController" primary="true" />
-    <bean id="groupService" class="org.resthub.identity.webapp.service.impl.GroupServiceImpl" primary="true" />
+    <bean id="groupController" class="org.resthub.identity.webapp.controller.GroupController" />
+    <bean id="userController" class="org.resthub.identity.webapp.controller.UserController" />
+    <bean id="groupService" class="org.resthub.identity.webapp.service.impl.GroupServiceImpl" />
+    <bean id="roleService" class="org.resthub.identity.webapp.service.impl.RoleServiceImpl" />
 </beans>
