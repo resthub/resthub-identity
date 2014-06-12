@@ -11,6 +11,10 @@
         <level value="warn" />
     </logger>
 
+    <logger name="org.resthub.identity.webapp">
+        <level value="info" />
+    </logger>
+
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
         <level value="debug" />
     </logger>

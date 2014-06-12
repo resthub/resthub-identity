@@ -22,22 +22,27 @@
 		ignore-unresolvable="true" />
 
 	<util:properties id="identityProperties">
-		<prop key="entityManagerFactoryRef">entityManagerFactory</prop>
-		<prop key="transactionManagerRef">transactionManager</prop>
+        <prop key="roles.prefix">ROLE_</prop>
+        <prop key="roles.crud.create">CREATE_</prop>
+        <prop key="roles.crud.read">READ_</prop>
+        <prop key="roles.crud.update">UPDATE_</prop>
+        <prop key="roles.crud.delete">DELETE_</prop>
+        <prop key="roles.application.user">USER</prop>
+        <prop key="roles.application.group">GROUP</prop>
+        <prop key="roles.application.role">ROLE</prop>
 	</util:properties>
 
 	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
 
-    <!--
-    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController" />
-    <bean id="roleController" class="org.resthub.identity.core.controller.impl.DefaultRoleController" />
+
+    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController" primary="false" />
+    <!--<bean id="roleController" class="org.resthub.identity.core.controller.impl.DefaultRoleController" />
     <bean id="userController" class="org.resthub.identity.core.controller.impl.DefaultUserController" />
--->
-    <!--
-    <bean id="userService" class="org.resthub.identity.core.service.AbstractUserService" />
-    <bean id="roleService" class="org.resthub.identity.core.service.AbstractRoleService" />
-    <bean id="groupService" class="org.resthub.identity.core.service.AbstractGroupService" />
-    <bean id="applicationService" class="org.resthub.identity.core.service.AbstractApplicationService" />
-    <bean id="permissionService" class="org.resthub.identity.core.service.AbstractPermissionService" />
+
+    <bean id="userService" class="org.resthub.identity.core.service.impl.DefaultUserService" />
+    <bean id="roleService" class="org.resthub.identity.core.service.impl.DefaultRoleService" />
     -->
+    <bean id="groupService" class="org.resthub.identity.core.service.impl.DefaultGroupService" primary="false" />
+    <!--<bean id="applicationService" class="org.resthub.identity.core.service.impl.DefaultApplicationService" />
+    <bean id="permissionService" class="org.resthub.identity.core.service.impl.DefaultPermissionService" />-->
 </beans>

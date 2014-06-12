@@ -5,6 +5,7 @@ import org.resthub.identity.model.Group;
 import org.resthub.identity.webapp.service.impl.GroupServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,9 +15,10 @@ import javax.inject.Named;
 /**
  *
  */
+@Primary
 @Controller
 @RequestMapping("/api/group")
-public class GroupController extends AbstractGroupController<Group, Long, GroupServiceImpl> {
+public class GroupController extends AbstractGroupController<Group, String, GroupServiceImpl> {
     private static final Logger LOGGER = LoggerFactory.getLogger(GroupController.class);
 
     @Inject

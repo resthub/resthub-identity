@@ -1,5 +1,6 @@
 package org.resthub.identity.core.service.impl;
 
+import org.resthub.identity.core.repository.AbstractRoleRepository;
 import org.resthub.identity.core.repository.impl.DefaultRoleRepository;
 import org.resthub.identity.core.service.AbstractRoleService;
 import org.resthub.identity.model.Role;
@@ -10,5 +11,5 @@ import javax.inject.Named;
  * Created by Bastien on 11/06/14.
  */
 @Named("roleService")
-public class DefaultRoleService extends AbstractRoleService<Role, Long, DefaultRoleRepository> {
+public class DefaultRoleService extends AbstractRoleService<Role, Long, AbstractRoleRepository<Role, Long>> {
 }
