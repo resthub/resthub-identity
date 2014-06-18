@@ -28,7 +28,7 @@
 
     <security:http create-session="always" auto-config="true" use-expressions="true" pattern="/**">
         <security:session-management session-fixation-protection="none" />
-        <security:intercept-url pattern="/management.html**" access="authenticated" />
+        <security:intercept-url pattern="/management.html" access="authenticated" />
         <security:intercept-url pattern="/j_spring_security_check" access="permitAll"/>
         <security:intercept-url pattern="/index.html" access="permitAll"/>
         <security:intercept-url pattern="/css/**" access="permitAll"/>

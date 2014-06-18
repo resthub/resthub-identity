@@ -1,8 +1,9 @@
 define([ 'backbone','backbone-queryparams' ], function(Backbone) {
 	var AppRouter = Backbone.Router.extend({
 		routes : {
-			'' : 'home',
+			'' : 'login',
 			'home' : 'home',
+			'login' : 'login',
 			'users' : 'users',
 			'groups' : 'groups',
 			'roles' : 'roles',
@@ -16,8 +17,14 @@ define([ 'backbone','backbone-queryparams' ], function(Backbone) {
 					root : $('#main')
 				});
 			});
-			
 		},
+        login : function() {
+            require([ 'view/login-view'], function(LoginView){
+                new LoginView({
+                    root : $('#main')
+                });
+            });
+        },
 		users : function() {
 			require([ 'model/user', 'view/user/users-view', 'collection/users' ], function(
 					User,UsersView, Users) {
