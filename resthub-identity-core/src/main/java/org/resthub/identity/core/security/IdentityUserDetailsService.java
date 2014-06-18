@@ -87,13 +87,9 @@ public class IdentityUserDetailsService implements UserDetailsService, Applicati
         String password = authentication.getCredentials().toString();
 
         // use the credentials to try to authenticate against the third party system
-        User user = this.userService.authenticateUser(name, password);
+        User user = userService.authenticateUser(name, password);
         if (user != null) {
-            List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
-            for(Permission permission: PermissionsOwnerTools.getInheritedPermission(user)){
-                grantedAuths.add(new SimpleGrantedAuthority(permission.getCode()));
-            }
-            return new UsernamePasswordAuthenticationToken(name, password, grantedAuths);
+            return new UsernamePasswordAuthenticationToken(name, password, new IdentityUserDetailsAdapter(user).getAuthorities());
         } else {
             throw new BadCredentialsException("Unable to auth against third party systems");
         }

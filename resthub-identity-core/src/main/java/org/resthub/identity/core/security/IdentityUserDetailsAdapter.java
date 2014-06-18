@@ -9,6 +9,7 @@ import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class IdentityUserDetailsAdapter implements UserDetails {
@@ -44,7 +45,7 @@ public class IdentityUserDetailsAdapter implements UserDetails {
         // retreival
         grantedAuthorities = new ArrayList<GrantedAuthority>();
         for (Permission permission : PermissionsOwnerTools.getInheritedPermission(user)) {
-            grantedAuthorities.add(new GrantedAuthorityImpl(permission.getCode()));
+            grantedAuthorities.add(new SimpleGrantedAuthority(permission.getCode()));
         }
 
     }

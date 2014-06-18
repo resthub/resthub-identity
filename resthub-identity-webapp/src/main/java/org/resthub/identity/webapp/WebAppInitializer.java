@@ -11,6 +11,8 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import java.util.Set;
+
 public class WebAppInitializer implements WebApplicationInitializer {
 
     @Override
@@ -22,9 +24,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(appContext));
         dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping("/*");
-
+        Set<String> mappingConflicts = dispatcher.addMapping("/*");
+        if (!mappingConflicts.isEmpty()) {
+            throw new IllegalStateException("'dispatcher' cannot be mapped to '/' under Tomcat versions <= 7.0.14");
+        }
         servletContext.addListener(new ContextLoaderListener(appContext));
+
         servletContext.addFilter("springSecurityFilterChain", DelegatingFilterProxy.class).addMappingForUrlPatterns(null, false, "/*");
 
         //Database Console for managing the app's database (TODO : profile)

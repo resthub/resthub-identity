@@ -35,15 +35,9 @@
         <prop key="roles.application.role">ROLE</prop>
     </util:properties>
 
-    <security:global-method-security secured-annotations="enabled" proxy-target-class="true"/>
+    <security:global-method-security proxy-target-class="true" secured-annotations="enabled" />
 
-    <security:http auto-config="true">
-        <security:intercept-url pattern="/main*" access="ROLE_ADMIN,ROLE_REGULAR_USER"/>
-        <security:form-login login-page="/login" default-target-url="/main"
-                             authentication-failure-url="/loginError"/>
-    </security:http>
-
-    <security:authentication-manager>
+    <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider ref="identityUserDetailsService" />
     </security:authentication-manager>
 
