@@ -1,15 +1,13 @@
 package org.resthub.identity.core.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.fest.assertions.api.Assertions;
-import org.resthub.identity.core.tools.PermissionsOwnerTools;
-import org.resthub.identity.model.Application;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.User;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PermissionsOwnerToolsTest {
 
@@ -25,7 +23,7 @@ public class PermissionsOwnerToolsTest {
         lp = PermissionsOwnerTools.getInheritedPermission(u);
 
         // There is no permissions
-        Assertions.assertThat(lp.size()== 0).isTrue();
+        Assertions.assertThat(lp.size() == 0).isTrue();
     }
 
     @Test
@@ -55,7 +53,7 @@ public class PermissionsOwnerToolsTest {
     @Test
     public void testWithPermissionsFromGroup() {
         // Given a new user without permissions nor Groups
-    	Permission p1 = new Permission("permission1");
+        Permission p1 = new Permission("permission1");
         Permission p2 = new Permission("permission2");
 
         User u = new User();
@@ -79,7 +77,7 @@ public class PermissionsOwnerToolsTest {
     @Test
     public void testWithPermissionsFromGroupFromGroup() {
         // Given a new user without permissions nor Groups
-    	Permission p1 = new Permission("permission1");
+        Permission p1 = new Permission("permission1");
         Permission p2 = new Permission("permission2");
         Permission p3 = new Permission("permission3");
 

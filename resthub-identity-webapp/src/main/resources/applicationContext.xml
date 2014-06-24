@@ -1,9 +1,9 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:security="http://www.springframework.org/schema/security"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                             http://www.springframework.org/schema/context
@@ -15,28 +15,29 @@
                             http://www.springframework.org/schema/security
                             http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <context:annotation-config />
-    <context:component-scan base-package="org.resthub.identity.webapp" />
+    <context:annotation-config/>
+    <context:component-scan base-package="org.resthub.identity.webapp"/>
 
-    <jpa:repositories base-package="org.resthub.identity.webapp.repository" />
+    <jpa:repositories base-package="org.resthub.identity.webapp.repository"/>
 
-    <util:properties id="esProp" location="classpath:es.properties" />
+    <util:properties id="esProp" location="classpath:es.properties"/>
 
     <!-- Node for Embedded ES -->
-    <bean id="esNode" class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean" />
+    <bean id="esNode" class="fr.pilato.spring.elasticsearch.ElasticsearchNodeFactoryBean"/>
     <bean id="esClient" class="fr.pilato.spring.elasticsearch.ElasticsearchClientFactoryBean"/>
 
     <security:http create-session="always" auto-config="true" use-expressions="true" pattern="/**">
-        <security:session-management session-fixation-protection="none" />
-        <security:intercept-url pattern="/management.html" access="authenticated" />
+        <security:session-management session-fixation-protection="none"/>
+        <security:intercept-url pattern="/management.html" access="authenticated"/>
         <security:intercept-url pattern="/j_spring_security_check" access="permitAll"/>
         <security:intercept-url pattern="/index.html" access="permitAll"/>
         <security:intercept-url pattern="/css/**" access="permitAll"/>
         <security:intercept-url pattern="/img/**" access="permitAll"/>
         <security:intercept-url pattern="/js/**" access="permitAll"/>
         <security:intercept-url pattern="/template/**" access="permitAll"/>
-        <security:form-login login-page="/index.html#login" default-target-url="/management.html" always-use-default-target="true" />
-        <security:logout logout-success-url="/index.html" />
+        <security:form-login login-page="/index.html#login" default-target-url="/management.html"
+                             always-use-default-target="true"/>
+        <security:logout logout-success-url="/index.html"/>
         <security:access-denied-handler/>
     </security:http>
 
@@ -46,8 +47,8 @@
     <bean id="groupService" class="org.resthub.identity.webapp.service.WebAppGroupServiceImpl" />
     -->
 
-    <bean id="groupController" class="org.resthub.identity.webapp.controller.GroupController" />
-    <bean id="userController" class="org.resthub.identity.webapp.controller.UserController" />
-    <bean id="groupService" class="org.resthub.identity.webapp.service.impl.GroupServiceImpl" />
-    <bean id="roleService" class="org.resthub.identity.webapp.service.impl.RoleServiceImpl" />
+    <bean id="groupController" class="org.resthub.identity.webapp.controller.GroupController"/>
+    <bean id="userController" class="org.resthub.identity.webapp.controller.UserController"/>
+    <bean id="groupService" class="org.resthub.identity.webapp.service.impl.GroupServiceImpl"/>
+    <bean id="roleService" class="org.resthub.identity.webapp.service.impl.RoleServiceImpl"/>
 </beans>

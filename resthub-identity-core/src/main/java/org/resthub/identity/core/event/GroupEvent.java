@@ -5,6 +5,42 @@ import org.springframework.context.ApplicationEvent;
 
 public class GroupEvent extends ApplicationEvent {
 
+    private GroupEventType type;
+
+    ;
+    private Group subGroup;
+    public GroupEvent(GroupEventType type, Group group) {
+        super(group);
+        this.type = type;
+    }
+
+    public GroupEvent(GroupEventType type, Group group, Group subGroup) {
+        super(group);
+        this.type = type;
+        this.subGroup = subGroup;
+
+    }
+
+    public Group getGroup() {
+        return (Group) this.source;
+    }
+
+    public GroupEventType getType() {
+        return type;
+    }
+
+    public void setType(GroupEventType type) {
+        this.type = type;
+    }
+
+    public Group getSubGroup() {
+        return subGroup;
+    }
+
+    public void setSubGroup(Group subGroup) {
+        this.subGroup = subGroup;
+    }
+
     /**
      * Kind of changes notified by this service
      */
@@ -30,40 +66,5 @@ public class GroupEvent extends ApplicationEvent {
          * Group removal from a group. Arguments : 1- removed group. 2- concerned parent group.
          */
         GROUP_REMOVED_FROM_GROUP
-    };
-
-    private GroupEventType type;
-    private Group subGroup;
-
-    public Group getGroup() {
-        return (Group)this.source;
-    }
-
-    public GroupEventType getType() {
-        return type;
-    }
-
-    public void setType(GroupEventType type) {
-        this.type = type;
-    }
-
-    public GroupEvent(GroupEventType type, Group group) {
-        super(group);
-        this.type = type;
-    }
-
-    public Group getSubGroup() {
-        return subGroup;
-    }
-
-    public void setSubGroup(Group subGroup) {
-        this.subGroup = subGroup;
-    }
-
-    public GroupEvent(GroupEventType type, Group group, Group subGroup) {
-        super(group);
-        this.type = type;
-        this.subGroup = subGroup;
-
     }
 }

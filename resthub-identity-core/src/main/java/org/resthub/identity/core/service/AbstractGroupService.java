@@ -5,15 +5,14 @@ import org.resthub.identity.core.event.GroupEvent;
 import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.core.repository.AbstractGroupRepository;
 import org.resthub.identity.core.repository.AbstractUserRepository;
-import org.resthub.identity.service.GroupService;
-import org.resthub.identity.service.RoleService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Permission;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GroupService;
+import org.resthub.identity.service.RoleService;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * Default implementation of a Group Service (can be override by creating a bean with the same name after this one)
  */
-public abstract class AbstractGroupService<T extends Group, ID extends Serializable, R extends AbstractGroupRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements GroupService<T, ID> {
+public abstract class AbstractGroupService<T extends Group, I extends Serializable, R extends AbstractGroupRepository<T, I>> extends CrudServiceImpl<T, I, R> implements GroupService<T, I> {
     /**
      * The userRepository<br/>
      * This class need it in order to be able to deal with users
@@ -175,7 +174,7 @@ public abstract class AbstractGroupService<T extends Group, ID extends Serializa
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(ID id) {
+    public void delete(I id) {
         // Get the actual group
         T group = this.findById(id);
 
@@ -208,7 +207,7 @@ public abstract class AbstractGroupService<T extends Group, ID extends Serializa
     @Transactional(readOnly = false)
     public T update(T group) throws AlreadyExistingEntityException {
         // Check if there is an already existing group with this name with a
-        // different ID
+        // different I
         T existingGroup = this.findByName(group.getName());
         if (existingGroup == null || existingGroup.getId() == group.getId()) {
             group = super.update(group);

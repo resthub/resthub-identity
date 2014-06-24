@@ -8,14 +8,12 @@ import org.springframework.data.repository.query.Param;
 import java.io.Serializable;
 import java.util.List;
 
-public interface AbstractUserRepository<T extends User, ID extends Serializable> extends JpaRepository<T, ID> {
+public interface AbstractUserRepository<T extends User, I extends Serializable> extends JpaRepository<T, I> {
 
     /**
      * Find a list of {@link User} from login
      *
-     * @param login
-     *            login to search for
-     *
+     * @param login login to search for
      * @return the list of found users (empty if not found)
      */
     List<T> findByLogin(String login);

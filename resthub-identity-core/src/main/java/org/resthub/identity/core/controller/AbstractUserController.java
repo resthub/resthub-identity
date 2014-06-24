@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Created by bastien on 03/06/14.
  */
-public abstract class AbstractUserController<T extends User, ID extends Serializable, S extends UserService<T, ID>> extends ServiceBasedRestController<T, ID, S> {
+public abstract class AbstractUserController<T extends User, I extends Serializable, S extends UserService<T, I>> extends ServiceBasedRestController<T, I, S> {
     @Inject
     @Named("userService")
     @Override
@@ -54,7 +54,7 @@ public abstract class AbstractUserController<T extends User, ID extends Serializ
      */
     @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.USER)
     @Override
-    public T update(@PathVariable("id") ID id, @RequestBody T resource) {
+    public T update(@PathVariable("id") I id, @RequestBody T resource) {
         try {
             return super.update(id, resource);
         } catch (AlreadyExistingEntityException e) {
@@ -89,7 +89,7 @@ public abstract class AbstractUserController<T extends User, ID extends Serializ
      */
     @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER)
     @Override
-    public T findById(@PathVariable("id") ID id) {
+    public T findById(@PathVariable("id") I id) {
         return super.findById(id);
     }
 
@@ -107,7 +107,7 @@ public abstract class AbstractUserController<T extends User, ID extends Serializ
      */
     @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.USER)
     @Override
-    public void delete(@PathVariable("id") ID id) {
+    public void delete(@PathVariable("id") I id) {
         super.delete(id);
     }
 
@@ -208,7 +208,7 @@ public abstract class AbstractUserController<T extends User, ID extends Serializ
             throw new NotFoundException();
         }
 
-        retreivedUser = super.update((ID) retreivedUser.getId(), user);
+        retreivedUser = super.update((I) retreivedUser.getId(), user);
 
         return retreivedUser;
     }

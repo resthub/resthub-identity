@@ -11,7 +11,7 @@
     //    module.exports = async;
     //}
     //else {
-        root.async = async;
+    root.async = async;
     //}
 
     async.noConflict = function () {
@@ -77,7 +77,8 @@
     }
 
     async.forEach = function (arr, iterator, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         if (!arr.length) {
             return callback();
         }
@@ -86,7 +87,8 @@
             iterator(x, function (err) {
                 if (err) {
                     callback(err);
-                    callback = function () {};
+                    callback = function () {
+                    };
                 }
                 else {
                     completed += 1;
@@ -99,7 +101,8 @@
     };
 
     async.forEachSeries = function (arr, iterator, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         if (!arr.length) {
             return callback();
         }
@@ -108,7 +111,8 @@
             iterator(arr[completed], function (err) {
                 if (err) {
                     callback(err);
-                    callback = function () {};
+                    callback = function () {
+                    };
                 }
                 else {
                     completed += 1;
@@ -125,7 +129,8 @@
     };
 
     async.forEachLimit = function (arr, limit, iterator, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         if (!arr.length || limit <= 0) {
             return callback();
         }
@@ -133,7 +138,7 @@
         var started = 0;
         var running = 0;
 
-        (function replenish () {
+        (function replenish() {
             if (completed === arr.length) {
                 return callback();
             }
@@ -144,7 +149,8 @@
                 iterator(arr[started - 1], function (err) {
                     if (err) {
                         callback(err);
-                        callback = function () {};
+                        callback = function () {
+                        };
                     }
                     else {
                         completed += 1;
@@ -274,7 +280,8 @@
             iterator(x, function (result) {
                 if (result) {
                     main_callback(x);
-                    main_callback = function () {};
+                    main_callback = function () {
+                    };
                 }
                 else {
                     callback();
@@ -292,7 +299,8 @@
             iterator(x, function (v) {
                 if (v) {
                     main_callback(true);
-                    main_callback = function () {};
+                    main_callback = function () {
+                    };
                 }
                 callback();
             });
@@ -308,7 +316,8 @@
             iterator(x, function (v) {
                 if (!v) {
                     main_callback(false);
-                    main_callback = function () {};
+                    main_callback = function () {
+                    };
                 }
                 callback();
             });
@@ -346,7 +355,8 @@
     };
 
     async.auto = function (tasks, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         var keys = _keys(tasks);
         if (!keys.length) {
             return callback(null);
@@ -375,17 +385,19 @@
         addListener(function () {
             if (_keys(results).length === keys.length) {
                 callback(null, results);
-                callback = function () {};
+                callback = function () {
+                };
             }
         });
 
         _forEach(keys, function (k) {
-            var task = (tasks[k] instanceof Function) ? [tasks[k]]: tasks[k];
+            var task = (tasks[k] instanceof Function) ? [tasks[k]] : tasks[k];
             var taskCallback = function (err) {
                 if (err) {
                     callback(err);
                     // stop subsequent errors hitting callback multiple times
-                    callback = function () {};
+                    callback = function () {
+                    };
                 }
                 else {
                     var args = Array.prototype.slice.call(arguments, 1);
@@ -418,7 +430,8 @@
     };
 
     async.waterfall = function (tasks, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         if (!tasks.length) {
             return callback();
         }
@@ -426,7 +439,8 @@
             return function (err) {
                 if (err) {
                     callback(err);
-                    callback = function () {};
+                    callback = function () {
+                    };
                 }
                 else {
                     var args = Array.prototype.slice.call(arguments, 1);
@@ -447,7 +461,8 @@
     };
 
     async.parallel = function (tasks, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         if (tasks.constructor === Array) {
             async.map(tasks, function (fn, callback) {
                 if (fn) {
@@ -479,7 +494,8 @@
     };
 
     async.series = function (tasks, callback) {
-        callback = callback || function () {};
+        callback = callback || function () {
+        };
         if (tasks.constructor === Array) {
             async.mapSeries(tasks, function (fn, callback) {
                 if (fn) {
@@ -519,7 +535,7 @@
                 return fn.next();
             };
             fn.next = function () {
-                return (index < tasks.length - 1) ? makeCallback(index + 1): null;
+                return (index < tasks.length - 1) ? makeCallback(index + 1) : null;
             };
             return fn;
         };
@@ -586,10 +602,10 @@
             empty: null,
             drain: null,
             push: function (data, callback) {
-                if(data.constructor !== Array) {
+                if (data.constructor !== Array) {
                     data = [data];
                 }
-                _forEach(data, function(task) {
+                _forEach(data, function (task) {
                     q.tasks.push({
                         data: task,
                         callback: typeof callback === 'function' ? callback : null
@@ -603,14 +619,14 @@
             process: function () {
                 if (workers < q.concurrency && q.tasks.length) {
                     var task = q.tasks.shift();
-                    if(q.empty && q.tasks.length == 0) q.empty();
+                    if (q.empty && q.tasks.length == 0) q.empty();
                     workers += 1;
                     worker(task.data, function () {
                         workers -= 1;
                         if (task.callback) {
                             task.callback.apply(task, arguments);
                         }
-                        if(q.drain && q.tasks.length + workers == 0) q.drain();
+                        if (q.drain && q.tasks.length + workers == 0) q.drain();
                         q.process();
                     });
                 }
@@ -648,8 +664,8 @@
     async.log = _console_fn('log');
     async.dir = _console_fn('dir');
     /*async.info = _console_fn('info');
-    async.warn = _console_fn('warn');
-    async.error = _console_fn('error');*/
+     async.warn = _console_fn('warn');
+     async.error = _console_fn('error');*/
 
     async.memoize = function (fn, hasher) {
         var memo = {};
@@ -674,7 +690,7 @@
                     var q = queues[key];
                     delete queues[key];
                     for (var i = 0, l = q.length; i < l; i++) {
-                      q[i].apply(null, arguments);
+                        q[i].apply(null, arguments);
                     }
                 }]));
             }
@@ -684,9 +700,9 @@
     };
 
     async.unmemoize = function (fn) {
-      return function () {
-        return (fn.unmemoized || fn).apply(null, arguments);
-      };
+        return function () {
+            return (fn.unmemoized || fn).apply(null, arguments);
+        };
     };
 
 }());

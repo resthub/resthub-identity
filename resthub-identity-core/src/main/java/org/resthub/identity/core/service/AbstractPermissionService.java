@@ -2,8 +2,8 @@ package org.resthub.identity.core.service;
 
 import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.core.repository.AbstractPermissionRepository;
-import org.resthub.identity.service.PermissionService;
 import org.resthub.identity.model.Permission;
+import org.resthub.identity.service.PermissionService;
 import org.springframework.util.Assert;
 
 import javax.inject.Inject;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * An implementation of a PermissionService.
  */
-public abstract class AbstractPermissionService<T extends Permission, ID extends Serializable, R extends AbstractPermissionRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements PermissionService<T, ID> {
+public abstract class AbstractPermissionService<T extends Permission, I extends Serializable, R extends AbstractPermissionRepository<T, I>> extends CrudServiceImpl<T, I, R> implements PermissionService<T, I> {
 
     @Override
     @Inject
@@ -23,7 +23,7 @@ public abstract class AbstractPermissionService<T extends Permission, ID extends
         super.setRepository(permissionRepository);
     }
 
-    public Permission findByCode(String code) {
+    public T findByCode(String code) {
         Assert.notNull(code, "Permission code must not be null");
         List<T> result = this.repository.findByCode(code);
         int size = result.size();

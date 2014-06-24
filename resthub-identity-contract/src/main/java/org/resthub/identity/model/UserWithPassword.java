@@ -1,8 +1,8 @@
 package org.resthub.identity.model;
 
-import javax.persistence.Column;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Column;
 
 public class UserWithPassword extends User {
 

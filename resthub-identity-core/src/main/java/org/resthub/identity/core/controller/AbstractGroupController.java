@@ -25,21 +25,20 @@ import java.util.List;
 /**
  * Created by bastien on 03/06/14.
  */
-public abstract class AbstractGroupController<T extends Group, ID extends Serializable, S extends GroupService<T, ID>> extends ServiceBasedRestController<T, ID, S> {
+public abstract class AbstractGroupController<T extends Group, I extends Serializable, S extends GroupService<T, I>> extends ServiceBasedRestController<T, I, S> {
+    @Inject
+    @Named("roleService")
+    private RoleService roleService;
+    @Inject
+    @Named("userService")
+    private UserService userService;
+
     @Inject
     @Named("groupService")
     @Override
     public void setService(S service) {
         this.service = service;
     }
-
-    @Inject
-    @Named("roleService")
-    private RoleService roleService;
-
-    @Inject
-    @Named("userService")
-    private UserService userService;
 
     /**
      * Override this methods in order to secure it *
@@ -59,7 +58,7 @@ public abstract class AbstractGroupController<T extends Group, ID extends Serial
      */
     @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.GROUP)
     @Override
-    public T update(@PathVariable("id") ID id, @RequestBody T resource) {
+    public T update(@PathVariable("id") I id, @RequestBody T resource) {
         try {
             return super.update(id, resource);
         } catch (AlreadyExistingEntityException e) {
@@ -94,7 +93,7 @@ public abstract class AbstractGroupController<T extends Group, ID extends Serial
      */
     @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP)
     @Override
-    public T findById(@PathVariable("id") ID id) {
+    public T findById(@PathVariable("id") I id) {
         return super.findById(id);
     }
 
@@ -112,7 +111,7 @@ public abstract class AbstractGroupController<T extends Group, ID extends Serial
      */
     @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP)
     @Override
-    public void delete(@PathVariable("id") ID id) {
+    public void delete(@PathVariable("id") I id) {
         super.delete(id);
     }
 

@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery'], function ($) {
 
     /**
      * @attribute destroyed
@@ -26,12 +26,12 @@ define(['jquery'], function($) {
 
     var oldClean = jQuery.cleanData;
 
-    $.cleanData = function(elems) {
-        for ( var i = 0, elem;
-             (elem = elems[i]) !== undefined; i++ ) {
-                 $(elem).triggerHandler("destroyed");
-                 //$.event.remove( elem, 'destroyed' );
-             }
-             oldClean(elems);
+    $.cleanData = function (elems) {
+        for (var i = 0, elem;
+             (elem = elems[i]) !== undefined; i++) {
+            $(elem).triggerHandler("destroyed");
+            //$.event.remove( elem, 'destroyed' );
+        }
+        oldClean(elems);
     };
 });

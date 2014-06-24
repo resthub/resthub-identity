@@ -15,45 +15,45 @@ import javax.inject.Named;
 @ActiveProfiles("resthub-jpa")
 public class DefaultRoleRepositoryTest extends AbstractTransactionalTest {
 
-	private static final String ROLE_NAME = "TestRole";
-	private static final String NEW_ROLE_NAME = "NewRole";
+    private static final String ROLE_NAME = "TestRole";
+    private static final String NEW_ROLE_NAME = "NewRole";
 
-	@Inject
-	@Named("roleRepository")
-	private AbstractRoleRepository<Role, Long> roleRepository;
-	
-	// Cleanup after each test
+    @Inject
+    @Named("roleRepository")
+    private AbstractRoleRepository<Role, Long> roleRepository;
+
+    // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
         roleRepository.deleteAll();
     }
-    
-	// Cleanup after each test
+
+    // Cleanup after each test
     @AfterMethod
     public void cleanAfter() {
-    	roleRepository.deleteAll();
+        roleRepository.deleteAll();
     }
-    
-	@Test
-	public void testCreate() {
-		Role role = new Role(ROLE_NAME + Math.round(Math.random() * 100));
-		role = roleRepository.save(role);
-		Assertions.assertThat(role).as("Role not created !").isNotNull();
-	}
 
-	@Test
-	public void testUpdate() {
-		// Créer un groupe
-		Role role = new Role(ROLE_NAME + Math.round(Math.random() * 100));
-		role = roleRepository.save(role);
-		Assertions.assertThat(role).as("Role not created !").isNotNull();
-		// Récupérer le groupe créé et le modifier
-		Role role1 = roleRepository.findOne(role.getId());
-		role1.setName(NEW_ROLE_NAME);
-		roleRepository.save(role1);
-		// Récupérer le groupe pour vérifier s'il a bien été modifié
-		Role role2 = roleRepository.findOne(role.getId());
-		Assertions.assertThat(role2.getName()).as("Role not updated!").isEqualTo(NEW_ROLE_NAME);
-	}
-	
+    @Test
+    public void testCreate() {
+        Role role = new Role(ROLE_NAME + Math.round(Math.random() * 100));
+        role = roleRepository.save(role);
+        Assertions.assertThat(role).as("Role not created !").isNotNull();
+    }
+
+    @Test
+    public void testUpdate() {
+        // Créer un groupe
+        Role role = new Role(ROLE_NAME + Math.round(Math.random() * 100));
+        role = roleRepository.save(role);
+        Assertions.assertThat(role).as("Role not created !").isNotNull();
+        // Récupérer le groupe créé et le modifier
+        Role role1 = roleRepository.findOne(role.getId());
+        role1.setName(NEW_ROLE_NAME);
+        roleRepository.save(role1);
+        // Récupérer le groupe pour vérifier s'il a bien été modifié
+        Role role2 = roleRepository.findOne(role.getId());
+        Assertions.assertThat(role2.getName()).as("Role not updated!").isEqualTo(NEW_ROLE_NAME);
+    }
+
 }

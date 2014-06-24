@@ -1,4 +1,4 @@
-define(['backbone-orig', 'underscore'], function(Backbone, _) {
+define(['backbone-orig', 'underscore'], function (Backbone, _) {
 
     var Pubsub = window.Pubsub;
 

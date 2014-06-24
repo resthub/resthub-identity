@@ -14,32 +14,31 @@ import org.testng.annotations.BeforeMethod;
 //import com.ning.http.client.Response;
 
 /**
- * 
  * @author Guillaume Zurbach
  */
 public class DefaultGroupControllerWebTest extends AbstractWebTest {
-	
+
     public DefaultGroupControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
         this.useOpenEntityManagerInViewFilter = true;
     }
-	
-	// Cleanup after each test
+
+    // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-      	this.request("api/user").delete();
-      	this.request("api/group").delete();
+        this.request("api/user").delete();
+        this.request("api/group").delete();
         this.request("api/role").delete();
-     }
-    
-	// Cleanup after each test
+    }
+
+    // Cleanup after each test
     @AfterMethod
     public void cleanAfter() {
         this.request("api/user").delete();
-      	this.request("api/group").delete();
+        this.request("api/group").delete();
         this.request("api/role").delete();
     }
-	
+
     private String generateRandomGroupName() {
         return "GroupName" + Math.round(Math.random() * 10000000);
     }
@@ -56,14 +55,14 @@ public class DefaultGroupControllerWebTest extends AbstractWebTest {
         return r;
     }
 
-//    @Test
+    //    @Test
     public void testShouldGetUsersFromGroup() {
-    	
+
     	/* Given a new group */
         String groupName = "testGroup";
         Group g = new Group();
         g.setName(groupName);
-        
+
         this.request("api/group").jsonPost(g);
         
         /* Given a new user */
@@ -89,17 +88,17 @@ public class DefaultGroupControllerWebTest extends AbstractWebTest {
 
         /* Then the list of users contains our user */
         Assertions.assertThat(usersFromGroup.contains(u.getLogin())).as("The list of users should contain our just added user").isTrue();
-        
+
     }
-    
-//    @Test
+
+    //    @Test
     public void deleteGroupWithRole() {
     	
     	/* Given a new group */
         String groupName = "testGroup";
         Group g = new Group();
         g.setName(groupName);
-        
+
         Response response = this.request("api/group").jsonPost(g);
         g = JsonHelper.deserialize(response.getBody(), Group.class);
         
@@ -116,6 +115,6 @@ public class DefaultGroupControllerWebTest extends AbstractWebTest {
         /* When I get the users of the group */
         this.request("api/group/" + g.getId()).delete();
 
-        
+
     }
 }

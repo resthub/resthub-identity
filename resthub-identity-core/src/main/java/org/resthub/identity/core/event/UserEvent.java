@@ -6,6 +6,41 @@ import org.springframework.context.ApplicationEvent;
 
 public class UserEvent extends ApplicationEvent {
 
+    private UserEventType type;
+
+    ;
+    private Group group;
+    public UserEvent(UserEventType type, User user) {
+        super(user);
+        this.type = type;
+    }
+
+    public UserEvent(UserEventType type, User user, Group group) {
+        super(user);
+        this.type = type;
+        this.group = group;
+    }
+
+    public User getUser() {
+        return (User) this.source;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public UserEventType getType() {
+        return type;
+    }
+
+    public void setType(UserEventType type) {
+        this.type = type;
+    }
+
     /**
      * Kind of changes notified by this service
      */
@@ -34,40 +69,6 @@ public class UserEvent extends ApplicationEvent {
          * group.
          */
         USER_REMOVED_FROM_GROUP
-    };
-
-    private UserEventType type;
-    private Group group;
-
-    public User getUser() {
-        return (User)this.source;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public UserEventType getType() {
-        return type;
-    }
-
-    public void setType(UserEventType type) {
-        this.type = type;
-    }
-
-    public UserEvent(UserEventType type, User user) {
-        super(user);
-        this.type = type;
-    }
-
-    public UserEvent(UserEventType type, User user, Group group) {
-        super(user);
-        this.type = type;
-        this.group = group;
     }
 
 }

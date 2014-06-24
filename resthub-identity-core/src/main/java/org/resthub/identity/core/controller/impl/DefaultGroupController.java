@@ -1,9 +1,6 @@
 package org.resthub.identity.core.controller.impl;
 
 import org.resthub.identity.core.controller.AbstractGroupController;
-import org.resthub.identity.core.repository.AbstractGroupRepository;
-import org.resthub.identity.core.service.AbstractGroupService;
-import org.resthub.identity.core.service.impl.DefaultGroupService;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.service.GroupService;
 import org.springframework.stereotype.Controller;

@@ -1,29 +1,26 @@
 package org.resthub.identity.core.tools;
 
+import org.resthub.identity.model.Group;
+import org.resthub.identity.model.Permission;
+import org.resthub.identity.model.PermissionsOwner;
+import org.resthub.identity.model.Role;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.resthub.identity.model.PermissionsOwner;
-import org.resthub.identity.model.Group;
-import org.resthub.identity.model.Permission;
-import org.resthub.identity.model.Role;
-
 /**
  * An Helper class to deals with permissions
- * 
- * */
+ */
 public class PermissionsOwnerTools {
     /**
      * Allow to get all the permissions of the entity, coming from both direct
      * permissions or inherited permissions; each permission is reported once
      * even if it appears in different groups, roles or direct permssions
-     * 
-     * @param p
-     *            the permissionOwner (User, Groups, ...) for which we are
-     *            requesting permissions
-     * 
+     *
+     * @param p the permissionOwner (User, Groups, ...) for which we are
+     *          requesting permissions
      * @return the List of permissions
-     * */
+     */
     public static List<Permission> getInheritedPermission(PermissionsOwner owner) {
         List<Permission> result = new ArrayList<Permission>();
         List<Permission> tmpPermissions = owner.getPermissions();
@@ -34,8 +31,8 @@ public class PermissionsOwnerTools {
                 }
             }
         }
-        for(Role userRole : owner.getRoles()) {
-        	tmpPermissions = userRole.getPermissions();
+        for (Role userRole : owner.getRoles()) {
+            tmpPermissions = userRole.getPermissions();
             if (tmpPermissions != null) {
                 for (Permission permission : tmpPermissions) {
                     if (!result.contains(permission)) {
@@ -44,7 +41,7 @@ public class PermissionsOwnerTools {
                 }
             }
         }
-        
+
         List<Group> groups = owner.getGroups();
         if (groups != null) {
             for (Group group : groups) {
@@ -58,8 +55,8 @@ public class PermissionsOwnerTools {
                         }
                     }
                 }
-                for(Role groupRole : group.getRoles()) {
-                	tmpPermissions = groupRole.getPermissions();
+                for (Role groupRole : group.getRoles()) {
+                    tmpPermissions = groupRole.getPermissions();
                     if (tmpPermissions != null) {
                         for (Permission permission : tmpPermissions) {
                             if (!result.contains(permission)) {

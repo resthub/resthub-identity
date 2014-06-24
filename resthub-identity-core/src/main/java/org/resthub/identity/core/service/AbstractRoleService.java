@@ -4,14 +4,14 @@ import org.resthub.common.service.CrudServiceImpl;
 import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.core.repository.AbstractPermissionsOwnerRepository;
 import org.resthub.identity.core.repository.AbstractRoleRepository;
-import org.resthub.identity.service.GroupService;
-import org.resthub.identity.service.RoleService;
-import org.resthub.identity.service.UserService;
 import org.resthub.identity.exception.AlreadyExistingEntityException;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.PermissionsOwner;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
+import org.resthub.identity.service.GroupService;
+import org.resthub.identity.service.RoleService;
+import org.resthub.identity.service.UserService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractRoleService<T extends Role, ID extends Serializable, R extends AbstractRoleRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements RoleService<T, ID>, ApplicationEventPublisherAware {
+public abstract class AbstractRoleService<T extends Role, I extends Serializable, R extends AbstractRoleRepository<T, I>> extends CrudServiceImpl<T, I, R> implements RoleService<T, I>, ApplicationEventPublisherAware {
     protected AbstractPermissionsOwnerRepository permissionsOwnerRepository;
     protected UserService userService;
     protected GroupService groupService;
@@ -63,7 +63,7 @@ public abstract class AbstractRoleService<T extends Role, ID extends Serializabl
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(ID id) {
+    public void delete(I id) {
         // Get the actual group
         T role = this.findById(id);
 
@@ -127,7 +127,7 @@ public abstract class AbstractRoleService<T extends Role, ID extends Serializabl
     @Transactional(readOnly = false)
     public T update(T role) throws AlreadyExistingEntityException {
         // Check if there is an already existing role with this name with a
-        // different ID
+        // different I
         T existingRole = this.findByName(role.getName());
         if (existingRole == null || existingRole.getId() == role.getId()) {
             role = super.update(role);

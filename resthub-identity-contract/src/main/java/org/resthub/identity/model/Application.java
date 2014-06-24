@@ -1,12 +1,10 @@
 package org.resthub.identity.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 public class Application implements Serializable {
@@ -54,7 +52,7 @@ public class Application implements Serializable {
         this.id = id;
     }
 
-    @Column(nullable = false, unique=true)
+    @Column(nullable = false, unique = true)
     public String getName() {
         return name;
     }

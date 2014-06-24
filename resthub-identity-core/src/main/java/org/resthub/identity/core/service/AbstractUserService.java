@@ -5,15 +5,14 @@ import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.core.event.UserEvent;
 import org.resthub.identity.core.repository.AbstractPermissionsOwnerRepository;
 import org.resthub.identity.core.repository.AbstractUserRepository;
+import org.resthub.identity.core.tools.PermissionsOwnerTools;
+import org.resthub.identity.exception.AlreadyExistingEntityException;
+import org.resthub.identity.model.*;
 import org.resthub.identity.service.ApplicationService;
 import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.RoleService;
 import org.resthub.identity.service.UserService;
-import org.resthub.identity.core.tools.PermissionsOwnerTools;
-import org.resthub.identity.exception.AlreadyExistingEntityException;
-import org.resthub.identity.model.*;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -28,7 +27,7 @@ import java.util.List;
 /**
  * Default implementation of a User Service (can be override by creating a bean with the same name after this one)
  */
-public abstract class AbstractUserService<T extends User, ID extends Serializable, R extends AbstractUserRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements UserService<T, ID> {
+public abstract class AbstractUserService<T extends User, I extends Serializable, R extends AbstractUserRepository<T, I>> extends CrudServiceImpl<T, I, R> implements UserService<T, I> {
     protected AbstractPermissionsOwnerRepository permissionsOwnerRepository;
     protected GroupService groupService;
     protected RoleService roleService;
@@ -107,8 +106,8 @@ public abstract class AbstractUserService<T extends User, ID extends Serializabl
     @Transactional(readOnly = false)
     public T update(T user) throws AlreadyExistingEntityException {
         // Check if there is an already existing user with this login with a
-        // different ID
-        User existingUser = this.findById((ID) user.getId());
+        // different I
+        User existingUser = this.findById((I) user.getId());
         if (user.getPassword() == null) {
             user.setPassword(existingUser.getPassword());
         } else if (!user.getPassword().equals(existingUser.getPassword())) {
@@ -126,7 +125,7 @@ public abstract class AbstractUserService<T extends User, ID extends Serializabl
      */
     @Override
     @Transactional(readOnly = false)
-    public void delete(ID id) {
+    public void delete(I id) {
         User deleted = findById(id);
         // Overloaded method call
         super.delete(id);

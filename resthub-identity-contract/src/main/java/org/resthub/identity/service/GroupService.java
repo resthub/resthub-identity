@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Default implementation of a Group Service (can be override by creating a bean with the same name after this one)<br/>
  */
-public interface GroupService<T extends Group, ID extends Serializable> extends CrudService<T, ID>, ApplicationEventPublisherAware {
+public interface GroupService<T extends Group, I extends Serializable> extends CrudService<T, I>, ApplicationEventPublisherAware {
     /**
      * Create a new group.
      *

@@ -6,7 +6,7 @@ import org.resthub.identity.model.Application;
 import java.io.Serializable;
 import java.util.List;
 
-public interface ApplicationService<T extends Application, ID extends Serializable> extends CrudService<T, ID> {
+public interface ApplicationService<T extends Application, I extends Serializable> extends CrudService<T, I> {
 
     /**
      * Find the application with its name.

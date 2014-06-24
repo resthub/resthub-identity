@@ -8,29 +8,29 @@
     </appender>
 
     <logger name="org.resthub">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
 
     <logger name="org.resthub.identity.webapp">
-        <level value="info" />
+        <level value="info"/>
     </logger>
 
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
-        <level value="debug" />
+        <level value="debug"/>
     </logger>
 
     <logger name="org.springframework">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
 
     <logger name="org.hibernate">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
     <logger name="org.hibernate.SQL">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
 
     <root level="warn">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

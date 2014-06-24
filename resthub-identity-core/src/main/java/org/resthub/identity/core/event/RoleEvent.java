@@ -7,6 +7,57 @@ import org.springframework.context.ApplicationEvent;
 
 public class RoleEvent extends ApplicationEvent {
 
+    private RoleEventType type;
+
+    ;
+    private User user;
+    private Group group;
+
+    public RoleEvent(RoleEventType type, Role role) {
+        super(role);
+        this.type = type;
+    }
+
+    public RoleEvent(RoleEventType type, Role role, User user) {
+        super(role);
+        this.type = type;
+        this.user = user;
+    }
+
+    public RoleEvent(RoleEventType type, Role role, Group group) {
+        super(role);
+        this.type = type;
+        this.group = group;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Role getRole() {
+        return (Role) this.source;
+    }
+
+    public RoleEventType getType() {
+        return type;
+    }
+
+    public void setType(RoleEventType type) {
+        this.type = type;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     /**
      * Kind of changes notified for role events
      */
@@ -44,56 +95,6 @@ public class RoleEvent extends ApplicationEvent {
          * parent user.
          */
         ROLE_REMOVED_FROM_USER
-    };
-
-    private RoleEventType type;
-    private User user;
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    private Group group;
-
-    public Role getRole() {
-        return (Role)this.source;
-    }
-
-    public RoleEventType getType() {
-        return type;
-    }
-
-    public void setType(RoleEventType type) {
-        this.type = type;
-    }
-
-    public RoleEvent(RoleEventType type, Role role) {
-        super(role);
-        this.type = type;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public RoleEvent(RoleEventType type, Role role, User user) {
-        super(role);
-        this.type = type;
-        this.user = user;
-    }
-
-    public RoleEvent(RoleEventType type, Role role, Group group) {
-        super(role);
-        this.type = type;
-        this.group = group;
     }
 
 }

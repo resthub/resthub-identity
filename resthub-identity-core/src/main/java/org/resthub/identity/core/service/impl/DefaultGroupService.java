@@ -11,5 +11,5 @@ import javax.inject.Named;
  * Created by Bastien on 11/06/14.
  */
 @Named("groupService")
-public class DefaultGroupService extends AbstractGroupService<Group, Long, DefaultGroupRepository> implements GroupService<Group,Long> {
+public class DefaultGroupService extends AbstractGroupService<Group, Long, DefaultGroupRepository> implements GroupService<Group, Long> {
 }

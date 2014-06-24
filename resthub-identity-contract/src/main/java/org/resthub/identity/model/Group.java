@@ -18,21 +18,21 @@ public class Group extends PermissionsOwner {
     private static final long serialVersionUID = -4082240647340997479L;
     /**
      * name of the group
-     * */
+     */
     protected String name = null;
 
     /**
      * Default Constructor
-     * */
+     */
     public Group() {
 
     }
 
     /**
      * getName
-     * 
+     *
      * @return name of the group
-     * */
+     */
     @Column(unique = true)
     @NotNull
     public String getName() {
@@ -41,18 +41,17 @@ public class Group extends PermissionsOwner {
 
     /**
      * setName
-     * 
-     * @param name
-     *            the name to be set for the group
-     * */
+     *
+     * @param name the name to be set for the group
+     */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Display the representation of the group Display the ID and the Name of
+     * Display the representation of the group Display the I and the Name of
      * the Group
-     * */
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

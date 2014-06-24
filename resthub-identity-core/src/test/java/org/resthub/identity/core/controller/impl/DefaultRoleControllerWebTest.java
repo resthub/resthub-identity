@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 
 /**
  * Test class for <tt>RoleController</tt>.
- * 
+ *
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
 public class DefaultRoleControllerWebTest extends AbstractWebTest {
@@ -23,26 +23,26 @@ public class DefaultRoleControllerWebTest extends AbstractWebTest {
         super("resthub-web-server,resthub-jpa");
         this.useOpenEntityManagerInViewFilter = true;
     }
-	
-	// Cleanup after each test
+
+    // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-       	this.request("api/user").delete();
-       	this.request("api/group").delete();
+        this.request("api/user").delete();
+        this.request("api/group").delete();
         this.request("api/role").delete();
     }
-    
-	// Cleanup after each test
+
+    // Cleanup after each test
     @AfterMethod
     public void cleanAfter() {
-   	this.request("api/user").delete();
-     	this.request("api/group").delete();
+        this.request("api/user").delete();
+        this.request("api/group").delete();
         this.request("api/role").delete();
     }
 
     /**
      * Generate a random role name based on a string and a randomized number.
-     * 
+     *
      * @return A unique role name.
      */
     private String generateRandomRoleName() {
@@ -74,22 +74,22 @@ public class DefaultRoleControllerWebTest extends AbstractWebTest {
 
     @Test
     public void shouldGetUsersWithDirectRole() {
-    	// Given some new roles
+        // Given some new roles
         Role r1 = new Role("role1");
         Role r2 = new Role("role2");
-        
+
         Response response = this.request("api/role").jsonPost(r1);
-        r1 = JsonHelper.deserialize(response.getBody(), Role.class); 
-        
+        r1 = JsonHelper.deserialize(response.getBody(), Role.class);
+
         response = this.request("api/role").jsonPost(r2);
         r2 = JsonHelper.deserialize(response.getBody(), Role.class);
-        
+
         // Given some new users
         User u1 = this.createTestUser(1);
         User u2 = this.createTestUser(2);
         User u3 = this.createTestUser(3);
         User u4 = this.createTestUser(4);
-        
+
         response = this.request("api/user").jsonPost(u1);
         u1 = JsonHelper.deserialize(response.getBody(), User.class);
         response = this.request("api/user").jsonPost(u2);
@@ -98,7 +98,7 @@ public class DefaultRoleControllerWebTest extends AbstractWebTest {
         u3 = JsonHelper.deserialize(response.getBody(), User.class);
         response = this.request("api/user").jsonPost(u4);
         u4 = JsonHelper.deserialize(response.getBody(), User.class);
-        
+
         // Given the association of the users with the roles
         // u1 with role1
         this.request("api/user/name/" + u1.getLogin() + "/roles/" + r1.getName()).put(JsonHelper.serialize(u1));
@@ -112,7 +112,7 @@ public class DefaultRoleControllerWebTest extends AbstractWebTest {
         String notExistingRoleUsers = this.request("api/role/inventedRole/users").get().getBody();
         String role1Users = this.request("api/role/role1/users").get().getBody();
         String role2Users = this.request("api/role/role2/users").get().getBody();
-        
+
         // Then the lists should only contain what I asked for
         Assertions.assertThat(notExistingRoleUsers).as("A search with an unknown role shouldn't bring anything").isEqualTo("[ ]");
 

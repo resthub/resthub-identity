@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
-public interface RoleService<T extends Role, ID extends Serializable> extends CrudService<T, ID> {
+public interface RoleService<T extends Role, I extends Serializable> extends CrudService<T, I> {
     /**
      * Find the role with its name.
      *

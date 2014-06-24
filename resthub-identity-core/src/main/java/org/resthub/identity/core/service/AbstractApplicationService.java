@@ -10,7 +10,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class AbstractApplicationService<T extends Application, ID extends Serializable, R extends AbstractApplicationRepository<T, ID>> extends CrudServiceImpl<T, ID, R> implements ApplicationService<T, ID> {
+public abstract class AbstractApplicationService<T extends Application, I extends Serializable, R extends AbstractApplicationRepository<T, I>> extends CrudServiceImpl<T, I, R> implements ApplicationService<T, I> {
     @Inject
     @Named("applicationRepository")
     @Override

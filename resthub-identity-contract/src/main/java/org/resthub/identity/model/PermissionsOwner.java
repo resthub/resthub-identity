@@ -1,22 +1,13 @@
 package org.resthub.identity.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -25,35 +16,33 @@ import com.fasterxml.jackson.annotation.JsonView;
  * permissions. When possible you SHOULD use method form the class and not from
  * the permissions list
  * </p>
- * 
+ * <p>
  * Must be an entity to be references by permissions_owner_permissions and
  * permissions_owner_groups
  */
 @Entity
 @Table(name = "idm_permissions_owner")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class PermissionsOwner implements Serializable  {
+public abstract class PermissionsOwner implements Serializable {
 
     private static final long serialVersionUID = 5506055534017559927L;
-
-    private Long id;
-
     /**
      * the list of permissions
-     * */
+     */
     protected List<Permission> permissions = new ArrayList<Permission>();
-
     /**
      * List of Permissions Owner (Group) in which the Permissions Owner is
-     * */
+     */
     protected List<Group> groups = new ArrayList<Group>();
-
     /**
      * List of roles the permission owner has.
      */
     protected List<Role> roles = new ArrayList<Role>();
+    private Long id;
 
-    /** Default constructor */
+    /**
+     * Default constructor
+     */
     public PermissionsOwner() {
 
     }
@@ -65,10 +54,9 @@ public abstract class PermissionsOwner implements Serializable  {
 
     /**
      * Constructor
-     * 
-     * @param permissions
-     *            list of permission to be assigned to the new Identity
-     * */
+     *
+     * @param permissions list of permission to be assigned to the new Identity
+     */
     public PermissionsOwner(List<Permission> permissions) {
         this.permissions = permissions;
     }
@@ -86,10 +74,10 @@ public abstract class PermissionsOwner implements Serializable  {
 
     /**
      * Retrieve the permissions assigned to the identity
-     * 
+     *
      * @return the permissions list if permissions have been assigned, otherwise
-     *         null
-     * */
+     * null
+     */
     @ManyToMany
     @JoinTable(name = "permissions_owner_permissions")
     @JsonIgnore
@@ -107,7 +95,7 @@ public abstract class PermissionsOwner implements Serializable  {
 
     /**
      * Retrieve the roles assigned to the identity.
-     * 
+     *
      * @return the list of roles assigned to the identity.
      */
     @ManyToMany
@@ -127,15 +115,14 @@ public abstract class PermissionsOwner implements Serializable  {
 
     /**
      * gets the user's Groups
-     * 
+     *
      * @return the list of groups in which the user is. The List could be null
-     *         is the user is in no group
-     * 
+     * is the user is in no group
      */
     @ManyToMany
     @JoinTable(name = "permissions_owner_groups",
-    		joinColumns = @JoinColumn(name = "permissions_owner", referencedColumnName = "id"),
-    		inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "permissions_owner", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
     @JsonIgnore
     public List<Group> getGroups() {
         return groups;
@@ -173,8 +160,11 @@ public abstract class PermissionsOwner implements Serializable  {
         hash = 43 * hash + (this.id == null ? 0 : this.id.hashCode());
         return hash;
     }
-    
-    public static interface IdView{}
-    public static interface ProfileView{}
+
+    public static interface IdView {
+    }
+
+    public static interface ProfileView {
+    }
 
 }

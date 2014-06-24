@@ -15,47 +15,47 @@ import javax.inject.Named;
 @ActiveProfiles("resthub-jpa")
 public class DefaultGroupRepositoryTest extends AbstractTransactionalTest {
 
-	private static final String GROUP_NAME = "TestGroup";
-	private static final String NEW_GROUP_NAME = "NewGroup";
+    private static final String GROUP_NAME = "TestGroup";
+    private static final String NEW_GROUP_NAME = "NewGroup";
 
-	@Inject
-	@Named("groupRepository")
-	private AbstractGroupRepository<Group, Long> groupRepository;
+    @Inject
+    @Named("groupRepository")
+    private AbstractGroupRepository<Group, Long> groupRepository;
 
-	// Cleanup after each test
+    // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-    	groupRepository.deleteAll();
+        groupRepository.deleteAll();
     }
-    
-	// Cleanup after each test
+
+    // Cleanup after each test
     @AfterMethod
     public void cleanAfter() {
-    	groupRepository.deleteAll();
+        groupRepository.deleteAll();
     }
-    
-	@Test
-	public void testCreate() {
-		Group group = new Group();
-		group.setName(GROUP_NAME + Math.round(Math.random() * 100));
-		group = groupRepository.save(group);
-		Assertions.assertThat(group).as("Group not created !").isNotNull();
-	}
 
-	@Test
-	public void testUpdate() {
-		// Créer un groupe
-		Group group = new Group();
-		group.setName(GROUP_NAME + Math.round(Math.random() * 100));
-		group = groupRepository.save(group);
-		Assertions.assertThat(group).as("Group not created !").isNotNull();
-		// Récupérer le groupe créé et le modifier
-		Group group1 = groupRepository.findOne(group.getId());
-		group1.setName(NEW_GROUP_NAME);
-		groupRepository.save(group1);
-		// Récupérer le groupe pour vérifier s'il a bien été modifié
-		Group group2 = groupRepository.findOne(group.getId());
-		Assertions.assertThat(group2.getName()).as("Group not updated!").isEqualTo(NEW_GROUP_NAME);
-	}
+    @Test
+    public void testCreate() {
+        Group group = new Group();
+        group.setName(GROUP_NAME + Math.round(Math.random() * 100));
+        group = groupRepository.save(group);
+        Assertions.assertThat(group).as("Group not created !").isNotNull();
+    }
+
+    @Test
+    public void testUpdate() {
+        // Créer un groupe
+        Group group = new Group();
+        group.setName(GROUP_NAME + Math.round(Math.random() * 100));
+        group = groupRepository.save(group);
+        Assertions.assertThat(group).as("Group not created !").isNotNull();
+        // Récupérer le groupe créé et le modifier
+        Group group1 = groupRepository.findOne(group.getId());
+        group1.setName(NEW_GROUP_NAME);
+        groupRepository.save(group1);
+        // Récupérer le groupe pour vérifier s'il a bien été modifié
+        Group group2 = groupRepository.findOne(group.getId());
+        Assertions.assertThat(group2.getName()).as("Group not updated!").isEqualTo(NEW_GROUP_NAME);
+    }
 
 }

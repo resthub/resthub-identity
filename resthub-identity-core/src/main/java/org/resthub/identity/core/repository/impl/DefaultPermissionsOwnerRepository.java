@@ -7,7 +7,7 @@ import javax.inject.Named;
 
 /**
  * Repository for generic operations on AbstractPermissionsOwner entities.
- * 
+ *
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
 @Named("permissionsOwnerRepository")

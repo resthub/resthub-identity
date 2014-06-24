@@ -1,9 +1,9 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:security="http://www.springframework.org/schema/security"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                             http://www.springframework.org/schema/context
@@ -35,16 +35,17 @@
         <prop key="roles.application.role">ROLE</prop>
     </util:properties>
 
-    <security:global-method-security proxy-target-class="true" secured-annotations="enabled" />
+    <security:global-method-security proxy-target-class="true" secured-annotations="enabled"/>
 
     <security:authentication-manager alias="authenticationManager">
-        <security:authentication-provider ref="identityUserDetailsService" />
+        <security:authentication-provider ref="identityUserDetailsService"/>
     </security:authentication-manager>
 
     <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
 
 
-    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController" primary="false"/>
+    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController"
+          primary="false"/>
     <bean id="roleController" class="org.resthub.identity.core.controller.impl.DefaultRoleController" primary="false"/>
     <bean id="userController" class="org.resthub.identity.core.controller.impl.DefaultUserController" primary="false"/>
 

@@ -20,22 +20,22 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
     public DefaultUserControllerWebTest() {
         super("resthub-web-server,resthub-jpa");
         this.useOpenEntityManagerInViewFilter = true;
-        
+
     }
-    
+
     // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-       	this.request("api/user").delete();
-       	this.request("api/group").delete();
+        this.request("api/user").delete();
+        this.request("api/group").delete();
         this.request("api/role").delete();
     }
-    
-	// Cleanup after each test
+
+    // Cleanup after each test
     @AfterMethod
     public void tearDown() {
-      	this.request("api/user").delete();
-       	this.request("api/group").delete();
+        this.request("api/user").delete();
+        this.request("api/group").delete();
         this.request("api/role").delete();
     }
 
@@ -51,7 +51,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         u.setPassword(userPassword);
         u.setFirstName("Test");
         u.setLastName("Test");
-        u.setEmail(userLogin+"@test.com");
+        u.setEmail(userLogin + "@test.com");
         return u;
     }
 
@@ -76,14 +76,14 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         response = this.request("api/user/name/" + u.getLogin() + "/roles/" + r.getName()).jsonPut(u);
 
         // Then I get the user with this role
-        String userWithRole = this.request("api/user/name/" + u.getLogin()+"/roles").get().getBody();
+        String userWithRole = this.request("api/user/name/" + u.getLogin() + "/roles").get().getBody();
         Assertions.assertThat(userWithRole.contains(r.getName())).as("The user should contain the role").isTrue();
     }
 
     @Test
     public void shouldRemoveRoleFromUser() {
         // Given a new role
-    	Role r = new Role("Role" + Math.round(Math.random() * 100000));
+        Role r = new Role("Role" + Math.round(Math.random() * 100000));
         Response response = this.request("api/role").jsonPost(r);
         r = JsonHelper.deserialize(response.getBody(), Role.class);
 
@@ -91,7 +91,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         User u = this.createTestResource();
         response = this.request("api/user").jsonPost(u);
         u = JsonHelper.deserialize(response.getBody(), User.class);
-        
+
         this.request("api/user/name/" + u.getLogin() + "/roles/" + r.getName()).jsonPut(u);
         this.request("api/user/name/" + u.getLogin() + "/roles/" + r.getName()).delete();
 
@@ -109,7 +109,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         r1 = JsonHelper.deserialize(response.getBody(), Role.class);
         response = this.request("api/role").jsonPost(r2);
         r2 = JsonHelper.deserialize(response.getBody(), Role.class);
-        
+
         // Given some new users
         User u1 = this.createTestResource();
         User u2 = this.createTestResource();
@@ -123,7 +123,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         u3 = JsonHelper.deserialize(response.getBody(), User.class);
         response = this.request("api/user").jsonPost(u4);
         u4 = JsonHelper.deserialize(response.getBody(), User.class);
-        
+
         // Given the association of the users with the roles
         // u1 with role1
         this.request("api/user/name/" + u1.getLogin() + "/roles/" + r1.getName()).jsonPut(u1);
@@ -146,7 +146,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         Assertions.assertThat(user4Roles.contains(r1.getName()) && user4Roles.contains(r2.getName())).as("The list of roles for user4 should contain role1 and role2").isTrue();
     }
 
-    @Test(expectedExceptions=ConflictClientException.class)
+    @Test(expectedExceptions = ConflictClientException.class)
     public void cannotCreateTwiceTheSameUser() {
         // Given a new user
         User u = this.createTestResource();
@@ -156,10 +156,10 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         this.request("api/user").jsonPost(u);
     }
 
-    @Test(expectedExceptions=NotFoundClientException.class)
+    @Test(expectedExceptions = NotFoundClientException.class)
     public void shouldManageToCheckUserIdentity() {
         // Given a created user
-    	UserWithPassword u = new UserWithPassword(this.createTestResource());
+        UserWithPassword u = new UserWithPassword(this.createTestResource());
         String password = u.getPassword();
         Response response = this.request("api/user").jsonPost(u);
         User user = JsonHelper.deserialize(response.getBody(), User.class);

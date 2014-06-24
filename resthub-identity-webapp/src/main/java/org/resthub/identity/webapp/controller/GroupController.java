@@ -3,7 +3,6 @@ package org.resthub.identity.webapp.controller;
 import org.resthub.identity.core.controller.AbstractGroupController;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.service.GroupService;
-import org.resthub.identity.webapp.service.impl.GroupServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;

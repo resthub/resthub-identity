@@ -21,5 +21,4 @@ public class UserTestListener implements ApplicationListener<UserEvent> {
     }
 
 
-
 }

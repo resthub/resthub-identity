@@ -2,7 +2,7 @@ define({
     // root is mandatory.
     'root': {
         'menu': {
-        	'home': 'Home',
+            'home': 'Home',
             'roles': {
                 'roles': 'Roles',
                 'affect-group-roles': 'Affect role to group',
@@ -12,19 +12,19 @@ define({
             'groups': 'Groups',
             'console': 'Console',
             'about': 'About'
-    },
-    'home': {
-    	'title': 'Users, groups and roles management',
-        'description': 'This application allow to manage user, group and their roles and permissions.'
-    },
+        },
+        'home': {
+            'title': 'Users, groups and roles management',
+            'description': 'This application allow to manage user, group and their roles and permissions.'
+        },
         'about': {
             'content': 'This application allow to manage user, group and their roles and permissions.'
-    },
-    	'general': {
-    		'delete': 'Delete',
-    		'save': 'Save',
-    		'cancel': 'Cancel',
-    },
+        },
+        'general': {
+            'delete': 'Delete',
+            'save': 'Save',
+            'cancel': 'Cancel',
+        },
         'users': {
             'title': 'Users management',
             'new': 'New user ',
@@ -40,7 +40,7 @@ define({
                 'add': 'Add group to user'
             },
             'roles': {
-            	'title': 'User roles',
+                'title': 'User roles',
                 'name': 'Role name',
                 'add': 'Add role to user'
             }
@@ -56,28 +56,28 @@ define({
                 'add': 'Add group to group'
             },
             'roles': {
-            	'title': 'Group roles',
+                'title': 'Group roles',
                 'name': 'Role name',
                 'add': 'Add role to group'
             }
         },
         'roles': {
-        	'affect-group': {
-        		'roles': {
+            'affect-group': {
+                'roles': {
                     'name': 'Role name',
                     'add': 'Add role to group'
                 },
-                'title' : 'Group roles management'
+                'title': 'Group roles management'
             },
             'affect-user': {
-        		'roles': {
+                'roles': {
                     'name': 'Role name',
                     'add': 'Add role to user'
                 },
             },
-            'title' : 'Role management',
-            'new' :'New role',
-            'name' : 'Role name'
-    }
+            'title': 'Role management',
+            'new': 'New role',
+            'name': 'Role name'
+        }
     }
 });

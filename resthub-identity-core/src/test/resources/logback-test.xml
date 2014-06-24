@@ -8,25 +8,25 @@
     </appender>
 
     <logger name="org.resthub">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
-    
+
     <logger name="fr.pilato">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
 
     <logger name="org.springframework">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
 
     <logger name="org.hibernate">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
     <logger name="org.hibernate.SQL">
-        <level value="warn" />
+        <level value="warn"/>
     </logger>
 
     <root level="info">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

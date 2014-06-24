@@ -5,8 +5,8 @@
  */
 /*jslint regexp: true */
 /*global require: false, XMLHttpRequest: false, ActiveXObject: false,
-  define: false, window: false, process: false, Packages: false,
-  java: false, location: false */
+ define: false, window: false, process: false, Packages: false,
+ java: false, location: false */
 
 define(['module'], function (module) {
     'use strict';
@@ -62,7 +62,8 @@ define(['module'], function (module) {
                     progId = progIds[i];
                     try {
                         xhr = new ActiveXObject(progId);
-                    } catch (e) {}
+                    } catch (e) {
+                    }
 
                     if (xhr) {
                         progIds = [progId];  // so faster next time
@@ -126,8 +127,8 @@ define(['module'], function (module) {
             uHostName = uHostName[0];
 
             return (!uProtocol || uProtocol === protocol) &&
-                   (!uHostName || uHostName.toLowerCase() === hostname.toLowerCase()) &&
-                   ((!uPort && !uHostName) || uPort === port);
+                (!uHostName || uHostName.toLowerCase() === hostname.toLowerCase()) &&
+                ((!uPort && !uHostName) || uPort === port);
         },
 
         finishLoad: function (name, strip, content, onLoad) {
@@ -159,7 +160,7 @@ define(['module'], function (module) {
                 nonStripName = parsed.moduleName + '.' + parsed.ext,
                 url = req.toUrl(nonStripName),
                 useXhr = (masterConfig.useXhr) ||
-                         text.useXhr;
+                    text.useXhr;
 
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
@@ -177,7 +178,7 @@ define(['module'], function (module) {
                 //!strip part to avoid file system issues.
                 req([nonStripName], function (content) {
                     text.finishLoad(parsed.moduleName + '.' + parsed.ext,
-                                    parsed.strip, content, onLoad);
+                        parsed.strip, content, onLoad);
                 });
             }
         },
@@ -186,19 +187,19 @@ define(['module'], function (module) {
             if (buildMap.hasOwnProperty(moduleName)) {
                 var content = text.jsEscape(buildMap[moduleName]);
                 write.asModule(pluginName + "!" + moduleName,
-                               "define(function () { return '" +
-                                   content +
-                               "';});\n");
+                        "define(function () { return '" +
+                        content +
+                        "';});\n");
             }
         },
 
         writeFile: function (pluginName, moduleName, req, write, config) {
             var parsed = text.parseName(moduleName),
                 nonStripName = parsed.moduleName + '.' + parsed.ext,
-                //Use a '.js' file name so that it indicates it is a
-                //script that can be loaded across domains.
+            //Use a '.js' file name so that it indicates it is a
+            //script that can be loaded across domains.
                 fileName = req.toUrl(parsed.moduleName + '.' +
-                                     parsed.ext) + '.js';
+                    parsed.ext) + '.js';
 
             //Leverage own load() method to load plugin value, but only
             //write out values that do not have the strip argument,
@@ -220,9 +221,8 @@ define(['module'], function (module) {
     };
 
     if (masterConfig.env === 'node' || (!masterConfig.env &&
-            typeof process !== "undefined" &&
-            process.versions &&
-            !!process.versions.node)) {
+        typeof process !== "undefined" &&
+        process.versions && !!process.versions.node)) {
         //Using special require.nodeRequire, something added by r.js.
         fs = require.nodeRequire('fs');
 
@@ -235,7 +235,7 @@ define(['module'], function (module) {
             callback(file);
         };
     } else if (masterConfig.env === 'xhr' || (!masterConfig.env &&
-            text.createXhr())) {
+        text.createXhr())) {
         text.get = function (url, callback, errback) {
             var xhr = text.createXhr();
             xhr.open('GET', url, true);
@@ -264,7 +264,7 @@ define(['module'], function (module) {
             xhr.send(null);
         };
     } else if (masterConfig.env === 'rhino' || (!masterConfig.env &&
-            typeof Packages !== 'undefined' && typeof java !== 'undefined')) {
+        typeof Packages !== 'undefined' && typeof java !== 'undefined')) {
         //Why Java, why is this so awkward?
         text.get = function (url, callback) {
             var stringBuffer, line,

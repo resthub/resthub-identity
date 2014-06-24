@@ -1,9 +1,6 @@
 package org.resthub.identity.core.controller.impl;
 
 import org.resthub.identity.core.controller.AbstractRoleController;
-import org.resthub.identity.core.repository.AbstractRoleRepository;
-import org.resthub.identity.core.service.AbstractRoleService;
-import org.resthub.identity.core.service.impl.DefaultRoleService;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.service.RoleService;
 import org.springframework.stereotype.Controller;
