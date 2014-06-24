@@ -20,13 +20,14 @@ import javax.inject.Named;
 public class WebAppGroupServiceImpl implements ApplicationListener<GroupEvent> {
 
     @Autowired
-    Client client;
-    private
+    private Client client;
+
     @Value("#{esProp['index.name']}")
-    String indexName;
-    private
+
+    private String indexName;
     @Value("#{esProp['index.group.type']}")
-    String indexType;
+
+    private String indexType;
     /**
      * Injection of elasticsearch indexer;
      */

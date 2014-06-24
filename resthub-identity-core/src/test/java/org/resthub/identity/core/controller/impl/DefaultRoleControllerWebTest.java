@@ -2,14 +2,28 @@ package org.resthub.identity.core.controller.impl;
 
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.security.IdentityRoles;
+import org.resthub.identity.core.security.IdentityUserDetailsService;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.test.AbstractWebTest;
 import org.resthub.web.JsonHelper;
 import org.resthub.web.Response;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,7 +34,7 @@ import org.testng.annotations.Test;
 public class DefaultRoleControllerWebTest extends AbstractWebTest {
 
     public DefaultRoleControllerWebTest() {
-        super("resthub-web-server,resthub-jpa");
+        super("resthub-web-server,resthub-jpa,resthub-pool-hikaricp");
         this.useOpenEntityManagerInViewFilter = true;
     }
 

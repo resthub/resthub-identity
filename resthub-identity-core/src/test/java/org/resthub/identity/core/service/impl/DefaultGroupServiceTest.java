@@ -9,6 +9,7 @@ import org.resthub.identity.service.GroupService;
 import org.resthub.identity.service.UserService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -18,7 +19,8 @@ import javax.inject.Named;
 import java.util.List;
 import java.util.Random;
 
-@ActiveProfiles("resthub-jpa")
+@ContextConfiguration(locations = {"classpath:hikariCPContext.xml"})
+@ActiveProfiles({"resthub-jpa", "resthub-pool-hikaricp"})
 public class DefaultGroupServiceTest extends AbstractTransactionalTest {
 
     @Inject

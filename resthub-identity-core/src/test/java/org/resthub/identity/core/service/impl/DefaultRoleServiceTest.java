@@ -5,6 +5,7 @@ import org.resthub.identity.model.Role;
 import org.resthub.identity.service.RoleService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -13,7 +14,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-@ActiveProfiles("resthub-jpa")
+@ContextConfiguration(locations = {"classpath:hikariCPContext.xml"})
+@ActiveProfiles({"resthub-jpa", "resthub-pool-hikaricp"})
 public class DefaultRoleServiceTest extends AbstractTransactionalTest {
 
     @Inject

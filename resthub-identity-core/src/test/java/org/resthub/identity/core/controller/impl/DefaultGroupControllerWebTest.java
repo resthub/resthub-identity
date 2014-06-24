@@ -2,30 +2,49 @@ package org.resthub.identity.core.controller.impl;
 
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.security.IdentityUserDetailsService;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.test.AbstractWebTest;
 import org.resthub.web.JsonHelper;
 import org.resthub.web.Response;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-//import com.ning.http.client.Response;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * @author Guillaume Zurbach
  */
+//@WithMockUser(roles = {IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE})
 public class DefaultGroupControllerWebTest extends AbstractWebTest {
-
     public DefaultGroupControllerWebTest() {
-        super("resthub-web-server,resthub-jpa");
+        super("resthub-web-server,resthub-jpa,resthub-pool-hikaricp");
         this.useOpenEntityManagerInViewFilter = true;
     }
+
+    static ApplicationContext applicationContext = null;
+    static IdentityUserDetailsService userDetailsService = null;
 
     // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
+        UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_INVALID"));
+        Authentication authToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), authorities);
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+
         this.request("api/user").delete();
         this.request("api/group").delete();
         this.request("api/role").delete();
@@ -93,7 +112,7 @@ public class DefaultGroupControllerWebTest extends AbstractWebTest {
 
     //    @Test
     public void deleteGroupWithRole() {
-    	
+
     	/* Given a new group */
         String groupName = "testGroup";
         Group g = new Group();

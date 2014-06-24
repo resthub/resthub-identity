@@ -18,13 +18,11 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
-            <version>${log4joverself4.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.resthub</groupId>
             <artifactId>resthub-web-server</artifactId>
-            <version>${resthub.spring.stack.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>
@@ -40,12 +38,10 @@
         <dependency>
             <groupId>org.resthub</groupId>
             <artifactId>resthub-web-common</artifactId>
-            <version>${resthub.spring.stack.version}</version>
         </dependency>
         <dependency>
             <groupId>org.resthub</groupId>
             <artifactId>resthub-jpa</artifactId>
-            <version>${resthub.spring.stack.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>
@@ -60,7 +56,6 @@
         <dependency>
             <groupId>org.resthub</groupId>
             <artifactId>resthub-test</artifactId>
-            <version>${resthub.spring.stack.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -5,6 +5,7 @@ import org.resthub.identity.core.repository.AbstractGroupRepository;
 import org.resthub.identity.model.*;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -15,7 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@ActiveProfiles("resthub-jpa")
+@ContextConfiguration(locations = {"classpath:hikariCPContext.xml"})
+@ActiveProfiles({"resthub-jpa", "resthub-pool-hikaricp"})
 public class DefaultUserRepositoryTest extends AbstractTransactionalTest {
 
     private static final String GROUP_NAME = "TestGroup";

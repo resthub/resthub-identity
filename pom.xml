@@ -20,13 +20,14 @@
     </description>
 
     <properties>
-        <resthub.spring.stack.version>2.1.6</resthub.spring.stack.version>
-        <spring.security.version>3.2.4.RELEASE</spring.security.version>
+        <resthub.spring.stack.version>2.2.0-SNAPSHOT</resthub.spring.stack.version>
+        <spring.security.version>4.0.0.M1</spring.security.version>
         <elasticsearch.spring.integration.version>0.0.2</elasticsearch.spring.integration.version>
         <elasticsearch.version>0.20.5</elasticsearch.version>
         <log4joverself4.version>1.6.6</log4joverself4.version>
         <jetty.version>8.1.3.v20120416</jetty.version>
         <jetty.port>8080</jetty.port>
+        <hikaricp.version>1.2.9</hikaricp.version>
     </properties>
 
     <modules>
@@ -34,6 +35,133 @@
         <module>resthub-identity-core</module>
         <module>resthub-identity-webapp</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- RESThub dependencies -->
+            <dependency>
+                <groupId>org.resthub</groupId>
+                <artifactId>resthub-identity-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.resthub</groupId>
+                <artifactId>resthub-identity-contract</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.resthub</groupId>
+                <artifactId>resthub-test</artifactId>
+                <version>${resthub.spring.stack.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.resthub</groupId>
+                <artifactId>resthub-web-server</artifactId>
+                <version>${resthub.spring.stack.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.resthub</groupId>
+                <artifactId>resthub-web-common</artifactId>
+                <version>${resthub.spring.stack.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.resthub</groupId>
+                <artifactId>resthub-jpa</artifactId>
+                <version>${resthub.spring.stack.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Servlet dependencies -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <scope>provided</scope>
+                <version>3.0.1</version>
+            </dependency>
+
+            <!-- Elastic dependencies -->
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.pilato.spring</groupId>
+                <artifactId>spring-elasticsearch</artifactId>
+                <version>${elasticsearch.spring.integration.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Spring security dependencies -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-test</artifactId>
+                <version>${spring.security.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Logging dependencies -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>${log4joverself4.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikaricp.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -68,7 +196,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
             </plugin>
-
         </plugins>
 
         <pluginManagement>
@@ -77,8 +204,7 @@
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>jetty-maven-plugin</artifactId>
                     <version>${jetty.version}</version>
-                    <configuration><!-- We use non NIO connector in order to avoid read
-							only static files under windows -->
+                    <configuration><!-- We use non NIO connector in order to avoid read only static files under windows -->
                         <connectors>
                             <connector implementation="org.eclipse.jetty.server.bio.SocketConnector">
                                 <port>${jetty.port}</port>
@@ -94,4 +220,14 @@
         </pluginManagement>
     </build>
 
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
