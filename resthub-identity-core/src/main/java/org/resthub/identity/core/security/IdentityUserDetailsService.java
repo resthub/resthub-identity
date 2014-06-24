@@ -3,7 +3,7 @@ package org.resthub.identity.core.security;
 import org.resthub.identity.core.event.RoleEvent;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
-import org.resthub.identity.service.UserService;
+import org.resthub.identity.core.service.UserService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;

@@ -18,7 +18,7 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.resthub.identity.core"/>
 
-    <jpa:repositories base-package="org.resthub.identity.core.repository.impl"/>
+    <jpa:repositories base-package="org.resthub.identity.core.repository.defaults"/>
 
     <context:property-placeholder location="classpath*:identity.properties"
                                   properties-ref="identityProperties" ignore-resource-not-found="true"
@@ -42,14 +42,4 @@
     </security:authentication-manager>
 
     <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
-
-    <bean id="groupController" class="org.resthub.identity.core.controller.impl.DefaultGroupController" primary="false"/>
-    <bean id="roleController" class="org.resthub.identity.core.controller.impl.DefaultRoleController" primary="false"/>
-    <bean id="userController" class="org.resthub.identity.core.controller.impl.DefaultUserController" primary="false"/>
-
-    <bean id="userService" class="org.resthub.identity.core.service.impl.DefaultUserService" primary="false"/>
-    <bean id="roleService" class="org.resthub.identity.core.service.impl.DefaultRoleService" primary="false"/>
-    <bean id="groupService" class="org.resthub.identity.core.service.impl.DefaultGroupService" primary="false"/>
-    <bean id="applicationService" class="org.resthub.identity.core.service.impl.DefaultApplicationService" primary="false"/>
-    <bean id="permissionService" class="org.resthub.identity.core.service.impl.DefaultPermissionService" primary="false"/>
 </beans>

@@ -2,7 +2,7 @@ package org.resthub.identity.webapp.service;
 
 import org.elasticsearch.client.Client;
 import org.resthub.identity.core.event.RoleEvent;
-import org.resthub.identity.core.service.AbstractRoleService;
+import org.resthub.identity.core.service.impl.RoleServiceImpl;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.webapp.elasticsearch.Indexer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import javax.inject.Named;
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
 @Named("webAppRoleService")
-public class WebAppRoleServiceImpl extends AbstractRoleService implements ApplicationListener<RoleEvent> {
+public class WebAppRoleServiceImpl extends RoleServiceImpl implements ApplicationListener<RoleEvent> {
 
     @Autowired
     Client client;

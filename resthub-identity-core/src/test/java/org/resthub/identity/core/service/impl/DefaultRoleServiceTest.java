@@ -2,7 +2,7 @@ package org.resthub.identity.core.service.impl;
 
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.model.Role;
-import org.resthub.identity.service.RoleService;
+import org.resthub.identity.core.service.RoleService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;

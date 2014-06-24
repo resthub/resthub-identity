@@ -40,15 +40,4 @@
         <security:logout logout-success-url="/index.html"/>
         <security:access-denied-handler/>
     </security:http>
-
-    <!--
-    <bean id="userService" class="org.resthub.identity.webapp.service.WebAppUserServiceImpl" />
-    <bean id="roleService" class="org.resthub.identity.webapp.service.WebAppRoleServiceImpl" />
-    <bean id="groupService" class="org.resthub.identity.webapp.service.WebAppGroupServiceImpl" />
-    -->
-
-    <bean id="groupController" class="org.resthub.identity.webapp.controller.GroupController"/>
-    <bean id="userController" class="org.resthub.identity.webapp.controller.UserController"/>
-    <bean id="groupService" class="org.resthub.identity.webapp.service.impl.GroupServiceImpl"/>
-    <bean id="roleService" class="org.resthub.identity.webapp.service.impl.RoleServiceImpl"/>
 </beans>
