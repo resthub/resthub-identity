@@ -31,10 +31,11 @@ import java.util.List;
  *
  * @author "Nicolas Morel <nicolas.morel@atosorigin.com>"
  */
+//@WithMockUser(roles = {IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE})
 public class DefaultRoleControllerWebTest extends AbstractWebTest {
 
     public DefaultRoleControllerWebTest() {
-        super("resthub-web-server,resthub-jpa,resthub-pool-hikaricp");
+        super("resthub-web-server,resthub-jpa,resthub-pool-bonecp,resthub-identity-role,resthub-identity-group,resthub-identity-user");
         this.useOpenEntityManagerInViewFilter = true;
     }
 

@@ -14,8 +14,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-@ContextConfiguration(locations = {"classpath:hikariCPContext.xml"})
-@ActiveProfiles({"resthub-jpa", "resthub-pool-hikaricp"})
+@ContextConfiguration(locations = {"classpath:boneCPContext.xml"})
+@ActiveProfiles({"resthub-jpa", "resthub-pool-bonecp", "resthub-identity-role", "resthub-identity-group", "resthub-identity-user"})
 public class DefaultPermissionServiceTest extends AbstractTransactionalTest {
 
     @Inject

@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@ContextConfiguration(locations = {"classpath:hikariCPContext.xml"})
-@ActiveProfiles({"resthub-jpa", "resthub-pool-hikaricp"})
+@ContextConfiguration(locations = {"classpath:boneCPContext.xml"})
+@ActiveProfiles({"resthub-jpa", "resthub-pool-bonecp", "resthub-identity-role", "resthub-identity-group", "resthub-identity-user"})
 public class DefaultUserServiceTest extends AbstractTransactionalTest {
 
     /*

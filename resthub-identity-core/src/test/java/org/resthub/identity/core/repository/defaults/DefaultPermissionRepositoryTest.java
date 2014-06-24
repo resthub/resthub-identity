@@ -13,8 +13,8 @@ import org.testng.annotations.Test;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@ContextConfiguration(locations = {"classpath:hikariCPContext.xml"})
-@ActiveProfiles({"resthub-jpa", "resthub-pool-hikaricp"})
+@ContextConfiguration(locations = {"classpath:boneCPContext.xml"})
+@ActiveProfiles({"resthub-jpa", "resthub-pool-bonecp", "resthub-identity-role", "resthub-identity-group", "resthub-identity-user"})
 public class DefaultPermissionRepositoryTest extends AbstractTransactionalTest {
 
     private static final String PERMISSION_CODE = "TestPermission";

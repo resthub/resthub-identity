@@ -2,7 +2,10 @@ package org.resthub.identity.core.controller.impl;
 
 
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.security.IdentityRoles;
 import org.resthub.identity.core.security.IdentityUserDetailsService;
+import org.resthub.identity.core.service.defaults.DefaultPermissionService;
+import org.resthub.identity.core.service.defaults.DefaultUserService;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
@@ -16,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -29,22 +33,17 @@ import java.util.List;
 //@WithMockUser(roles = {IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE})
 public class DefaultGroupControllerWebTest extends AbstractWebTest {
     public DefaultGroupControllerWebTest() {
-        super("resthub-web-server,resthub-jpa,resthub-pool-hikaricp");
+        super("resthub-web-server,resthub-jpa,resthub-pool-bonecp,resthub-identity-role,resthub-identity-group,resthub-identity-user");
         this.useOpenEntityManagerInViewFilter = true;
     }
 
-    static ApplicationContext applicationContext = null;
-    static IdentityUserDetailsService userDetailsService = null;
+    private DefaultUserService userService;
+
+    private DefaultPermissionService permissionService;
 
     // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-        UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_INVALID"));
-        Authentication authToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), authorities);
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
         this.request("api/user").delete();
         this.request("api/group").delete();
         this.request("api/role").delete();

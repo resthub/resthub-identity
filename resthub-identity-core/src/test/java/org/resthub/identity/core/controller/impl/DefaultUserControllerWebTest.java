@@ -12,16 +12,24 @@ import org.resthub.web.JsonHelper;
 import org.resthub.web.Response;
 import org.resthub.web.exception.ConflictClientException;
 import org.resthub.web.exception.NotFoundClientException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //@WithMockUser(roles = {IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.USER, IdentityRoles.PFX + IdentityRoles.CREATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE, IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE})
 public class DefaultUserControllerWebTest extends AbstractWebTest {
 
     public DefaultUserControllerWebTest() {
-        super("resthub-web-server,resthub-jpa,resthub-pool-hikaricp");
+        super("resthub-web-server,resthub-jpa,resthub-pool-bonecp,resthub-identity-role,resthub-identity-group,resthub-identity-user");
         this.useOpenEntityManagerInViewFilter = true;
 
     }
