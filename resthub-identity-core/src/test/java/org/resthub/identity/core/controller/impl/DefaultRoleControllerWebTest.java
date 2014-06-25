@@ -28,7 +28,6 @@ public class DefaultRoleControllerWebTest extends AbstractWebTest {
 
     public DefaultRoleControllerWebTest() {
         super("resthub-web-server,resthub-jpa,resthub-pool-bonecp,resthub-identity-role,resthub-identity-group,resthub-identity-user");
-        this.contextLocations = "classpath*:resthubContext.xml classpath*:applicationContext.xml";
         this.useOpenEntityManagerInViewFilter = true;
     }
 
@@ -41,7 +40,7 @@ public class DefaultRoleControllerWebTest extends AbstractWebTest {
     // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-        this.request("j_spring_security_check").post("j_username=test&j_password=test");
+        this.request("j_spring_security_check").setQueryParameter("j_username", "test").setQueryParameter("j_password", "test").post();
 
         this.request("api/user").delete();
         this.request("api/group").delete();

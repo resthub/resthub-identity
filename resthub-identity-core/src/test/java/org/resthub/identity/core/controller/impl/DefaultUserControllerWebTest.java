@@ -19,12 +19,10 @@ import org.testng.annotations.Test;
 
 import javax.servlet.ServletException;
 
-
 public class DefaultUserControllerWebTest extends AbstractWebTest {
 
     public DefaultUserControllerWebTest() {
         super("resthub-web-server,resthub-jpa,resthub-pool-bonecp,resthub-identity-role,resthub-identity-group,resthub-identity-user");
-        this.contextLocations = "classpath*:resthubContext.xml classpath*:applicationContext.xml";
         this.useOpenEntityManagerInViewFilter = true;
     }
 
@@ -37,7 +35,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
     // Cleanup after each test
     @BeforeMethod
     public void cleanBefore() {
-        this.request("j_spring_security_check").post("j_username=test&j_password=test");
+        this.request("j_spring_security_check").setQueryParameter("j_username", "test").setQueryParameter("j_password", "test").post();
 
         this.request("api/user").delete();
         this.request("api/group").delete();
@@ -73,7 +71,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         return u;
     }
 
-    @Test
+    @Test(singleThreaded = true)
     public void shouldAddRoleToUser() {
         // Given a new role
         Role r = new Role("Role" + Math.round(Math.random() * 100000));

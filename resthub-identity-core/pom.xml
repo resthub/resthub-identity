@@ -14,6 +14,21 @@
     <name>RESThub identity manager core</name>
     <description>Provide identity management functionnality with security integration</description>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <excludes>
+                        <exclude>${project.basedir}/src/main/resources/resthubContext.xml</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.resthub</groupId>

@@ -33,12 +33,13 @@
         <prop key="roles.application.user">USER</prop>
         <prop key="roles.application.group">GROUP</prop>
         <prop key="roles.application.role">ROLE</prop>
+        <prop key="identity.user.service">identityUserDetailsService</prop>
     </util:properties>
 
     <security:global-method-security proxy-target-class="true" secured-annotations="enabled" />
 
     <security:authentication-manager alias="authenticationManager">
-        <security:authentication-provider ref="identityUserDetailsService"/>
+        <security:authentication-provider ref="${identity.user.service}"/>
     </security:authentication-manager>
 
     <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>

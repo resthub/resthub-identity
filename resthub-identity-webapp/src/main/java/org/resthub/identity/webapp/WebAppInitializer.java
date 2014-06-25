@@ -18,7 +18,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
         XmlWebApplicationContext appContext = new XmlWebApplicationContext();
         appContext.getEnvironment().setActiveProfiles("resthub-jpa", "resthub-web-server", "resthub-client-logging", "resthub-identity-group", "resthub-identity-role", "resthub-pool-bonecp");
-        String[] locations = {"classpath*:resthubContext.xml", "classpath*:applicationContext.xml", "classpath:boneCPContext.xml"};
+        String[] locations = {"classpath*:resthubContext.xml", "classpath*:applicationContext.xml"};
         appContext.setConfigLocations(locations);
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(appContext));
