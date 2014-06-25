@@ -16,7 +16,11 @@
     </logger>
 
     <logger name="org.springframework">
-        <level value="warn"/>
+        <level value="error"/>
+    </logger>
+
+    <logger name="org.springframework.security">
+        <level value="debug"/>
     </logger>
 
     <logger name="org.hibernate">
