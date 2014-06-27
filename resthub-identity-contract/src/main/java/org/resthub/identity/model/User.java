@@ -1,6 +1,8 @@
 package org.resthub.identity.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Column;
@@ -166,18 +168,11 @@ public class User extends PermissionsOwner {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("User[");
-        sb.append("Id: ").append(this.getId()).append(", ");
-        sb.append("Login: ").append(this.getLogin()).append(", ");
-        sb.append("Email: ").append(this.getEmail());
-        sb.append("]");
-        return sb.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 
     public String generateDefaultPassword() {
-        String s = "p455W0R[)";
-        return s;
+        return "p455W0R[)";
     }
 
     public static interface SummarizeView extends PermissionsOwner.IdView {

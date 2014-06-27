@@ -135,6 +135,7 @@
                 <version>${log4joverself4.version}</version>
             </dependency>
 
+            <!--
             <dependency>
                 <groupId>com.jolbox</groupId>
                 <artifactId>bonecp-spring</artifactId>
@@ -145,6 +146,12 @@
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>-->
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

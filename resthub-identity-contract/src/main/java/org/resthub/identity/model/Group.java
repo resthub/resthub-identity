@@ -1,5 +1,8 @@
 package org.resthub.identity.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -54,11 +57,6 @@ public class Group extends PermissionsOwner {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Group[");
-        sb.append("Id: ").append(this.getId()).append(", ");
-        sb.append("Name: ").append(this.getName());
-        sb.append("]");
-        return sb.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

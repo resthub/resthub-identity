@@ -50,10 +50,11 @@
             </exclusions>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>com.jolbox</groupId>
             <artifactId>bonecp-spring</artifactId>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.resthub</groupId>

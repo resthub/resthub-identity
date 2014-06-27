@@ -1,6 +1,8 @@
 package org.resthub.identity.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -113,5 +115,10 @@ public class Role implements Serializable {
     }
 
     public static interface SummarizeView extends IdView, Permission.SummarizeView {
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }
