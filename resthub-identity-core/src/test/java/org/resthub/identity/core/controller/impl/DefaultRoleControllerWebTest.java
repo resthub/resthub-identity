@@ -1,9 +1,11 @@
 package org.resthub.identity.core.controller.impl;
 
 
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.fest.assertions.api.Assertions;
 import org.resthub.identity.core.service.defaults.DefaultUserService;
+import org.resthub.identity.core.session.TestSessionManager;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.test.AbstractWebTest;
@@ -34,6 +36,7 @@ public class DefaultRoleControllerWebTest extends AbstractWebTest {
     @Override
     public ServletContextHandler customizeContextHandler(ServletContextHandler context) throws ServletException {
         context.getServletContext().addFilter("springSecurityFilterChain", DelegatingFilterProxy.class).addMappingForUrlPatterns(null, false, "/*");
+        context.getSessionHandler().setSessionManager(new TestSessionManager());
         return context;
     }
 

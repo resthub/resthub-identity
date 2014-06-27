@@ -113,7 +113,7 @@ public class RoleControllerImpl<T extends Role, I extends Serializable, S extend
      */
 
     @Override
-    @Secured({"IM-ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.USER)
     @RequestMapping(method = RequestMethod.GET, value = "{name}/users")
     @ResponseBody
     public List<User> findAllUsersWithRole(@PathVariable("name") String name) {

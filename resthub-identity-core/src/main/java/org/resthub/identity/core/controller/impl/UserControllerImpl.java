@@ -104,7 +104,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
     }
 
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAllRoleFromUser(@PathVariable("login") String login) {
@@ -119,7 +119,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
     }
 
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/groups")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeAllGroupFromUser(@PathVariable("login") String login) {
@@ -141,7 +141,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * Error 404
      */
     @Override
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.GET, value = "login/{login}")
     @ResponseBody
     public User getUserByLogin(@PathVariable("login") String login) {
@@ -167,7 +167,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * otherwise (It shouldn't append) an HTTP error 404
      */
     @Override
-    @Secured({"IS_AUTHENTICATED_FULLY"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.GET, value = "me")
     @ResponseBody
     public User currentUser() {
@@ -190,7 +190,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * Update the current user *
      */
     @Override
-    @Secured({"IS_AUTHENTICATED_FULLY"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.PUT, value = "me")
     @ResponseBody
     public T updateMe(T user) {
@@ -217,7 +217,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * otherwise HTTP Error 404
      */
     @Override
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.GET, value = "name/{login}/groups")
     @ResponseBody
     public List<Group> getGroupsFromUser(@PathVariable("login") String login) {
@@ -231,7 +231,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * @param group the name of the group the be added
      */
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.PUT, value = "name/{login}/groups/{group}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addGroupToUser(@PathVariable("login") String login, @PathVariable("group") String group) {
@@ -245,7 +245,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * @param groupName the name of the group the be removed
      */
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{login}/groups/{groups}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeGroupsForUser(@PathVariable("login") String userLogin, @PathVariable("groups") String groupName) {
@@ -260,7 +260,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * otherwise HTTP Error 404
      */
     @Override
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.GET, value = "name/{login}/permissions")
     @ResponseBody
     public List<Permission> getPermissionsFromUser(@PathVariable("login") String login) {
@@ -280,7 +280,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * otherwise HTTP Error 404
      */
     @Override
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.GET, value = "name/{login}/permissions/{application}")
     @ResponseBody
     public List<Permission> getPermissionsFromUserAndApplication(@PathVariable("login") String login, @PathVariable("application") String application) {
@@ -298,7 +298,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * @param permission the permission to be added
      */
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.PUT, value = "name/{login}/permissions/{permission}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addPermissionsToUser(@PathVariable("login") String login, @PathVariable("permission") Permission permission) {
@@ -312,7 +312,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * @param permission the permisssion to be removed
      */
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{login}/permissions/{permission}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePermissionsFromUser(@PathVariable("login") String login, @PathVariable("permission") Permission permission) {
@@ -320,7 +320,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
     }
 
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.PUT, value = "name/{login}/roles/{role}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addRoleToUser(@PathVariable("login") String login, @PathVariable("role") String role) {
@@ -331,7 +331,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * {@inheritDoc}
      */
     @Override
-    @Secured({"IM_USER_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{login}/roles/{role}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeRoleFromUser(@PathVariable("login") String login, @PathVariable("role") String role) {
@@ -345,7 +345,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * @return A list of roles the given user has.
      */
     @Override
-    @Secured({"IM_USER_ADMIN", "IM_USER_READ"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.GET, value = "name/{login}/roles")
     @ResponseBody
     public List<Role> getAllUserRoles(@PathVariable("login") String login) {
@@ -359,6 +359,7 @@ public class UserControllerImpl<T extends User, I extends Serializable, S extend
      * @param password The password of the user.
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.ROLE)
     @RequestMapping(method = RequestMethod.POST, value = "checkuser")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void authenticateUser(@RequestParam("user") String username, @RequestParam("password") String password) {

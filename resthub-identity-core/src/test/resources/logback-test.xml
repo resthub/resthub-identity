@@ -7,10 +7,6 @@
         </encoder>
     </appender>
 
-    <logger name="org.resthub.identity.core.security.TestIdentityUserDetailsService">
-        <level value="info"/>
-    </logger>
-
     <logger name="org.resthub">
         <level value="warn"/>
     </logger>
@@ -21,10 +17,6 @@
 
     <logger name="org.springframework">
         <level value="warn"/>
-    </logger>
-
-    <logger name="org.springframework.security">
-        <level value="debug"/>
     </logger>
 
     <logger name="org.hibernate">

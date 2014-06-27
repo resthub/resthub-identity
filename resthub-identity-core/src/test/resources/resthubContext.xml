@@ -6,7 +6,7 @@
                             http://www.springframework.org/schema/security
                             http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <security:http auto-config="true" use-expressions="true" pattern="/**">
+    <security:http auto-config="true" use-expressions="true" pattern="/**" create-session="always">
         <security:session-management session-fixation-protection="none"/>
         <security:intercept-url pattern="/j_spring_security_check" access="permitAll"/>
         <security:access-denied-handler/>

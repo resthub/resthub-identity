@@ -2,16 +2,18 @@ package org.resthub.identity.webapp.service;
 
 import org.elasticsearch.client.Client;
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.service.defaults.DefaultGroupService;
+import org.resthub.identity.core.service.defaults.DefaultUserService;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.User;
-import org.resthub.identity.core.service.GroupService;
-import org.resthub.identity.core.service.UserService;
 import org.resthub.identity.webapp.elasticsearch.Deleter;
 import org.resthub.identity.webapp.elasticsearch.Requester;
+import org.resthub.identity.webapp.service.impl.MySuperUserService;
 import org.resthub.test.AbstractTransactionalTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
@@ -20,7 +22,8 @@ import javax.inject.Named;
 import java.util.List;
 import java.util.Random;
 
-@ActiveProfiles("resthub-jpa")
+@ContextConfiguration(locations = {"classpath:boneCPContext.xml"})
+@ActiveProfiles({"resthub-jpa", "resthub-pool-bonecp", "resthub-identity-role", "resthub-identity-group"})
 public class SearchServiceTest extends AbstractTransactionalTest {
 
     /**
@@ -28,16 +31,18 @@ public class SearchServiceTest extends AbstractTransactionalTest {
      */
     @Inject
     @Named("userService")
-    protected UserService<User, Long> userService;
+    protected MySuperUserService userService;
     /**
      * Injection of the Group service.
      */
     @Inject
     @Named("groupService")
-    protected GroupService<Group, Long> groupService;
+    protected DefaultGroupService groupService;
+
     // Inject your client...
     @Autowired
     Client client;
+
     /**
      * Injection of elasticsearch requester;
      */
@@ -50,18 +55,18 @@ public class SearchServiceTest extends AbstractTransactionalTest {
     @Inject
     @Named("elasticDeleter")
     private Deleter deleter;
-    private
+
     @Value("#{esProp['index.name']}")
-    String indexName;
-    private
+    private String indexName;
+
     @Value("#{esProp['index.group.type']}")
-    String groupIndex;
-    private
+    private String groupIndex;
+
     @Value("#{esProp['index.user.type']}")
-    String userIndex;
-    private
+    private String userIndex;
+
     @Value("#{esProp['index.role.type']}")
-    String roleIndex;
+    private String roleIndex;
 
     @AfterMethod
     public void cleanup() {

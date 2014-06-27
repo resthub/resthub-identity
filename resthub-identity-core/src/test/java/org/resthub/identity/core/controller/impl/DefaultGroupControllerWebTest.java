@@ -1,8 +1,10 @@
 package org.resthub.identity.core.controller.impl;
 
 
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.session.TestSessionManager;
 import org.resthub.identity.model.Group;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
@@ -12,7 +14,6 @@ import org.resthub.web.Response;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import javax.servlet.ServletException;
 
@@ -21,7 +22,6 @@ import javax.servlet.ServletException;
  * @author Guillaume Zurbach
  */
 public class DefaultGroupControllerWebTest extends AbstractWebTest {
-
     public DefaultGroupControllerWebTest() {
         super("resthub-web-server,resthub-jpa,resthub-pool-bonecp,resthub-identity-role,resthub-identity-group,resthub-identity-user");
         this.useOpenEntityManagerInViewFilter = true;
@@ -30,6 +30,7 @@ public class DefaultGroupControllerWebTest extends AbstractWebTest {
     @Override
     public ServletContextHandler customizeContextHandler(ServletContextHandler context) throws ServletException {
         context.getServletContext().addFilter("springSecurityFilterChain", DelegatingFilterProxy.class).addMappingForUrlPatterns(null, false, "/*");
+        context.getSessionHandler().setSessionManager(new TestSessionManager());
         return context;
     }
 

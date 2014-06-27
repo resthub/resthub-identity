@@ -121,10 +121,11 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
      * HTTP Error 404
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP)
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET, value = "name/{name}")
     public T getGroupByName(@PathVariable("name") String name) {
-        T group = (T) this.service.findByName(name);
+        T group = this.service.findByName(name);
         if (group == null) {
             throw new NotFoundException();
         }
@@ -139,6 +140,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
      * otherwise HTTP Error 404
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP)
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET, value = "name/{name}/groups")
     public List<T> getGroupsFromGroups(@PathVariable("name") String name) {
@@ -152,6 +154,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
      * @param group the name of the group the be added
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.GROUP)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(method = RequestMethod.PUT, value = "name/{name}/groups/{group}")
     public void addGroupToGroup(@PathVariable("name") String name, @PathVariable("group") String group) {
@@ -165,6 +168,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
      * @param groupName the name of the gorup the be removed
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/groups/{groups}")
     public void removeGroupsForGroup(@PathVariable("name") String name, @PathVariable("groups") String groupName) {
@@ -179,6 +183,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
      * otherwise HTTP Error 404
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP)
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET, value = "/name/{name}/permissions")
     public List<Permission> getPermisionsFromGroup(@PathVariable("name") String name) {
@@ -196,6 +201,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
      * @param permission the permission to be added
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.UPDATE + IdentityRoles.GROUP)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(method = RequestMethod.PUT, value = "name/{name}/permissions/{permission}")
     public void addPermissionsToUser(@PathVariable("name") String login, @PathVariable("permission") Permission permission) {
@@ -209,6 +215,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
      * @param permission the permission to be removed
      */
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/permissions/{permission}")
     public void deletePermissionsFromUser(@PathVariable("name") String name, @PathVariable("permission") Permission permission) {
@@ -216,6 +223,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
     }
 
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP)
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET, value = "name/{name}/users")
     public List<User> getUsersFromGroup(@PathVariable("name") String name) {
@@ -227,6 +235,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
     }
 
     @Override
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.READ + IdentityRoles.GROUP)
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET, value = "name/{name}/roles")
     public List<Role> getRolesFromGroup(@PathVariable("name") String name) {
@@ -238,7 +247,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
     }
 
     @Override
-    @Secured({"IM_GROUP_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(method = RequestMethod.PUT, value = "name/{name}/roles/{role}")
     public void addRoleToGroup(@PathVariable("name") String name, @PathVariable("role") String role) {
@@ -246,7 +255,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
     }
 
     @Override
-    @Secured({"IM_GROUP_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles/{role}")
     public void removeRoleFromGroup(@PathVariable("name") String name, @PathVariable("role") String role) {
@@ -254,7 +263,7 @@ public class GroupControllerImpl<T extends Group, I extends Serializable, S exte
     }
 
     @Override
-    @Secured({"IM_GROUP_ADMIN"})
+    @Secured(value = IdentityRoles.PFX + IdentityRoles.DELETE + IdentityRoles.GROUP)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @RequestMapping(method = RequestMethod.DELETE, value = "name/{name}/roles")
     public void removeAllRoleFromGroup(@PathVariable("name") String name) {

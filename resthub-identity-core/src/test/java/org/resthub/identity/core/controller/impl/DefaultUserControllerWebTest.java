@@ -3,6 +3,7 @@ package org.resthub.identity.core.controller.impl;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.fest.assertions.api.Assertions;
+import org.resthub.identity.core.session.TestSessionManager;
 import org.resthub.identity.model.Role;
 import org.resthub.identity.model.User;
 import org.resthub.identity.model.UserWithPassword;
@@ -11,6 +12,7 @@ import org.resthub.web.Http;
 import org.resthub.web.JsonHelper;
 import org.resthub.web.Response;
 import org.resthub.web.exception.ConflictClientException;
+import org.resthub.web.exception.InternalServerErrorClientException;
 import org.resthub.web.exception.NotFoundClientException;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.testng.annotations.AfterMethod;
@@ -29,6 +31,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
     @Override
     public ServletContextHandler customizeContextHandler(ServletContextHandler context) throws ServletException {
         context.getServletContext().addFilter("springSecurityFilterChain", DelegatingFilterProxy.class).addMappingForUrlPatterns(null, false, "/*");
+        context.getSessionHandler().setSessionManager(new TestSessionManager());
         return context;
     }
 
@@ -71,7 +74,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         return u;
     }
 
-    @Test(singleThreaded = true)
+    @Test
     public void shouldAddRoleToUser() {
         // Given a new role
         Role r = new Role("Role" + Math.round(Math.random() * 100000));
@@ -157,7 +160,7 @@ public class DefaultUserControllerWebTest extends AbstractWebTest {
         Assertions.assertThat(user4Roles.contains(r1.getName()) && user4Roles.contains(r2.getName())).as("The list of roles for user4 should contain role1 and role2").isTrue();
     }
 
-    @Test(expectedExceptions = ConflictClientException.class)
+    @Test(expectedExceptions = InternalServerErrorClientException.class)
     public void cannotCreateTwiceTheSameUser() {
         // Given a new user
         User u = this.createTestResource();
