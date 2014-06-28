@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 /**
  * Front controller for User Management<br/>
  * Only ADMINS can access to the globality of this API<br/>
@@ -25,5 +28,12 @@ public class MyUserController extends UserControllerImpl<User, String, MySuperUs
     @Override
     public User create(@RequestBody User resource) {
         return super.create(resource);
+    }
+
+    @Override
+    @Inject
+    @Named("userService")
+    public void setService(MySuperUserService userService) {
+        super.setService(userService);
     }
 }
